@@ -1,0 +1,70 @@
+#include<iostream>
+#include<climits>
+
+using namespace std;
+
+int N;
+int max_value = INT_MIN;
+int min_value = INT_MAX;
+
+int numbers[11] = { 0 };
+int operators[4] = { 0 };
+
+void calculate(int index, int plus, int minus, int multi, int div, int total, int len)
+{
+	if (index == len)
+	{
+		if (total > max_value)
+		{
+			max_value = total;
+		}
+		if (total < min_value)
+		{
+			min_value = total;
+		}
+	}
+
+	index += 1;
+	if (plus < operators[0])
+	{
+		calculate(index, plus + 1, minus, multi, div, total + numbers[index], len);
+	}
+	if (minus < operators[1])
+	{
+		calculate(index, plus, minus + 1, multi, div, total - numbers[index], len);
+	}
+	if (multi < operators[2])
+	{
+		calculate(index, plus, minus, multi + 1, div, total * numbers[index], len);
+	}
+	if (div < operators[3])
+	{
+		calculate(index, plus, minus, multi, div + 1, total / numbers[index], len);
+	}
+}
+
+int main()
+{
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		numbers[i] = su;
+	}
+
+	for (i = 0; i < 4; i++)
+	{
+		int su;
+		cin >> su;
+		operators[i] = su;
+	}
+
+	int len = operators[0] + operators[1] + operators[2] + operators[3];
+	calculate(0, 0, 0, 0, 0, numbers[0], len);
+
+	cout << max_value << '\n';
+	cout << min_value << '\n';
+}

@@ -1,0 +1,82 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+// time, condition
+vector<vector<int>> building(501);
+queue<int> q;
+
+int weight[501];
+int num_of_edges[501];
+int answer[501];
+
+void time_of_building(int size)
+{
+	int i, value, b_value;
+	for (i = 1; i <= size; i++)
+	{
+		if (num_of_edges[i] == 0)
+		{
+			q.push(i);
+			answer[i] += weight[i];
+		}
+	}
+
+	while (!q.empty())
+	{
+		value = q.front();
+		q.pop();
+		
+		for (i = 0; i < building[value].size(); i++)
+		{
+			b_value = building[value][i];
+			num_of_edges[b_value]--;
+			
+			answer[b_value] =
+				max(answer[b_value], answer[value] + weight[b_value]);
+
+			if (num_of_edges[b_value] == 0)
+			{
+				q.push(b_value);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		int su;
+		int ind = 0;
+		while (1)
+		{
+			cin >> su;
+			if (su == -1) { break; }
+			else
+			{
+				if (ind == 0) { weight[i] = su; }
+				else
+				{
+					building[su].push_back(i);
+					num_of_edges[i]++;
+				}
+			}
+			ind++;
+		}
+	}
+
+	time_of_building(N);
+
+	for (i = 1; i <= N; i++)
+	{
+		cout << answer[i] << '\n';
+	}
+}

@@ -1,0 +1,53 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+int True = 0;
+
+// 최대 공약수
+int gcd(int a, int b)
+{
+	int result = 1;
+
+	while (a%result == 0 && b%result == 0) { result += 1; }
+
+	return result-1;
+}
+
+// 최소 공배수
+int lcm(int a, int b)
+{
+	return (a*b) / gcd(a,b);
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	for (int i = 0; i < T; i++)
+	{
+		True = 0;
+
+		int M, N, x, y;
+		cin >> M;
+		cin >> N;
+		cin >> x;
+		cin >> y;
+		
+		// 최소 공배수 만큼 반복 가능
+		int L = lcm(M, N);
+
+		while (x<=L && y<=L)
+		{
+			// x, y가 같으면 정답
+			if (x == y) { True = 1; break; }
+			if (x < y) { x += M; }
+			else { y += N; }
+		}
+		if (True == 1) { cout << x << endl; }
+		else { cout << -1 << endl; }
+	}
+}

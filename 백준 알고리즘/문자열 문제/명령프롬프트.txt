@@ -1,0 +1,39 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	char str[50][51];
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> str[i];
+	}
+
+	int len = strlen(str[0]);
+
+	for (j = 0; j < len; j++)
+	{
+		int same = 1;
+
+		for (i = 1; i < N; i++)
+		{
+			if (str[0][j] != str[i][j])
+			{
+				same = 0;
+			}
+		}
+
+		if (same == 1) { cout << str[0][j]; }
+		else if (same == 0) { cout << '?'; }
+	}
+	cout << '\n';
+	
+	return 0;
+}

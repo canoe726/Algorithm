@@ -1,0 +1,79 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int matrix[10001];
+int primeNumber[1300];
+
+void Eratostenes(int start, int N)
+{
+	int mul = 2;
+
+	while (1)
+	{
+		if ((start*start) <= N)
+		{
+			if (start*mul <= N)
+			{
+				matrix[start*mul] = 1;
+				mul += 1;
+			}
+			else
+			{
+				start += 1;
+				mul = 2;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+int main()
+{
+	fill_n(matrix, 0, 10000);
+	Eratostenes(2, 10000);
+
+	int T;
+	cin >> T;
+
+	for (int i = 0; i < T; i++)
+	{
+		int n;
+		cin >> n;
+
+		int len = -1;
+		
+		int min_gap = 10001;
+		int gap = -1;
+		
+		int prime1 = 0;
+		int prime2 = 0;
+
+		fill_n(primeNumber, 0, n);
+
+		for (int i = 2; i <= n; i++)
+		{
+			if (matrix[i] == 0) { len += 1; primeNumber[len] = i; }
+		}
+
+		for (int i = 0; i <= len; i++)
+		{
+			for (int j = i; j <= len; j++)
+			{
+				if ((primeNumber[i] + primeNumber[j]) == n)
+				{
+					gap = primeNumber[j] - primeNumber[i];
+					if (min_gap > gap) { min_gap = gap; prime1 = primeNumber[i]; prime2 = primeNumber[j]; }
+				}
+			}
+		}
+
+		cout << prime1 << ' ';
+		cout << prime2 << '\n';
+	}
+}
+

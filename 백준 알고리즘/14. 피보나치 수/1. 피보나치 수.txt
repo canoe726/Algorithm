@@ -1,0 +1,24 @@
+#include<iostream>
+
+using namespace std;
+
+int number[46];
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	fill_n(number, 46, 0);
+	number[0] = 0;
+	number[1] = 1;
+
+	for (int i = 2; i < 46; i++)
+	{
+		number[i] = number[i - 1] + number[i - 2];
+	}
+
+	cout << number[n] << '\n';
+
+	return 0;
+}

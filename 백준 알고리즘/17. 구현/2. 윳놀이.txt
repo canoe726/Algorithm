@@ -1,0 +1,90 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int stick[4] = { 0 };
+	int i, j;
+	for (i = 0; i < 3; i++)
+	{
+		int result = 0;
+
+		for (j = 0; j < 4; j++)
+		{
+			cin >> stick[j];
+			result += stick[j];
+		}
+
+		// ¹è(0) 4°³
+		if (result == 0)
+		{
+			cout << "D ";
+		}
+		else if (result == 1)
+		{
+			cout << "C ";
+		}
+		else if (result == 2)
+		{
+			cout << "B ";
+		}
+		else if (result == 3)
+		{
+			cout << "A ";
+		}
+		else if (result == 4)
+		{
+			cout << "E ";
+		}
+		cout << '\n';
+	}
+	
+	
+	return 0;
+}
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int i, j;
+	for (i = 0; i < 3; i++)
+	{
+		int zero = 0;
+
+		for (j = 0; j < 4; j++)
+		{
+			int su;
+			cin >> su;
+			if (su == 0)
+			{
+				zero++;
+			}
+		}
+
+		if (zero == 0)
+		{
+			printf("E\n");
+		}
+		else if (zero == 1)
+		{
+			printf("A\n");
+		}
+		else if (zero == 2)
+		{
+			printf("B\n");
+		}
+		else if (zero == 3)
+		{
+			printf("C\n");
+		}
+		else
+		{
+			printf("D\n");
+		}
+	}
+
+}

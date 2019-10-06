@@ -1,0 +1,51 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int Answer = 0;
+
+int matrix[5001];
+int check[5001];
+
+int main()
+{
+	fill_n(matrix, 5001, 0);
+	fill_n(check, 5001, 0);
+
+	int N, M;
+	cin >> N;
+	cin >> M;
+
+	for (int i = 1; i <= N; i++) { matrix[i-1] = i; }
+
+	int total = 0;
+	int index = -1;
+
+	while (1)
+	{
+		if (total == N) { break; }
+
+		int len = M;
+
+		for (int i = 1; i <= M; i++)
+		{
+			if (check[(index + 1) % N] == 0) { index = (index + 1) % N; }
+			else { i -= 1; index += 1; }
+		}
+		
+		if (M == 1 && N == 1) { cout << "<" << matrix[index] << ">\n"; }
+		else
+		{
+			if (total == 0) { cout << "<" << matrix[index] << ", "; }
+			else if (total == N - 1) { cout << matrix[index] << ">\n"; }
+			else { cout << matrix[index] << ", "; }
+		}
+
+		check[index] = 1;
+		total += 1;
+	}
+
+	return 0;
+}
+

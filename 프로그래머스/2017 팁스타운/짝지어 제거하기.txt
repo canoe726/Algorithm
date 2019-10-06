@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
+int solution(string s)
+{
+	int answer = 1;
+	int i;
+	
+	stack<char> pair;
+	pair.push(s[0]);
+
+	for (i = 1; i < s.size(); i++)
+	{
+		if (!pair.empty())
+		{
+			if (s[i] == pair.top())
+			{
+				pair.pop();
+			}
+			else
+			{
+				pair.push(s[i]);
+			}
+		}
+		else
+		{
+			pair.push(s[i]);
+		}
+	}
+
+	if (!pair.empty())
+	{
+		answer = 0;
+	}
+
+	return answer;
+}
+
+int main()
+{
+	string s;
+	cin >> s;
+
+	cout << solution(s) << endl;
+}

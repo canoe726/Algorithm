@@ -1,0 +1,101 @@
+#include<iostream>
+#include<list>
+#include<stack>
+#include<queue>
+
+using namespace std;
+
+list<int> lists[2000];
+
+int dfs_visited[2000];
+
+queue<int> bfs_queue;
+int bfs_visited[2000];
+
+void bfs_search(int vertex, int edge, int start)
+{
+	bfs_queue.push(start);
+	bfs_visited[start] = 1;
+
+	while (!bfs_queue.empty())
+	{
+		int value = bfs_queue.front();
+		bfs_queue.pop();
+		cout << value << " ";
+
+		list<int>::iterator itor = lists[value].begin();
+
+		while (lists[value].end() != itor)
+		{
+			if (bfs_visited[*itor] == 0)
+			{
+				bfs_queue.push(*itor);
+				bfs_visited[*itor] = 1;
+			}
+			itor++;
+		}
+
+	}
+}
+
+void dfs_search(int vertex, int edge, int start)
+{
+	cout << start << " ";
+	dfs_visited[start] = 1;
+
+	list<int>::iterator itor = lists[start].begin();
+
+	while ( lists[start].end() != itor )
+	{
+		if (dfs_visited[*itor] == 0)
+		{
+			dfs_search(vertex, edge, *itor);
+		}
+		itor++;
+	}
+}
+
+int main()
+{
+	int N, M, V;
+	cin >> N;
+	cin >> M;
+	cin >> V;
+
+	for (int i = 0; i < M; i++)
+	{
+		int start, end;
+		cin >> start;
+		cin >> end;
+
+		lists[start].push_back(end);
+		lists[end].push_back(start);
+	}
+
+	for (int i = 1; i <= N; i++)
+	{
+		lists[i].sort();
+	}
+
+	/*
+	for (int i = 1; i <= N; i++)
+	{
+		list<int>::iterator itor = lists[i].begin();
+		cout << i << " : ";
+
+		while (lists[i].end() != itor)
+		{
+			cout << *itor << " -> ";
+			itor++;
+		}
+		cout << endl;
+	}
+	*/
+
+	dfs_search(N, M, V);
+	cout << endl;
+	bfs_search(N, M, V);
+	cout << endl;
+
+	return 0;
+}

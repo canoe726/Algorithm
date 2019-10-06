@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> priorities, int location) {
+	int answer = 0;
+
+	int i;
+	int p_len = priorities.size();
+	
+	while (1)
+	{
+		int exist = 0;
+
+		for (i = 1; i < p_len; i++)
+		{
+			if (priorities[0] < priorities[i])
+			{
+				exist = 1;
+
+				int temp = priorities.front();
+				priorities.erase(priorities.begin());
+				priorities.push_back(temp);
+
+				location--;
+				if (location < 0) { location += p_len; }
+
+				break;
+			}
+		}
+
+		if (exist == 0)
+		{
+			priorities.erase(priorities.begin());
+			p_len--;
+			answer += 1;
+
+			if( location == 0 )
+			{
+				break;
+			}
+			location--;
+		}
+	}
+
+	return answer;
+}

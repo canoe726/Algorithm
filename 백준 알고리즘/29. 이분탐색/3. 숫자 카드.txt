@@ -1,0 +1,68 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int number[500001];
+
+int binary_search(int start, int end, int target)
+{
+	int mid;
+
+	while (start + 1 < end)
+	{
+		mid = (start + end) / 2;
+
+		if (number[mid] == target)
+		{
+			start = mid;
+			break;
+		}
+		else if (number[mid] < target)
+		{
+			start = mid;
+		}
+		else
+		{
+			end = mid;
+		}
+	}
+
+	if (number[start] == target)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int i, j;
+
+	int N;
+	cin >> N;
+
+	for (i = 0; i < N; i++)
+	{
+		cin >> number[i];
+	}
+	sort(number, number + N);
+
+	int M;
+	cin >> M;
+
+	for (i = 0; i < M; i++)
+	{
+		int su;
+		cin >> su;
+		cout << binary_search(0, N, su) << ' ';
+	}
+	cout << '\n';
+}

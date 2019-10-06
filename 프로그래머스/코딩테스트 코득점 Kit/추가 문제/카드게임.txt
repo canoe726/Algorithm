@@ -1,0 +1,82 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int answer = 0;
+
+void find_answer(int current, vector<int> left, vector<int> right)
+{
+	if (left.size() == 0 || right.size() == 0)
+	{
+		if (answer < current)
+		{
+			answer = current;
+		}
+		return;
+	}
+
+	// 오른쪽 카드를 버릴 수 있을 때
+	if (left[0] > right[0])
+	{
+		current += right[0];
+		right.erase(right.begin());
+
+		find_answer(current, left, right);
+	}
+	// 못 버릴 때
+	else
+	{
+		vector<int> temp1, temp2;
+		temp1 = left;
+		temp2 = right;
+
+		// 왼쪽 버리기
+		temp1.erase(temp1.begin());
+		find_answer(current, temp1, temp2);
+
+		temp1 = left;
+		temp2 = right;
+
+		// 양쪽 버리기
+		temp1.erase(temp1.begin());
+		temp2.erase(temp2.begin());
+		find_answer(current, temp1, temp2);
+	}
+}
+
+int solution(vector<int> left, vector<int> right) {
+	
+	find_answer(0, left, right);
+
+	return answer;
+}
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int n, m;
+	cin >> n;
+
+	vector<int> left;
+	vector<int> right;
+
+	int i, num;
+	for (i = 0; i < n; i++)
+	{
+		cin >> num;
+		left.push_back(num);
+	}
+
+	cin >> m;
+	for (i = 0; i < m; i++)
+	{
+		cin >> num;
+		right.push_back(num);
+	}
+
+	cout << solution(left, right) << '\n';
+}

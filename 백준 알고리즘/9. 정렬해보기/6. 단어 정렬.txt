@@ -1,0 +1,46 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+string words[20000];
+
+bool cmp(string a, string b)
+{
+	if (a.size() == b.size()) { return a < b; }
+	else { return a.size() < b.size(); }
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	getchar();
+
+	for (int i = 0; i < N; i++)
+	{
+		string word;
+		getline(cin, word, '\n');
+
+		words[i] = word;
+	}
+
+	sort(words, words + N, cmp);
+
+	for (int i = 0; i < N; i++)
+	{
+		if (i == 0) { cout << words[i] << endl; }
+		else
+		{
+			if (strcmp(words[i - 1].c_str(), words[i].c_str()))
+			{
+				cout << words[i] << endl;
+			}
+		}
+	}
+
+	return 0;
+}
+

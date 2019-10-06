@@ -1,0 +1,93 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+using namespace std;
+
+vector<string> dictionary;
+
+int main()
+{
+	int i, j, k, l;
+	for (i = 0; i < 26; i++)
+	{
+		char alphabet = 'A' + i;
+		string temp;
+
+		temp.push_back(alphabet);
+		dictionary.push_back(temp);
+	}
+
+	string str;
+	cin >> str;
+
+	for (i = 0; i < str.length(); i++)
+	{
+		int word_size = 1;
+		int exist;
+		int get_out = 0;
+		// 사전에 없을 때 까지 검사
+		while (1)
+		{
+			exist = 0;
+			string temp = "";
+			for (j = i; j < i + word_size; j++)
+			{
+				temp.push_back(str[j]);
+			}
+
+			for (j = 0; j < dictionary.size(); j++)
+			{
+				if (strcmp(temp.c_str(), dictionary[j].c_str()) == 0)
+				{
+					exist = 1;
+
+					if ((i + word_size) > str.length())
+					{
+						string check = temp;
+						check.pop_back();
+						for (k = 0; k < dictionary.size(); k++)
+						{
+							if (strcmp(check.c_str(), dictionary[k].c_str()) == 0)
+							{
+								cout << k + 1 << ' ';
+								break;
+							}
+						}
+						get_out = 1;
+						break;
+					}
+				}
+			}
+
+			if (get_out == 1)
+			{
+				i = str.length();
+				break;
+			}
+
+			if (exist == 0)
+			{
+				// 현재 입력 출력
+				string check = temp;
+				check.pop_back();
+				for (k = 0; k < dictionary.size(); k++)
+				{
+					if (strcmp(check.c_str(), dictionary[k].c_str()) == 0)
+					{
+						cout << k + 1 << ' ';
+						break;
+					}
+				}
+
+				// 사전 추가
+				dictionary.push_back(temp.c_str());
+				i += (temp.length() - 2);
+
+				exist = 0;
+				break;
+			}
+			word_size += 1;
+		}
+	}
+}

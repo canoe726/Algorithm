@@ -1,0 +1,113 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int answer = 0;
+int temp = 0;
+
+/*
+hit
+cog
+6
+hot dot dog lot log cog
+
+hit
+cog
+5
+hot dot dog lot log
+
+*/
+
+int num_of_string(string a, string b)
+{
+	int result = 0;
+
+	int i;
+	for (i = 0; i < a.size(); i++)
+	{
+		if (a[i] != b[i])
+		{
+			result++;
+		}
+	}
+
+	return result;
+}
+
+void dfs(string begin, string target, vector<string> words, int index)
+{
+	if (begin == target)
+	{
+		if (answer == 0)
+		{
+			answer = temp;
+		}
+		else if (answer > temp)
+		{
+			answer = temp;
+		}
+	}
+
+	int i;
+	for (i = index + 1; i < words.size(); i++)
+	{
+		if (num_of_string(words[index], words[i]) == 1)
+		{
+			temp++;
+			dfs(words[i], target, words, i);
+			temp--;
+		}
+	}
+}
+
+int solution(string begin, string target, vector<string> words) {
+
+	int exist = 0;
+	int i;
+	for (i = 0; i < words.size(); i++)
+	{
+		if (words[i] == target)
+		{
+			exist = 1;
+		}
+	}
+
+	if (exist == 1)
+	{
+		for (i = 0; i < words.size(); i++)
+		{
+			if (num_of_string(begin, words[i]) == 1)
+			{
+				temp = 1;
+				dfs(words[i], target, words, i);
+			}
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	string begin;
+	string target;
+	vector<string> words;
+
+	cin >> begin;
+	cin >> target;
+
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		string str;
+		cin >> str;
+		words.push_back(str);
+	}
+
+	cout << solution(begin, target, words) << endl;
+}

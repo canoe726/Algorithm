@@ -1,0 +1,33 @@
+#include<iostream>
+
+using namespace std;
+
+int Answer = 0;
+
+int main()
+{
+	cout << (((11^51))) << endl;
+	/*
+	int T;
+	cin >> T;
+
+	for (int i = 1; i <= T; i++)
+	{
+		Answer = 0;
+
+		int N;
+		cin >> N;
+		// unsigned int : 32bit 음이 아닌 정수
+		for (int j = 0; j < N; j++)
+		{
+			int su;
+			cin >> su;
+			Answer = Answer ^ su;
+		}
+
+		cout << "Case #" << i << endl;
+		cout << Answer << endl;
+	}
+	*/
+	return 0;
+}

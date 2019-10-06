@@ -1,0 +1,109 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<int> food_times, long long k) {
+	int answer = 0;
+
+	int i, zero = 0, index = 1;
+	for (i = 0; i < food_times.size(); i++)
+	{
+		if (food_times[i] == 0)
+		{
+			zero++;
+		}
+	}
+
+	long long length = k;
+	
+	for (i = 0; i < k; i++)
+	{
+		if (zero == food_times.size())
+		{
+			index = -1;
+			break;
+		}
+
+		index = (index + 1) % (food_times.size() + 1);
+		if (index == 0)
+		{
+			index++;
+		}
+
+		if (food_times[i % food_times.size()] != 0)
+		{
+			food_times[i % food_times.size()]--;
+			if (food_times[i % food_times.size()] == 0)
+			{
+				zero++;
+			}
+		}
+		else
+		{
+			k++;
+			continue;
+		}
+	}
+	if (zero == food_times.size())
+	{
+		index = -1;
+	}
+	else
+	{
+		int base = index;
+		for (i = 0; i < food_times.size(); i++)
+		{
+			if (food_times[(i + (base - 1)) % food_times.size()] != 0)
+			{
+				break;
+			}
+			else
+			{
+				index = (index + 1) % (food_times.size() + 1);
+				if (index == 0)
+				{
+					index++;
+				}
+			}
+		}
+	}
+	
+	answer = index;
+
+	return answer;
+}
+
+#include<iostream>
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	vector<int> food_times;
+	long long k;
+
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		int su;
+		cin >> su;
+		food_times.push_back(su);
+	}
+
+	cin >> k;
+
+	cout << solution(food_times, k) << endl;
+}
+
+/*
+3
+3 1 2
+5
+
+3
+3 2 1
+5
+
+*/

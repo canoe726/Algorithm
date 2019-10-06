@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> prices) {
+	vector<int> answer;
+
+	int len = prices.size();
+	int i, j;
+	int count = 0;
+	for (i = 0; i < len; i++)
+	{
+		count = 0;
+		for (j = i + 1; j < len; j++)
+		{
+			if (prices[i] > prices[j])
+			{
+				count++;
+				break;
+			}
+			else
+			{
+				count++;
+			}
+		}
+		answer.push_back(count);
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> prices;
+	int i;
+	int su;
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		prices.push_back(su);
+	}
+
+	vector<int> res = solution(prices);
+	for (i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << " ";
+	}
+	cout << endl;
+}
+

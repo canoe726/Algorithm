@@ -1,0 +1,28 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int Answer = 0;
+	int current = 0;
+
+	int i;
+	int a, b;
+	for (i = 0; i < 4; i++)
+	{
+		cin >> a;
+		cin >> b;
+		
+		current = current - a + b;
+
+		if (Answer < current)
+		{
+			Answer = current;
+		}
+	}
+
+	cout << Answer << '\n';
+	
+	return 0;
+}

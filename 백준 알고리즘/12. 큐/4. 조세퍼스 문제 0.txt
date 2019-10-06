@@ -1,0 +1,38 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int main()
+{
+	int N, K;
+	cin >> N >> K;
+
+	vector<int> jp;
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		jp.push_back(i);
+	}
+
+	int index = 0;
+	cout << "<";
+	while (!jp.empty())
+	{
+		index += (K - 1);
+		if (index >= jp.size())
+		{
+			index = index%jp.size();
+		}
+
+		if (jp.size() != 1)
+		{
+			cout << jp[index] << ", ";
+		}
+		else
+		{
+			cout << jp[index] << ">" << endl;
+		}
+		jp.erase(jp.begin() + index);
+	}
+}

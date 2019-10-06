@@ -1,0 +1,135 @@
+#include<iostream>
+#include<deque>
+#include<cstring>
+
+#define DELIM_CHARS "[,]"
+
+#pragma warning(disable:4996)
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	for (int i = 0; i < T; i++)
+	{
+		deque<int> deq;
+
+		char p[100001];
+		scanf("%s", p);
+
+		int p_len = strlen(p);
+
+		int n;
+		scanf("%d", &n);
+
+		char matrix[400003];
+		scanf("%s", matrix);
+
+		char *ptr = NULL;
+
+		// deque에 숫자 삽입
+		if (strcmp(matrix, "[]"))
+		{
+			for (int i = 0; i < n; i++)
+			{
+				if (i == 0)
+				{
+					ptr = strtok(matrix, DELIM_CHARS);
+					int temp = atoi(ptr);
+					deq.push_back(temp);
+				}
+				else
+				{
+					ptr = strtok(NULL, DELIM_CHARS);
+					int temp = atoi(ptr);
+					deq.push_back(temp);
+				}
+			}
+
+			int r_num = 0;
+			int error = 0;
+
+			// 함수 수행
+			for (int j = 0; j < p_len; j++)
+			{
+				if (p[j] == 'R')
+				{
+					r_num += 1;
+				}
+				else if (p[j] == 'D')
+				{
+					if (deq.empty()) { error = 1; break; }
+					else
+					{
+						if (r_num % 2 == 0) { deq.pop_front(); }
+						else { deq.pop_back(); }
+					}
+				}
+			}
+
+			// 결과 출력
+			if (error == 0)
+			{
+				if (r_num % 2 == 0)
+				{
+					cout << "[";
+					for (int j = 0; j<deq.size(); j++)
+					{
+						if (j != deq.size() - 1)
+						{
+							printf("%d,", deq[j]);
+						}
+						else
+						{
+							printf("%d", deq[j]);
+						}
+
+					}
+					cout << "]\n";
+				}
+				else
+				{
+					cout << "[";
+					for (int j = deq.size() - 1; j >= 0; j--)
+					{
+						if (j != 0)
+						{
+							printf("%d,", deq[j]);
+						}
+						else
+						{
+							printf("%d", deq[j]);
+						}
+
+					}
+					cout << "]\n";
+				}
+			}
+			else
+			{
+				cout << "error" << '\n';
+			}
+		}
+		else
+		{
+			int error = 0;
+
+			for (int j = 0; j < p_len; j++)
+			{
+				if (p[j] == 'D')
+				{
+					error = 1;
+					break;
+				}
+			}
+
+			if (error == 0) { cout << "[]" << "\n"; }
+			else if (error == 1) { cout << "error" << "\n"; }
+		}
+	}
+
+	return 0;
+}

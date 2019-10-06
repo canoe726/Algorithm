@@ -1,0 +1,67 @@
+#include<iostream>
+#include<string>
+
+// clothes 3 : pants -> 2, headgear -> 1
+// (입음 + 안입음) * (입음 + 안입음 ) * ... - (아무거도 안입음)
+// (  2   + 1) * (    1    + 1) - 1
+// (pants + 1) * (headgear + 1) - 1
+
+using namespace std;
+
+int Answer = 0;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	for (int i = 0; i < T; i++)
+	{
+		Answer = 1;
+
+		int clothes_num[31];
+		fill_n(clothes_num, 31, 0);
+		string clothes_type[31];
+
+		int len = 0;
+
+		int n;
+		cin >> n;
+		getchar();
+
+		for (int j = 0; j < n; j++)
+		{
+			string name;
+			string type;
+
+			getline(cin, name, ' ');
+			getline(cin, type, '\n');
+
+			int index = 0;
+			int exist = 0;
+
+			for(int k=0; k<len; k++)
+			{
+				if (type == clothes_type[k]) { index = k; exist = 1; break; }
+			}
+			if (exist == 0)
+			{
+				clothes_num[len] += 1;
+				clothes_type[len++] = type;
+			}
+			else if (exist == 1)
+			{
+				clothes_num[index] += 1;
+			}
+		}
+
+		for (int j = 0; j < len; j++)
+		{
+			Answer *= (clothes_num[j] + 1);
+		}
+		cout << Answer - 1 << endl;
+
+	}
+
+	return 0;
+}

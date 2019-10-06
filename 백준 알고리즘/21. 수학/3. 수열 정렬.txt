@@ -1,0 +1,47 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int A[51] = { 0 };
+	int B[51] = { 0 };
+	int P[51] = { 0 };
+
+	int visited[51] = { 0 };
+
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> A[i];
+		B[i] = A[i];
+	}
+
+	sort(B, B + N);
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			if (visited[j] == 0)
+			{
+				if (A[i] == B[j])
+				{
+					P[i] = j;
+					visited[j] = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		cout << P[i] << ' ';
+	}
+	cout << '\n';
+}

@@ -1,0 +1,147 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class Info
+{
+public :
+	string genres;
+	int play;
+	int total;
+	int index;
+
+	Info(string g, int p, int t, int i) : genres(g), play(p), total(t), index(i) {}
+};
+
+bool compare(Info a, Info b)
+{
+	if (a.total == b.total)
+	{
+		return a.play > b.play;
+	}
+	else
+	{
+		return a.total > b.total;
+	}	
+}
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+	vector<int> answer;
+
+	// CATEGORY
+	vector<pair<string, int>> total;
+
+	int i, j;
+	int g_len = genres.size();
+	total.push_back(pair<string, int>(genres[0], plays[0]));
+	
+	for (i = 1; i < g_len; i++)
+	{
+		int exist = 0;
+		for (j = 0; j < total.size(); j++)
+		{
+			if (genres[i] == total[j].first)
+			{
+				total[j].second += plays[i];
+				exist = 1;
+				break;
+			}
+		}
+		
+		if (exist == 0)
+		{
+			total.push_back(pair<string, int>(genres[i], plays[i]));
+		}
+	}
+
+	vector<Info> information;
+	for (i = 0; i < g_len; i++)
+	{
+		for (j = 0; j < total.size(); j++)
+		{
+			if (genres[i] == total[j].first)
+			{
+				information.push_back(Info(genres[i], plays[i], total[j].second, i));
+				break;
+			}
+		}		
+	}
+
+	sort(information.begin(), information.end(), compare);
+
+	int two = 0;
+	string current = information[0].genres;
+	answer.push_back(information[0].index);
+
+	for (i = 1; i < g_len; i++)
+	{
+		if (current != information[i].genres)
+		{
+			answer.push_back(information[i].index);
+			current = information[i].genres;
+			two = 0;
+		}
+		else
+		{
+			if (two < 1)
+			{
+				answer.push_back(information[i].index);
+				two++;
+			}
+			else
+			{
+				continue;
+			}
+		}
+	}
+
+	return answer;
+}
+
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<string> genres;
+	vector<int> plays;
+
+	int i;
+	string temp;
+	int su;
+	for (i = 0; i < N; i++)
+	{
+		cin >> temp;
+		genres.push_back(temp.c_str());
+	}
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		plays.push_back(su);
+	}
+
+	vector<int> ans = solution(genres, plays);
+	for (i = 0; i < N; i++)
+	{
+		cout << ans[i] << " ";
+	} cout << endl;
+}
+
+/*
+5
+classic
+pop
+classic
+classic
+pop
+500
+600
+150
+800
+2500
+
+*/

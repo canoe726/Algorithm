@@ -1,0 +1,79 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+
+using namespace std;
+
+// 산술평균
+double arithmetic_mean(int start, int end, int N, int *dolls)
+{
+	double result = 0.0;
+
+	int i;
+	for (i = start; i < end; i++)
+	{
+		result += dolls[i];
+	}
+
+	result /= (double)(N);
+
+	return result;
+}
+
+// 분산
+double dispersion(double a_m, int start, int end, int N, int *dolls)
+{
+	double result = 0.0;
+
+	int i;
+	for (i = start; i < end; i++)
+	{
+		result += pow((dolls[i] - a_m), 2);
+	}
+
+	result /= (double)(N);
+
+	return result;
+}
+
+// 표준편차
+double standard_deviation(double d)
+{
+	if (d >= 0)
+	{
+		return sqrt(d);
+	}
+	else
+	{
+		return d;
+	}
+}
+
+int main()
+{
+	int dolls[501] = { 0 };
+	double answer[501] = { 0.0 };
+	int size = 0;
+
+	int N, K;
+	cin >> N >> K;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> dolls[i];
+	}
+
+	double a_m, d, s_d;
+	for (i = 0; i <= N - K; i++)
+	{
+		a_m = arithmetic_mean(i, i + K, K, dolls);
+		d = dispersion(a_m, i, i + K, K, dolls);
+		s_d = standard_deviation(d);
+
+		answer[size++] = s_d;
+	}
+
+	cout.precision(11);
+	cout << *min_element(answer, answer + size) << '\n';
+}

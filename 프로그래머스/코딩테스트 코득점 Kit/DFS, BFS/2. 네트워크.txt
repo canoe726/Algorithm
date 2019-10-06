@@ -1,0 +1,89 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+/*
+3
+1 1 0
+1 1 0
+0 0 1
+
+3
+1 0 0
+0 1 0
+0 0 1
+
+4
+1 1 0 0
+1 1 0 0
+0 0 1 1
+0 0 1 1
+
+5
+1 0 1 0 0
+0 1 0 0 0
+1 0 1 1 0
+0 0 1 1 0
+0 0 0 0 1
+
+*/
+
+int answer = 0;
+int visited[201] = { 0 };
+
+void dfs(int n, vector<vector<int>> computers, int start)
+{
+	int i;
+	
+	for (i = 0; i < computers[start].size(); i++)
+	{
+		if ((start != i) && (computers[start][i] == 1))
+		{
+			if (visited[i] == 0)
+			{
+				visited[i] = 1;
+				dfs(n, computers, i);
+			}
+		}
+	}
+}
+
+int solution(int n, vector<vector<int>> computers) {
+	
+	int i;
+	for (i = 0; i < computers.size(); i++)
+	{
+		if (visited[i] == 0)
+		{
+			answer++;
+			visited[i] = 1;
+		}
+
+		dfs(n, computers, i);
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<vector<int>> computers(N, vector<int>(N,0));
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			int su;
+			cin >> su;
+			computers[i][j] = su;
+		}
+	}
+
+	cout << solution(N, computers) << endl;
+}

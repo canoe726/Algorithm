@@ -1,0 +1,28 @@
+#include<iostream>
+
+using namespace std;
+
+// fibonacci period
+// k(10^n) = 15*10^(n-1)
+#define period 1500000
+#define mod 1000000
+
+int fibo[period];
+
+int main()
+{
+	long long N;
+	cin >> N;
+
+	fibo[0] = 0;
+	fibo[1] = 1;
+
+	for (int i = 2; i < period; i++)
+	{
+		fibo[i] = (fibo[i - 1] + fibo[i - 2]) % mod;
+	}
+
+	cout << fibo[N%period] << '\n';
+
+	return 0;
+}

@@ -1,0 +1,44 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+
+using namespace std;
+
+const int MAX = 1 << 21;
+
+int N, treeSize;
+int result;
+int arr[MAX];
+
+int DFS(int index)
+{
+	if (index * 2 >= treeSize)
+	{
+		result += arr[index];
+		return arr[index];
+	}
+	else
+	{
+		int left = DFS(index * 2);
+		int right = DFS(index * 2 + 1);
+
+		result += arr[index] + abs(left - right);
+
+		return arr[index] + max(left, right);
+	}
+}
+
+int main()
+{
+	cin >> N;
+	treeSize = 1 << (N + 1);
+
+	int i;
+	for (i = 2; i < treeSize; i++)
+	{
+		cin >> arr[i];
+	}
+
+	DFS(1);
+	cout << result << '\n';
+}

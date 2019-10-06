@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include<iostream>
+using namespace std;
+
+vector<vector<int>> answer;
+
+void move(int a, int b)
+{
+	vector<int> temp;
+	temp.push_back(a);
+	temp.push_back(b);
+	answer.push_back(temp);
+}
+
+void recur_hanoi(int n, int from, int by, int to)
+{
+	if (n == 1)
+	{
+		move(from, to);
+	}
+	else
+	{
+		recur_hanoi(n - 1, from, to, by);
+		move(from, to);
+		recur_hanoi(n - 1, by, from, to);
+	}
+}
+
+vector<vector<int>> solution(int n) {
+
+	recur_hanoi(n, 1, 2, 3);
+
+	return answer;
+}
+
+int main()
+{
+	int num;
+	cin >> num;
+
+	vector<vector<int>> res = solution(num);
+	int i, j;
+	for (i = 0; i < res.size(); i++)
+	{
+		for (j = 0; j < res[i].size(); j++)
+		{
+			cout << res[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+}

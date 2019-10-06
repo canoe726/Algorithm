@@ -1,0 +1,95 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int T[7];
+int datas[7] = { 0 };
+int maximum = 0;
+
+void swap(int *i, int *j)
+{
+	int temp = *i;
+	*i = *j;
+	*j = temp;
+}
+
+void process(int q, string a)
+{
+	char temp[7];
+	int i;
+
+	for (i = q - 1; i >= 0; i--)
+	{
+		temp[i] = T[i] + '0';
+	}
+
+	int num = atoi(temp);
+
+	if (num > maximum) { maximum = num; }
+}
+
+void Perm(int n, int r, int q, string a)
+{
+	if (r == 0) {
+		process(q, a);
+		return;
+	}
+	for (int i = n - 1; i >= 0; i--) {
+		swap(&datas[i], &datas[n - 1]); //n-1을 모든 index와 swap해서 다양한 순서를 만든다.
+		T[r - 1] = datas[n - 1];		  //T의 뒤에서부터 결과값 저장	
+		Perm(n - 1, r - 1, q, a);		  //다음  index로 진행 	
+		swap(&datas[i], &datas[n - 1]);
+	}
+}
+
+
+string solution(string numbers, int k) {
+	string answer = "";
+
+	int i;
+	for (i = 0; i < numbers.size(); i++)
+	{
+		datas[i] = numbers[i] - '0';
+	}
+
+	Perm(numbers.size(), numbers.size()-k, numbers.size() - k, answer);
+	
+	answer = to_string(maximum);
+
+	return answer;
+}
+
+int main()
+{
+	int limit;
+
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		string number;
+		cin >> number;
+
+		int k;
+		cin >> k;
+
+		string ans = solution(number, k);
+		cout << ans << endl;
+	}
+}
+
+/*
+3
+1924
+2
+1231234
+3
+4177252841
+4
+
+*/

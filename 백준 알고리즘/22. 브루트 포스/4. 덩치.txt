@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<pair<int, int>> person(N);
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> person[i].first;
+		cin >> person[i].second;
+	}
+
+	int score = 1;
+
+	for (i = 0; i < N; i++)
+	{
+		int num = 1;
+
+		for (j = 0; j < N; j++)
+		{
+			if (person[i].first < person[j].first &&
+				person[i].second < person[j].second)
+			{
+				num++;
+			}
+		}
+
+		cout << num << ' ';
+	}
+
+
+}

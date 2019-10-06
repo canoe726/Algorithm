@@ -1,0 +1,68 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int cacheSize, vector<string> cities) {
+	int answer = 0;
+
+	vector<string> caches;
+
+	int i, j;
+	int cities_length = cities.size();
+
+	if (cacheSize != 0)
+	{
+		for (i = 0; i < cities_length; i++)
+		{
+			int len = cities[i].size();
+			for (j = 0; j < len; j++)
+			{
+				if (cities[i][j] >= 'a' && cities[i][j] <= 'z')
+				{
+					cities[i][j] = cities[i][j] - 'a' + 'A';
+				}
+			}
+		}
+
+		caches.push_back(cities[0]);
+		answer += 5;
+
+		for (i = 1; i < cities_length; i++)
+		{
+			int exist = 0;
+			for (j = 0; j < caches.size(); j++)
+			{
+				if (cities[i] == caches[j])
+				{
+					exist = 1;
+					caches.erase(caches.begin() + j);
+					caches.push_back(cities[i]);
+					answer += 1;
+					break;
+				}
+			}
+
+			if (exist == 0)
+			{
+				if (caches.size() < cacheSize)
+				{
+					caches.push_back(cities[i]);
+					answer += 5;
+				}
+				else
+				{
+					caches.erase(caches.begin());
+					caches.push_back(cities[i]);
+					answer += 5;
+				}
+			}
+		}
+	}
+	else
+	{
+		answer = 5 * cities_length;
+	}
+
+	return answer;
+}

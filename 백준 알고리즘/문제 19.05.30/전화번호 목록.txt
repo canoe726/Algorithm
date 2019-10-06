@@ -1,0 +1,128 @@
+#include<iostream>
+#include<cstdlib>
+#include<cstring>
+
+using namespace std;
+
+char phone_book[10001][11] = { '\0' };
+
+typedef struct Trie
+{
+	Trie *numbers[10];
+	bool finish = false;
+
+	Trie()
+	{
+		memset(numbers, NULL, sizeof(numbers));
+	}
+
+	~Trie()
+	{
+		int i;
+		for (i = 0; i < 10; i++)
+		{
+			if (numbers[i])
+			{
+				delete numbers[i];
+			}
+		}
+	}
+
+	void insert(char *ch)
+	{
+		if (*ch == '\0')
+		{
+			finish = true;
+			return;
+		}
+		else
+		{
+			int num = *ch - '0';
+			if (numbers[num] == NULL)
+			{
+				numbers[num] = new Trie();
+			}
+			numbers[num]->insert(ch + 1);
+		}
+	}
+
+	bool check(char *ch)
+	{
+		if (*ch == '\0')
+		{
+			return true;
+		}
+		else
+		{
+			if (finish == true)
+			{
+				return false;
+			}
+
+			int num = *ch - '0';
+			numbers[num]->check(ch + 1);
+		}
+	}
+
+} Trie;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++)
+	{
+		Trie *Tree = new Trie;
+
+		int n;
+		cin >> n;
+		getchar();
+
+		for (j = 0; j < n; j++)
+		{
+			cin >> phone_book[j];
+
+			for (k = 0; k < strlen(phone_book[j]); k++)
+			{
+				Tree->insert(&phone_book[j][k]);
+			}
+		}
+
+		bool answer = true;
+		for (j = 0; j < n; j++)
+		{
+			if (!Tree->check(phone_book[j]))
+			{
+				answer = false;
+			}
+		}
+
+		if (answer == 1)
+		{
+			cout << "YES" << endl;
+		}
+		else
+		{
+			cout << "NO" << endl;
+		}
+
+		delete Tree;
+	}
+}
+
+/*
+2
+3
+911
+97625999
+91125426
+5
+113
+12340
+123440
+12345
+98346
+
+*/

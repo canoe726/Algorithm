@@ -1,0 +1,47 @@
+#include<iostream>
+
+using namespace std;
+#define mod 10007
+
+int Answer[1001][1001];
+
+int find_combination(int N, int K)
+{
+	if (Answer[N][K] == NULL)
+	{
+		if (N == K || K == 0)
+		{
+			return 1;
+		}
+		else
+		{
+			return find_combination(N - 1, K - 1) + find_combination(N - 1, K);
+		}
+	}
+	else
+	{
+		return Answer[N][K];
+	}
+}
+
+int main()
+{
+	int N, K;
+	cin >> N;
+	cin >> K;
+
+	for (int i = 0; i < 1001; i++)
+	{
+		for (int j = 0; j < 1001; j++)
+		{
+			if (i >= j)
+			{
+				Answer[i][j] = (find_combination(i, j)) % mod;
+			}
+		}
+	}
+
+	cout << Answer[N][K] << '\n';
+
+	return 0;
+}

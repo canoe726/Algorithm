@@ -1,0 +1,121 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int arr[500000];
+int sorted[500000];
+int most[500000];
+
+int find_average(int n)
+{
+	int result = 0;
+
+	int sum = 0;
+
+	for (int i = 0; i < n; i++) { sum += arr[i]; }
+
+	if (sum >= 0)
+	{
+		if ((sum / float(n) - int(sum / n)) >= 0.5) { result = int(sum / n) + 1; }
+		else { result = int(sum / n); }
+	}
+	else
+	{
+		if (((sum / float(n) - int(sum / n))*(-1) >= 0.5)) { result = int(sum / n) - 1; }
+		else { result = int(sum / n); }
+	}
+
+	return result;
+}
+
+int find_mid(int n)
+{
+	return sorted[n / 2];
+}
+
+int find_freq(int n)
+{
+	int index = 0;
+	int most_freq = 0;
+	int num = 0;
+	int before = sorted[0];
+
+	for (int i = 0; i <= n; i++)
+	{
+		if (i != n)
+		{
+			if (before == sorted[i]) { num += 1; }
+			else
+			{
+				if (most_freq == num)
+				{
+					most[index] = before;
+					index += 1;
+				}
+				else if (most_freq < num)
+				{
+					index = 0;
+					most[index] = before;
+					most_freq = num;
+					index += 1;
+				}
+
+				num = 1;
+			}
+
+			before = sorted[i];
+		}
+		else
+		{
+			if (most_freq == num)
+			{
+				most[index] = before;
+				index += 1;
+			}
+			else if (most_freq < num)
+			{
+				index = 0;
+				most[index] = before;
+				most_freq = num;
+				index += 1;
+			}
+		}
+	}
+
+	if (index == 1) { return most[0]; }
+	else { return most[1]; }
+}
+
+int find_range(int max, int min)
+{
+	if (max < 0 && min < 0) { return min * (-1) + max; }
+	else { return max - min; }
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int max = -10000;
+	int min = 10000;
+
+	for (int i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		arr[i] = su;
+		sorted[i] = su;
+
+		if (su > max) { max = su; }
+		if (su < min) { min = su; }
+	}
+
+	sort(sorted, sorted + N);
+
+	cout << find_average(N) << endl;
+	cout << find_mid(N) << endl;
+	cout << find_freq(N) << endl;
+	cout << find_range(max, min) << endl;
+}

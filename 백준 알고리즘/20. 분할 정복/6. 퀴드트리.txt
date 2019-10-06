@@ -1,0 +1,64 @@
+#include<iostream>
+
+using namespace std;
+
+int quadtree[65][65];
+
+void compression(int size, int row, int col)
+{
+	int same = 0;
+
+	int first = quadtree[row][col];
+
+	int i, j;
+	for (i = row; i < row + size; i++)
+	{
+		for (j = col; j < col + size; j++)
+		{
+			if (first != quadtree[i][j])
+			{
+				same = 1;
+			}
+		}
+	}
+
+	if (same == 0)
+	{
+		cout << first;
+	}
+	else
+	{
+		// 8 : 0 0 / 4 0 / 0 4 / 4 4
+
+		int newsize = size / 2;
+		cout << '(';
+		for (i = row; i <= row + newsize; i += newsize)
+		{
+			for (j = col; j <= col + newsize; j += newsize)
+			{
+				compression(size / 2, i, j);
+			}
+		}
+		cout << ')';
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			char su;
+			cin >> su;
+			quadtree[i][j] = su - '0';
+		}
+	}
+
+	compression(N, 0, 0);
+}
+

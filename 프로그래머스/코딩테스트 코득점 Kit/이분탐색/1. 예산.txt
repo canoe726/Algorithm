@@ -1,0 +1,175 @@
+// 정답 코드
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+/*
+4
+120 110 140 150
+511
+
+*/
+
+using namespace std;
+
+int solution(vector<int> budgets, int M) {
+	int answer = 0;
+	
+	int sum = 0;
+	int i;
+	int len = budgets.size();
+
+	for (i = 0; i < len; i++)
+	{
+		sum += budgets[i];
+	}
+
+	sort(budgets.begin(), budgets.end());
+
+	if (sum <= M)
+	{
+		answer = budgets[len - 1];
+	}
+	else
+	{
+		int low, high, mid;
+
+		low = 0;
+		high = M;
+
+		while (low + 1 < high)
+		{
+			mid = (low + high) / 2;
+			sum = 0;
+
+			for (i = 0; i < budgets.size(); i++)
+			{
+				if (budgets[i] < mid)
+				{
+					sum += budgets[i];
+				}
+				else
+				{
+					sum += mid;
+				}
+			}
+
+			if (sum <= M)
+				low = mid;
+			else
+				high = mid;
+		}
+
+		answer = low;
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> budgets;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		budgets.push_back(su);
+	}
+
+	int M;
+	cin >> M;
+
+	cout << solution(budgets, M) << endl;
+}
+
+// 내가 푼 코드
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+/*
+4
+120 110 140 150
+600
+
+*/
+
+using namespace std;
+
+bool desc(int a, int b)
+{
+	return a > b;
+}
+
+int solution(vector<int> budgets, int M) {
+	int answer = 0;
+	int len = budgets.size();
+	int size = budgets.size();
+	int i;
+
+	sort(budgets.begin(), budgets.end(), desc);
+
+	int divide;
+	int total = 0;
+
+	for (i = size - 1; i >= 0; i--)
+	{
+		divide = M / (double)len;
+		
+		if (divide >= budgets[i])
+		{
+			M -= budgets[i];
+			len--;
+		}
+		else
+		{
+			total += budgets[i];
+		}
+	}
+
+	if (len <= 0)
+	{
+		answer = budgets[0];
+	}
+	else
+	{
+		if (M < total)
+		{
+			answer = M / (double)len;
+		}
+		else
+		{
+			answer = M;
+		}
+	}
+	
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> budgets;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		budgets.push_back(su);
+	}
+
+	int M;
+	cin >> M;
+
+	cout << solution(budgets, M) << endl;
+}

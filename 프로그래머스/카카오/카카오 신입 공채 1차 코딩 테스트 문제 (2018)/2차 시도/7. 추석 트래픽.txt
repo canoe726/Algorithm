@@ -1,0 +1,72 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+using namespace std;
+
+typedef struct Time
+{
+	int hour;
+	int minute;
+	int second;
+	int milisecond;
+	float process;
+} Time;
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	getchar();
+
+	vector<Time> T;
+
+	int i, j;
+	for (i = 0; i < n; i++)
+	{
+		char str[31];	
+		cin.getline(str, 31, '\n');
+
+		char h[3], m[3], s[3], ms[4], p[6];
+		
+		// hour
+		h[0] = str[11];
+		h[1] = str[12];
+		h[2] = '\0';
+
+		// minute
+		m[0] = str[14];
+		m[1] = str[15];
+		m[2] = '\0';
+
+		// second
+		s[0] = str[17];
+		s[1] = str[18];
+		s[2] = '\0';
+
+		// mili second
+		ms[0] = str[20];
+		ms[1] = str[21];
+		ms[2] = str[22];
+		ms[3] = '\0';
+
+		for (j = 24; j < strlen(str) - 1; j++)
+		{
+			p[j - 24] = str[j];
+		}
+		p[j - 24] = '\0';
+
+		Time temp;
+		temp.hour = atoi(h);
+		temp.minute = atoi(m);
+		temp.second = atoi(s);
+		temp.milisecond = atoi(ms);
+		temp.process = atof(p);
+
+		T.push_back(temp);
+	}
+
+
+
+}

@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+string solution(vector<string> participant, vector<string> completion) {
+	string answer = "";
+
+	sort(participant.begin(), participant.end());
+	sort(completion.begin(), completion.end());
+
+	const int size = participant.size();
+
+	for (int i = 0; i<size; i++) {
+
+		if (participant[i] != completion[i]) {
+			answer = participant[i];
+			break;
+		}
+	}
+	return answer;
+}
+
+/*
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	int N, M;
+	cin >> N;
+
+	vector<string> p;
+	vector<string> c;
+
+	int i;
+	string temp;
+	for (i = 0; i < N; i++)
+	{
+		cin >> temp;
+		p.push_back(temp.c_str());
+	}
+
+	cin >> M;
+	for (i = 0; i < M; i++)
+	{
+		cin >> temp;
+		c.push_back(temp.c_str());
+	}
+
+	string ans = solution(p, c);
+	cout << ans << endl;
+}
+
+/*
+3
+leo
+kiki
+eden
+2
+eden
+kiki
+
+5
+marina
+josipa
+nikola
+vinko
+filipa
+4
+josipa
+filipa
+marina
+nikola
+
+4
+mislav
+stanko
+mislav
+ana
+3
+stanko
+ana
+mislav
+
+
+5
+mislav
+mislav
+mislav
+mislav
+mislav
+4
+mislav
+mislav
+mislav
+mislav
+*/
+*/

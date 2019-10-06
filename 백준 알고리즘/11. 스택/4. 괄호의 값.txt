@@ -1,0 +1,109 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+// ( : -1, ) : -2
+// [ : -3, ] : -4
+
+int main()
+{
+	stack<int> s;
+
+	string str;
+	cin >> str;
+
+	int i, size, answer = 0;
+	size = str.size();
+
+	for (i = 0; i < size; i++)
+	{
+		if (str[i] == '(' || str[i] == '[')
+		{
+			if (str[i] == '(')
+			{
+				s.push(-1);
+			}
+			else
+			{
+				s.push(-3);
+			}
+		}
+		else
+		{
+			if (!s.empty())
+			{
+				if (s.top() == -1 && str[i] == ')')
+				{
+					s.pop();
+					s.push(2);
+				}
+				else if (s.top() == -3 && str[i] == ']')
+				{
+					s.pop();
+					s.push(3);
+				}
+				else
+				{
+					int temp = 0;
+
+					while (!s.empty())
+					{
+						if (s.top() != -1 && s.top() != -3 && s.top() != -2 && s.top() != -4)
+						{
+							temp += s.top();
+							s.pop();
+						}
+						else
+						{
+							break;
+						}
+					}
+
+					if (!s.empty())
+					{
+						if (s.top() == -1 && str[i] == ')')
+						{
+							temp *= 2;
+							s.pop();
+							s.push(temp);
+						}
+						else if (s.top() == -3 && str[i] == ']')
+						{
+							temp *= 3;
+							s.pop();
+							s.push(temp);
+						}
+					}
+					else
+					{
+						answer = 0;
+						break;
+					}
+				}
+			}
+			else
+			{
+				answer = 0;
+				break;
+			}
+		}
+	}
+	
+	while (!s.empty())
+	{
+		if (s.top() != -1 && s.top() != -3 && s.top() != -2 && s.top() != -4)
+		{
+			answer += s.top();
+			s.pop();
+		}
+		else
+		{
+			answer = 0;
+			break;
+		}
+	}
+	cout << answer << endl;
+}
+

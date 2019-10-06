@@ -1,0 +1,135 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+#define INF 987654321
+
+int graph[51][51] = { 0 };
+
+int solution(int N, vector<vector<int> > road, int K) {
+	int answer = 0;
+
+	int i, j;
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			graph[i][j] = INF;
+		}
+	}
+	
+	// make graph
+	for (i = 0; i < road.size(); i++)
+	{
+		if (graph[road[i][0] - 1][road[i][1] - 1] != 0)
+		{
+			if (graph[road[i][0] - 1][road[i][1] - 1] > road[i][2])
+			{
+				graph[road[i][0] - 1][road[i][1] - 1] = road[i][2];
+			}
+		}
+		else
+		{
+			graph[road[i][0] - 1][road[i][1] - 1] = road[i][2];
+		}
+
+		if (graph[road[i][1] - 1][road[i][0] - 1] != 0)
+		{
+			if (graph[road[i][1] - 1][road[i][0] - 1] > road[i][2])
+			{
+				graph[road[i][1] - 1][road[i][0] - 1] = road[i][2];
+			}
+		}
+		else
+		{
+			graph[road[i][1] - 1][road[i][0] - 1] = road[i][2];
+		}
+	}
+
+	int visited[51] = { 0 };
+	int min_distance[51] = { 0 };
+
+	// initialize max value in min_distance matrix
+	for (i = 0; i < N; i++)
+	{
+		min_distance[i] = INF;
+	}
+	min_distance[0] = 0;
+
+	// Dijkstra algorithm
+	while (1)
+	{
+		int temp = INF;
+		int cur_index = -1;
+
+		for (i = 0; i < N; i++)
+		{
+			if (visited[i] == 0 && min_distance[i] < temp)
+			{
+				temp = min_distance[i];
+				cur_index = i;
+			}
+		}
+
+		if (temp == INF)
+		{
+			break;
+		}
+
+		visited[cur_index] = 1;
+
+		for (i = 0; i < N; i++)
+		{
+			if (visited[i] == 1)
+			{
+				continue;
+			}
+
+			unsigned int distance = min_distance[cur_index] + graph[cur_index][i];
+
+			if (distance < min_distance[i])
+			{
+				min_distance[i] = distance;
+			}
+		}
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		if (min_distance[i] <= K)
+		{
+			answer++;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+	
+	int loop;
+	cin >> loop;
+
+	vector<vector<int> > road(loop);
+
+	int i, j;
+	for (i = 0; i < loop; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			int su;
+			cin >> su;
+			road[i].push_back(su);
+		}
+	}
+
+	int K;
+	cin >> K;
+
+	cout << solution(N, road, K) << endl;
+}

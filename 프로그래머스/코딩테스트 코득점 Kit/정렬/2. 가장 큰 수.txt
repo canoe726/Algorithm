@@ -1,0 +1,77 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(string a, string b)
+{
+	string a_ = a + b;
+	string b_ = b + a;
+
+	return a_ > b_;
+}
+
+string solution(vector<int> numbers) {
+	string answer = "";
+
+	vector<string> number;
+	int i;
+	for (i = 0; i < numbers.size(); i++)
+	{
+		number.push_back(to_string(numbers[i]));
+	}
+
+	sort(number.begin(), number.end(), cmp);
+
+	for (i = 0; i < number.size(); i++)
+	{
+		answer += number[i];
+	}
+
+	if (answer[0] == '0')
+	{
+		return "0";
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	int M;
+	vector<int> numbers;
+
+	for (i = 0; i < N; i++)
+	{
+		cin >> M;
+		for (j = 0; j < M; j++)
+		{
+			int su;
+			cin >> su;
+			numbers.push_back(su);
+		}
+		string str = solution(numbers);
+		cout << str << endl;
+
+		int n_len = numbers.size();
+		for (j = 0; j < n_len; j++)
+		{
+			numbers.erase(numbers.begin());
+		}
+	}
+}
+
+/*
+2
+5
+3 30 34 5 9
+3
+6 10 2
+
+*/

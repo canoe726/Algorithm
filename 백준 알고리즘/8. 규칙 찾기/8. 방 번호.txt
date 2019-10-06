@@ -1,0 +1,45 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+int Answer = -1;
+
+int set[10];
+
+int main()
+{
+	// 48 ~ 57
+	// cout << int('0') << ", " << int('9') << endl;
+
+	string N;
+	cin >> N;
+
+	fill_n(set, 0, 10);
+
+	for (int i = 0; i < N.length(); i++)
+	{
+		if ((N[i] - 48) == 6)
+		{
+			if (set[6] > set[9]) { set[9] += 1; }
+			else { set[6] += 1; }
+			continue;
+		}
+		if ((N[i] - 48) == 9)
+		{
+			if (set[6] < set[9]) { set[6] += 1; }
+			else { set[9] += 1; }
+			continue;
+		}
+
+		set[N[i] - 48] += 1;
+	}
+
+	for (int j = 0; j < 10; j++)
+	{
+		if (Answer < set[j]) { Answer = set[j]; }
+	}
+	
+	cout << Answer << endl;
+}

@@ -1,0 +1,65 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(int brown, int red) {
+	vector<int> answer;
+
+	int total = brown + red;
+
+	int width = total;
+	int height = 1;
+	
+	while (1)
+	{
+		if (height > width) { break; }
+
+		if (width * height == total)
+		{
+			if ((width * 2 + height * 2 - 4) == (total - red))
+			{
+				answer.push_back(width);
+				answer.push_back(height);
+				break;
+			}
+		}
+		
+		height += 1;
+		width = total / height;
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int brown;
+	int red;
+	
+	int i, j;
+
+	for (i = 0; i < N; i++)
+	{
+		cin >> brown;
+		cin >> red;
+
+		vector<int> ans = solution(brown, red);
+		for (j = 0; j < ans.size(); j++)
+		{
+			cout << ans[j] << endl;
+		}
+	}
+}
+
+/*
+3
+10 2
+8 1
+24 24
+
+*/

@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int find_answer(int n)
+{
+	long long a = 1, b = 1;
+
+	int i;
+	for (i = n + 2; i <= 2 * n; i++)
+	{
+		a *= i;
+	}
+	for (i = 1; i <= n; i++)
+	{
+		b *= i;
+	}
+
+	return a / b;
+}
+
+int solution(int n) {
+	int answer = 0;
+
+	answer = find_answer(n);
+
+	return answer;
+}
+
+#include<iostream>
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	cout << solution(n) << '\n';
+}

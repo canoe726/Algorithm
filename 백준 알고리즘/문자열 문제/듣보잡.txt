@@ -1,0 +1,47 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+vector<string> no_hear;
+vector<string> no_see;
+vector<string> no_hear_see;
+
+int main()
+{
+	int N, M;
+	cin >> N;
+	cin >> M;
+
+	string temp;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> temp;
+		no_hear.push_back(temp);
+	}
+	for (i = 0; i < M; i++)
+	{
+		cin >> temp;
+		no_see.push_back(temp);
+	}
+	sort(no_hear.begin(), no_hear.end());
+	sort(no_see.begin(), no_see.end());
+
+	no_hear_see.resize(no_hear.size() + no_see.size());//공간확보
+	auto itr = set_intersection(no_hear.begin(), no_hear.end(), no_see.begin(), no_see.end(), no_hear_see.begin());//교집합
+	no_hear_see.erase(itr, no_hear_see.end());//남은공간 제거
+
+	sort(no_hear_see.begin(), no_hear_see.end());
+	int len = no_hear_see.size();
+	cout << len << '\n';
+	for (i = 0; i < len; i++)
+	{
+		cout << no_hear_see[i] << '\n';
+	}
+
+	return 0;
+}

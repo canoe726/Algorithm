@@ -1,0 +1,126 @@
+#include<iostream>
+#include<cmath>
+#include<climits>
+#include<vector>
+
+using namespace std;
+
+int table[20][20] = { 0 };
+int start_team_value = 0;
+int link_team_value = 0;
+int answer = INT_MAX;
+
+void calculate_team_score(vector<int> a, vector<int> b, int start, int count, int N, int mode)
+{
+	int i, j;
+
+	if (count >= N)
+	{
+		if (mode == 0)
+		{
+			start_team_value += table[a[0]][a[1]];
+			start_team_value += table[a[1]][a[0]];
+		}
+		else
+		{
+			link_team_value += table[a[0]][a[1]];
+			link_team_value += table[a[1]][a[0]];
+		}
+
+		return;
+	}
+
+	for (i = start; i < b.size(); i++)
+	{
+		a.push_back(b[i]);
+		calculate_team_score(a, b, i + 1, count + 1, N, mode);
+
+		if (start >= b.size())
+		{
+			a.clear();
+		}
+		else
+		{
+			a.pop_back();
+		}
+	}
+}
+
+void team_combination(vector<int> team, int start, int count, int N)
+{
+	int i, j;
+
+	if (count >= N / 2)
+	{
+		vector<int> start_team;
+		start_team_value = 0;
+		calculate_team_score(start_team, team, 0, 0, 2, 0);
+
+		// find link_team
+		vector<int> remain_team;
+		for (i = 0; i < N; i++)
+		{
+			int exist = 0;
+			for (j = 0; j < team.size(); j++)
+			{
+				if (i == team[j])
+				{
+					exist = 1;
+				}
+			}
+			if (exist == 0)
+			{
+				remain_team.push_back(i);
+			}
+		}
+
+		vector<int> link_team;
+		link_team_value = 0;
+		calculate_team_score(link_team, remain_team, 0, 0, 2, 1);
+		
+		int res = abs(start_team_value - link_team_value);
+		if (answer > res)
+		{
+			answer = res;
+		}
+
+		return;
+	}
+
+	for (i = start; i < N; i++)
+	{
+		team.push_back(i);
+		team_combination(team, i + 1, count + 1, N);
+
+		if (start >= N)
+		{
+			team.clear();
+		}
+		else
+		{
+			team.pop_back();
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			int su;
+			cin >> su;
+			table[i][j] = su;
+		}
+	}
+
+	vector<int> team;
+	team_combination(team, 0, 0, N);
+
+	cout << answer << '\n';
+}

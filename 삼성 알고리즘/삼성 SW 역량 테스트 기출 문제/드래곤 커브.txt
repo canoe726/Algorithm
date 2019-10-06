@@ -1,0 +1,116 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+
+#define PI 3.141592
+#define FIELD_SIZE 101
+
+using namespace std;
+
+int N;
+int field[FIELD_SIZE][FIELD_SIZE] = { 0 };
+int generation[20];
+int answer = 0;
+
+vector<pair<int, int>> pos[20];
+
+void mark_dot()
+{
+	int i, j;
+	
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < pos[i].size(); j++)
+		{
+			field[pos[i][j].first][pos[i][j].second] = 1;
+		}
+	}
+}
+
+void count_rectangle()
+{
+	int i, j;
+	// y axis
+	for (i = 0; i < FIELD_SIZE - 1; i++)
+	{
+		// x axis
+		for (j = 0; j < FIELD_SIZE - 1; j++)
+		{			
+			if (field[i][j] == 1 &&
+				field[i][j + 1] == 1 &&
+				field[i + 1][j] == 1 &&
+				field[i + 1][j + 1] == 1)
+			{
+				answer++;
+			}
+		}
+	}
+}
+
+void make_dragon_curve()
+{
+	int i, j, k;
+	double degree = (90.0 * (PI / 180.0));
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < generation[i]; j++)
+		{
+			// ±âÁØÁ¡
+			int basis_x = pos[i].back().first;
+			int basis_y = pos[i].back().second;
+
+			int len = pos[i].size();
+
+			for (k = len - 2; k >=0; k--)
+			{
+				double x_prime = -sin(degree)*(pos[i][k].second - basis_y) + basis_x;
+				double y_prime = sin(degree)*(pos[i][k].first - basis_x) + basis_y;
+
+				pos[i].push_back(pair<int, int>((int)(x_prime + 0.5), (int)(y_prime + 0.5)));
+			}			
+		}
+	}
+}
+
+int main()
+{
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int x, y, d, g;
+		cin >> x >> y >> d >> g;
+		generation[i] = g;
+
+		pos[i].push_back(pair<int, int>(x, y));
+		
+		// right
+		if (d == 0)
+		{
+			pos[i].push_back(pair<int, int>(x + 1, y));
+		}
+		// up
+		else if (d == 1)
+		{
+			pos[i].push_back(pair<int, int>(x, y - 1));
+		}
+		// left
+		else if (d == 2)
+		{
+			pos[i].push_back(pair<int, int>(x - 1, y));
+		}
+		// down
+		else if (d == 3)
+		{
+			pos[i].push_back(pair<int, int>(x, y + 1));
+		}
+	}
+	
+	make_dragon_curve();
+	mark_dot();
+	count_rectangle();
+
+	cout << answer << '\n';
+}

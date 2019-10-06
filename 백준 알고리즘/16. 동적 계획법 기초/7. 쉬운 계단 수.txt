@@ -1,0 +1,38 @@
+#include<iostream>
+
+using namespace std;
+
+#define MOD 1000000000
+
+unsigned long long Answer[101][10];
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	Answer[1][0] = 0;
+	for (int i = 1; i < 10; i++)
+	{
+		Answer[1][i] = 1;
+	}
+
+	for (int i = 2; i < 101; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			if (j == 0) { Answer[i][j] = Answer[i - 1][j + 1] % MOD; }
+			else if (j == 9) { Answer[i][j] = Answer[i - 1][j - 1] % MOD; }
+			else { Answer[i][j] = (Answer[i - 1][j - 1] + Answer[i - 1][j + 1]) % MOD; }
+		}
+	}
+
+	unsigned long long result = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		result += Answer[N][i] % MOD;
+	}
+	cout << result % MOD << endl;
+
+	return 0;
+}

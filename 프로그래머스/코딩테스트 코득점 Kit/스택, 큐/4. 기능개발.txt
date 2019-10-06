@@ -1,0 +1,74 @@
+#include <string>
+#include <vector>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> progresses, vector<int> speeds) {
+	vector<int> answer;
+	vector<int> day;
+
+	int len = progresses.size();
+
+	int i, j;
+	for (i = 0; i < len; i++)
+	{
+		float x = (100 - progresses[i]) / (float)speeds[i];
+		x = ceil(x);
+		day.push_back(int(x));
+	}
+
+	int count = 1;
+	for (i = 0; i < len; i++)
+	{
+		count = 1;
+		for (j = i + 1; j < len; j++)
+		{
+			if (day[i] < day[j])
+			{
+				break;
+			}
+			else
+			{
+				count += 1;
+			}
+		}
+		if (count != 1)
+		{
+			i += count - 1;
+		}
+		answer.push_back(count);
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> progresses;
+	vector<int> speeds;
+	int i;
+	int su;
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		progresses.push_back(su);
+	}
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		speeds.push_back(su);
+	}
+
+	vector<int> res = solution(progresses, speeds);
+	for (i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << " ";
+	}
+	cout << endl;
+}
+

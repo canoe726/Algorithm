@@ -1,0 +1,41 @@
+#include<iostream>
+
+using namespace std;
+
+int count_num(int n)
+{
+	int result = 0;
+
+	while (n)
+	{
+		result += n % 10;
+		n /= 10;
+	}
+
+	return result;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int exist = 0;
+	int i;
+	for (i = 1; i < 1000001; i++)
+	{
+		if (N == (i + count_num(i)))
+		{
+			cout << i << '\n';
+			exist = 1;
+			break;
+		}
+	}
+
+	if (exist == 0)
+	{
+		cout << 0 << '\n';
+	}
+}
+
+

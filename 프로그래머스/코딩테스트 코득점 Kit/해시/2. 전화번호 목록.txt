@@ -1,0 +1,76 @@
+#include <cstring>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool solution(vector<string> phone_book) {
+	bool answer = true;
+
+
+	sort(phone_book.begin(), phone_book.end());
+	
+	int size = phone_book.size();
+	int i;
+	for (i = 0; i < size - 1; i++)
+	{
+		if (strncmp(phone_book[i].c_str(), phone_book[i + 1].c_str(), phone_book[i].size()) == 0)
+		{
+			answer = false;
+			break;
+		}
+	}
+
+	return answer;
+}
+
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<string> p;
+	vector<string> c;
+
+	int i;
+	string temp;
+	for (i = 0; i < N; i++)
+	{
+		cin >> temp;
+		p.push_back(temp.c_str());
+	}
+
+	bool ans = solution(p);
+	cout << ans << endl;
+}
+
+/*
+3
+119
+97674223
+1195524421
+
+3
+123
+456
+789
+
+5
+12
+123
+1235
+567
+88
+
+6
+12
+1123
+15235
+567
+5678
+88
+
+*/

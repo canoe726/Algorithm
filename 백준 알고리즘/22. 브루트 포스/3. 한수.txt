@@ -1,0 +1,55 @@
+#include<iostream>
+
+using namespace std;
+
+bool num_cmp(int X)
+{
+	if (X == 1000)
+	{
+		return false;
+	}
+
+	int a[3] = { 0 };
+	int i = 0;
+	int index = 0;
+	bool result = false;
+
+	while (X)
+	{
+		a[index++] = X % 10;
+		X /= 10;
+	}
+
+	if ((a[2] - a[1]) == (a[1] - a[0]))
+	{
+		result = true;
+	}
+
+	return result;
+}
+
+int main()
+{
+	int result = 0;
+
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		if (i < 100)
+		{
+			result++;
+		}
+		else
+		{
+			if (num_cmp(i) == true)
+			{
+				result++;
+			}
+		}
+	}
+
+	cout << result << '\n';
+}

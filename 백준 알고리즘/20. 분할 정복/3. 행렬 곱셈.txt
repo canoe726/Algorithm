@@ -1,0 +1,96 @@
+#include<iostream>
+#include<stdlib.h>
+
+using namespace std;
+
+void print_matrix(int **A, int row, int col)
+{
+	int i, j;
+
+	for (i = 0; i < row; i++)
+	{
+		for (j = 0; j < col; j++)
+		{
+			cout << A[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+}
+
+int **alloc_matrix(int row, int col)
+{
+	int i;
+
+	int **A = new int*[row];
+	for (i = 0; i < row; i++)
+	{
+		A[i] = new int[col];
+	}
+
+	return A;
+}
+
+void init_matrix(int **A, int row, int col)
+{
+	int i, j;
+
+	for (i = 0; i < row; i++)
+	{
+		for (j = 0; j < col; j++)
+		{
+			cin >> A[i][j];
+		}
+	}
+}
+
+void multiply_matrix(int **res,int **A, int **B, int A_N, int A_M, int B_K)
+{
+	int i, j, k;
+
+	for (i = 0; i < A_N; i++)
+	{
+		for (j = 0; j < B_K; j++)
+		{
+			int sum = 0;
+			for (k = 0; k < A_M; k++)
+			{
+				sum += A[i][k] * B[k][j];
+			}
+			res[i][j] = sum;
+		}
+	}
+}
+
+int main()
+{
+	int **result = NULL;
+
+	int **A = NULL;
+	int A_N;
+	int A_M;
+
+	cin >> A_N;
+	cin >> A_M;
+
+	A = alloc_matrix(A_N, A_M);
+	init_matrix(A, A_N, A_M);
+
+	int **B = NULL;
+	int B_M;
+	int B_K;
+
+	cin >> B_M;
+	cin >> B_K;
+
+	B = alloc_matrix(B_M, B_K);
+	init_matrix(B, B_M, B_K);
+
+	result = alloc_matrix(A_N, B_K);
+
+	multiply_matrix(result, A, B, A_N, A_M, B_K);
+
+	//print_matrix(A, A_N, A_M);
+	//print_matrix(B, B_M, B_K);
+	print_matrix(result, A_N, B_K);
+}
+

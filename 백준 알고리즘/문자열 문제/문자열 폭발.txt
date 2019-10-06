@@ -1,0 +1,33 @@
+#pragma warning (disable:4996)
+
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main()
+{
+	char res[1000001];
+
+	string str;
+	cin >> str;
+	string boom;
+	cin >> boom;
+
+	int str_len = strlen(str.c_str());
+	int boom_len = strlen(boom.c_str());
+
+	int i, j = 0;
+	for (i = 0; i <= str_len; i++)
+	{
+		if (strncmp(res + j - boom_len, boom.c_str(), boom_len) == 0)
+		{
+			j -= boom_len;
+		}
+		res[j++] = str[i];
+	}
+	if (!res[0]) { cout << "FRULA" << '\n'; }
+	else { cout << res << '\n'; }
+
+	return 0;
+}

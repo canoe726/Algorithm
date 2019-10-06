@@ -1,0 +1,60 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int N;
+int T[16] = { 0 };
+int P[16] = { 0 };
+int dp[16] = { 0 };
+int answer = 0;
+
+void find_max(int before, int cur, int start)
+{
+	if (start > N)
+	{
+		if ((start-1) == N)
+		{
+			dp[cur] = max(P[cur] + dp[before], dp[cur]);
+			if (dp[cur] > answer) { answer = dp[cur]; }
+		}
+		return;
+	}
+	
+	int i;
+	for (i = start; i <= N; i++)
+	{
+		dp[cur] = max(P[cur] + dp[before], dp[cur]);
+
+		if (dp[cur] > answer) { answer = dp[cur]; }
+
+		find_max(cur, i, i + T[i]);
+	}
+}
+
+void dynamic()
+{
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		find_max(0, i, i + T[i]);
+	}
+}
+
+int main()
+{
+	cin >> N;
+
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		int t, p;
+		cin >> t >> p;
+		T[i] = t;
+		P[i] = p;
+	}
+
+	dynamic();
+
+	cout << answer << '\n';
+}

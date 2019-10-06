@@ -1,0 +1,111 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(int n, int t, int m, int p) {
+	string answer = "";
+
+	vector<int> result;
+
+	int i, j;
+	int number = 0;
+	int order = 1;
+
+	while (t > 0)
+	{
+		int temp = number;
+
+		if (temp == 0)
+		{
+			if (p == 1)
+			{
+				result.push_back(0);
+				t -= 1;
+			}
+			order += 1;
+		}
+		else
+		{
+			vector<int> n_group;
+
+			while (temp)
+			{
+				n_group.push_back(temp%n);
+				temp /= n;
+			}
+
+			for (j = n_group.size() - 1; j >= 0; j--)
+			{
+				if (order == p)
+				{
+					t -= 1;
+					if (t < 0)
+					{
+						break;
+					}
+					result.push_back(n_group[j]);
+				}
+				order += 1;
+				if (order > m) { order = 1; }
+			}
+		}
+
+		number += 1;
+	}
+
+	if (n < 10)
+	{
+		for (i = 0; i < result.size(); i++)
+		{
+			answer.push_back(result[i] + '0');
+		}
+	}
+	else
+	{
+		for (i = 0; i < result.size(); i++)
+		{
+			if (result[i] >= 0 && result[i] <= 9)
+			{
+				answer.push_back(result[i] + '0');
+			}
+			else if (result[i] == 10)
+			{
+				answer.push_back('A');
+			}
+			else if (result[i] == 11)
+			{
+				answer.push_back('B');
+			}
+			else if (result[i] == 12)
+			{
+				answer.push_back('C');
+			}
+			else if (result[i] == 13)
+			{
+				answer.push_back('D');
+			}
+			else if (result[i] == 14)
+			{
+				answer.push_back('E');
+			}
+			else if (result[i] == 15)
+			{
+				answer.push_back('F');
+			}
+		}
+	}
+
+	return answer;
+}
+
+
+#include<iostream>
+
+int main()
+{
+	int n, t, m, p;
+	cin >> n >> t >> m >> p;
+
+	cout << solution(n, t, m, p) << '\n';
+}

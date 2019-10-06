@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+/*
+5
+1 1 1 1 1
+3
+
+*/
+
+int answer = 0;
+
+void dfs(vector<int> numbers, int target, int index, int total)
+{
+	if (index == numbers.size())
+	{
+		if (total == target)
+		{
+			answer++;
+		}
+		return;
+	}
+	dfs(numbers, target, index + 1, total + numbers[index]);
+	dfs(numbers, target, index + 1, total - numbers[index]);
+}
+
+int solution(vector<int> numbers, int target) {
+	
+	dfs(numbers, target, 0, 0);
+
+	return answer;
+}

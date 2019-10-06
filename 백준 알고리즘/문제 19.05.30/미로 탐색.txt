@@ -1,0 +1,69 @@
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#include<string>
+
+using namespace std;
+
+queue<pair<int, int>> q;
+// ╩С го аб ©Л | y, x
+int N, M;
+int dir[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+int maze[101][101] = { 0 };
+int visited[101][101] = { 0 };
+
+void bfs()
+{
+	// y, x
+	q.push(make_pair(1, 1));
+	visited[1][1] = 1;
+
+	int i;
+
+	while (!q.empty())
+	{
+		int qy, qx;
+		qy = q.front().first;
+		qx = q.front().second;
+		q.pop();
+
+		if (qy == N && qx == M)
+		{
+			break;
+		}
+		
+		for (i = 0; i < 4; i++)
+		{
+			if (qy + dir[i][0] >= 1 && qy + dir[i][0] <= N &&
+				qx + dir[i][1] >= 1 && qx + dir[i][1] <= M &&
+				visited[qy + dir[i][0]][qx + dir[i][1]] == 0 &&
+				maze[qy + dir[i][0]][qx + dir[i][1]] == 1 )
+			{
+				q.push(make_pair(qy + dir[i][0], qx + dir[i][1]));
+				visited[qy + dir[i][0]][qx + dir[i][1]] = visited[qy][qx] + 1;
+			}
+		}
+	}
+}
+
+int main()
+{
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 1; i <= N; i++)
+	{
+		string str;
+		cin >> str;
+
+		for (j = 1; j <= str.size(); j++)
+		{
+			maze[i][j] = str[j - 1] - '0';
+		}
+	}
+
+	bfs();
+
+	cout << visited[N][M] << endl;
+}
+

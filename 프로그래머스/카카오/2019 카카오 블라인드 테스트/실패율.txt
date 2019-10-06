@@ -1,0 +1,100 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(pair<double, int> a, pair<double, int> b)
+{
+	if (a.first == b.first)
+	{
+		return a.second < b.second;
+	}
+	else
+	{
+		return a.first > b.first;
+	}
+}
+
+vector<int> solution(int N, vector<int> stages) {
+	vector<int> answer;
+
+	int users[501] = { 0 };
+	int userSize = stages.size();
+	// percentage, stage
+	vector<pair<double, int>> info;
+	
+	for (vector<int>::iterator it = stages.begin(); it != stages.end(); it++)
+	{
+		users[*it - 1]++;
+	}
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		if (users[i] == 0)
+		{
+			info.push_back(make_pair(0.0, i + 1));
+		}
+		else
+		{
+			info.push_back(make_pair((double)users[i]/userSize, i + 1));
+			userSize -= users[i];
+		}
+	}
+
+	sort(info.begin(), info.end(), cmp);
+
+	for (vector<pair<double,int>>::iterator it = info.begin(); it != info.end(); it++)
+	{
+		answer.push_back(it->second);
+	}
+
+	return answer;
+}
+
+#include <iostream>
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> stages;
+	vector<int> result;
+	
+	int i;
+	int len;
+	cin >> len;
+	for (i = 0; i < len; i++)
+	{
+		int su;
+		cin >> su;
+		stages.push_back(su);
+	}
+
+	result = solution(N, stages);
+	for (i = 0; i < result.size(); i++)
+	{
+		cout << result[i] << endl;
+	}
+}
+
+/*
+5
+8
+2 1 2 6 2 4 3 3
+
+4
+5
+4 4 4 4 4
+¤±
+4
+5
+3 3 3 3 3
+
+4
+5
+6 6 6 6 6
+
+*/

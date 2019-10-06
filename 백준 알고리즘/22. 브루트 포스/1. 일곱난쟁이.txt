@@ -1,0 +1,45 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int sum = 0;
+	int height[9];
+
+	int i, j;
+	for (i = 0; i < 9; i++)
+	{
+		cin >> height[i];
+		sum += height[i];
+	}
+
+	sort(height, height + 9);
+
+	int index1 = -1;
+	int index2 = -1;
+
+	for (i = 0; i < 9; i++)
+	{
+		for (j = i + 1; j < 9; j++)
+		{
+			if (sum - height[i] - height[j] == 100)
+			{
+				index1 = i;
+				index2 = j;
+			}
+			if (index1 != -1 || index2 != -1) { break; }
+		}
+		if (index1 != -1 || index2 != -1) { break; }
+	}
+
+	for (i = 0; i < 9; i++)
+	{
+		if (i != index1 && i != index2)
+		{
+			cout << height[i] << '\n';
+		}
+	}
+}
+

@@ -1,0 +1,122 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+int char_len(char *input)
+{
+	int length = 0;
+	char *p = input;
+
+	char *i;
+	for (i = p; *i != '\0'; i++)
+	{
+		length++;
+	}
+
+	return length;
+}
+
+// skill_trees_len은 skill_trees의 길이입니다.
+int solution(char* skill, char* skill_trees[], size_t skill_trees_len) {
+	int answer = 0;
+
+	int i, j, k;
+	for (i = 0; i < skill_trees_len; i++)
+	{
+		int exist = 0;
+		for (j = 0; j < char_len(skill) - 1; j++)
+		{
+			int index = -1;
+
+			// skill[j] 위치를 찾는다.
+			for (k = 0; k < char_len(skill_trees[i]); k++)
+			{
+				if (skill[j] == skill_trees[i][k])
+				{
+					index = k;
+					break;
+				}
+			}
+
+			if (index == -1)
+			{
+				for (k = 0; k < char_len(skill_trees[i]); k++)
+				{
+					if (skill[j + 1] == skill_trees[i][k])
+					{
+						exist = 1;
+						break;
+					}
+				}
+			}
+			else
+			{
+				// skill[j] 앞에 skill[j+1]이 있는지 검사
+				for (k = index - 1; k >= 0; k--)
+				{
+					if (skill[j + 1] == skill_trees[i][k])
+					{
+						exist = 1;
+						break;
+					}
+				}
+			}
+
+			if (exist == 1)
+			{
+				break;
+			}
+		}
+		if (exist == 0)
+		{
+			answer++;
+		}
+	}
+
+	return answer;
+}
+
+#pragma warning(disable:4996)
+
+int main()
+{
+	char skill[21] = { '\0' };
+	scanf("%s", skill);
+
+	int n, i, j;
+	scanf("%d", &n);
+	
+	char **skill_trees = NULL;
+	size_t size = n;
+	skill_trees = (char**)malloc(sizeof(char*) * n);
+
+	for (i = 0; i < n; i++)
+	{
+		char input[21] = { '\0' };
+		getchar();
+		scanf("%s", input);
+		int len = char_len(input);
+
+		skill_trees[i] = (char*)malloc(sizeof(char) * len);
+		for (j = 0; j < len; j++)
+		{
+			skill_trees[i][j] = input[j];
+		}
+		skill_trees[i][j] = '\0';
+	}
+	for (i = 0; i < n; i++)
+	{
+		printf("%s\n", skill_trees[i]);
+	}
+
+	printf("%d\n",solution(skill, skill_trees, size));
+}
+
+/*
+CBD
+4
+BDA
+BACDE
+CBADF
+AECB
+*/

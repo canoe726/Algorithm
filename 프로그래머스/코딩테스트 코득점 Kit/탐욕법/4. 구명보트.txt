@@ -1,0 +1,75 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<int> people, int limit) {
+	int answer = 0;
+
+	sort(people.begin(), people.end());
+
+	int len = people.size();
+
+	int start = 0;
+	int end = len - 1;
+
+	while (start <= end)
+	{	
+		if (people[end] + people[start] <= limit)
+		{
+			end--;
+			start++;
+			answer++;
+		}
+		else
+		{
+			end--;
+			answer++;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int limit;
+
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		vector<int> people;
+
+		int N;
+		cin >> N;
+		for (j = 0; j < N; j++)
+		{
+			int su;
+			cin >> su;
+			people.push_back(su);
+		}
+		cin >> limit;
+
+		int ans = solution(people, limit);
+		cout << ans << endl;
+	}
+}
+
+/*
+3
+4
+70 50 80 50
+100
+3
+70 80 50
+100
+4
+40 40 50 30
+80
+
+*/

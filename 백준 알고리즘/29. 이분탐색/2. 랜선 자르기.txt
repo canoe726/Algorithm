@@ -1,0 +1,52 @@
+#include<iostream>
+#include<climits>
+
+using namespace std;
+
+int arr[10001];
+
+long long binary_search(int size, int target)
+{
+	long long left = 0;
+	long long right = LLONG_MAX;
+	long long mid = 0;
+	int count = 0;
+
+	int i;
+
+	while (left + 1 < right)
+	{
+		count = 0;
+		mid = (left + right) / 2;
+
+		for (i = 0; i < size; i++)
+		{
+			count += (arr[i] / mid);
+		}
+
+		if (count < target)
+		{
+			right = mid;
+		}
+		else
+		{
+			left = mid;
+		}
+	}
+	
+	return left;
+}
+
+int main()
+{
+	int K, N;
+	cin >> K >> N;
+
+	int i;
+	for (i = 0; i < K; i++)
+	{
+		cin >> arr[i];
+	}
+
+	cout << binary_search(K, N) << '\n';
+}

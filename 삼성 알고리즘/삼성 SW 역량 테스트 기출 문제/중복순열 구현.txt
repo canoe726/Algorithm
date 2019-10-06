@@ -1,0 +1,30 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+void combination(int index, vector<int> &pick, int count)
+{
+	if (index == count)
+	{
+		for (int i = 0; i < pick.size(); i++)
+		{
+			cout << pick[i] << ' ';
+		}
+		cout << '\n';
+		return;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		pick.push_back(i);
+		combination(index + 1, pick, count);
+		pick.pop_back();
+	}
+}
+
+int main()
+{
+	vector<int> pick;
+	combination(0, pick, 3);
+}

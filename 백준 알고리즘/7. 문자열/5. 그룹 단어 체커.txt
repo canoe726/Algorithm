@@ -1,0 +1,42 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+int Answer;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	Answer = N;
+	bool minus = false;
+
+	for (int i = 0; i < N; i++)
+	{
+		char word[101];
+		cin >> word;
+
+		for (int j = 0; j < strlen(word) - 1; j++)
+		{
+			minus = false;
+			for (int k = j + 1; k < strlen(word); k++)
+			{
+				if (word[j] == word[k])
+				{
+					if (k - j > 1)
+					{
+						Answer -= 1;
+						minus = true;
+						break;
+					}
+				}
+			}
+			if (minus == true) { break; }
+		}
+	}
+
+	cout << Answer << endl;
+}

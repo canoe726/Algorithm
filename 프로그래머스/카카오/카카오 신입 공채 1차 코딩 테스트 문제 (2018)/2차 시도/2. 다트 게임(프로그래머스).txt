@@ -1,0 +1,94 @@
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+int solution(string dartResult) {
+	int answer = 0;
+
+	int numbers[3] = { 0 };
+	int number_index = 0;
+
+	char score[3] = { 0 };
+	int score_index = 0;
+
+	int stars[3] = { 0 };
+	int hashs[3] = { 0 };
+
+	int len = dartResult.size();
+	int i, j;
+
+	for (i = 0; i < len; i++)
+	{
+		if (dartResult[i] >= '0' && dartResult[i] <= '9')
+		{
+			if (dartResult[i + 1] == '0')
+			{
+				numbers[number_index++] = 10;
+				i++;
+			}
+			else
+			{
+				numbers[number_index++] = dartResult[i] - '0';
+			}
+		}
+		else if (dartResult[i] == 'S' || dartResult[i] == 'D' || dartResult[i] == 'T')
+		{
+			score[score_index++] = dartResult[i];
+		}
+		else if (dartResult[i] == '*')
+		{
+			stars[number_index - 1]++;
+			if ((number_index - 2) >= 0)
+			{
+				stars[number_index - 2]++;
+			}
+		}
+		else if (dartResult[i] == '#')
+		{
+			hashs[number_index - 1] = 1;
+		}
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		int temp = 0;
+
+		if (score[i] == 'S')
+		{
+			temp = pow(numbers[i], 1);
+		}
+		else if (score[i] == 'D')
+		{
+			temp = pow(numbers[i], 2);
+		}
+		else if (score[i] == 'T')
+		{
+			temp = pow(numbers[i], 3);
+		}
+
+		temp = temp * pow(2, stars[i]);
+
+		if (hashs[i] == 1)
+		{
+			temp *= -1;
+		}
+
+		answer += temp;
+	}
+
+	return answer;
+}
+
+#include<iostream>
+#include<cmath>
+
+using namespace std;
+
+int main()
+{
+	string str;
+	cin >> str;
+
+	cout << solution(str) << '\n';
+}

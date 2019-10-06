@@ -1,0 +1,129 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<int>> baseball) {
+	int answer = 0;
+
+	vector<string> balls;
+
+	int i, j, k, l;
+	int strike = 0, ball = 0;
+	string str1;
+	string str2;
+
+	// find candidate
+	for (i = 100; i < 990; i++)
+	{
+		str2 = to_string(i);
+		int count = 0;
+		for (j = 0; j < 3; j++)
+		{
+			if (str2[j] == '0')
+			{
+				count++;
+				break;
+			}
+		}
+		if (count != 0) { continue; }
+
+		count = 0;
+		for (j = 0; j < 3; j++)
+		{
+			for (k = 0; k < 3; k++)
+			{
+				if ( j != k )
+				{
+					if (str2[j] == str2[k])
+					{
+						count++;
+					}
+				}
+			}			
+		}
+		if (count == 0)
+		{
+			balls.push_back(str2);
+		}
+	}
+
+	for (i = 0; i < baseball.size(); i++)
+	{
+		str1 = to_string(baseball[i][0]);
+
+		for (j = 0; j < balls.size(); j++)
+		{
+			str2 = balls[j];
+			strike = 0;
+			ball = 0;
+			
+			for (k = 0; k < 3; k++)
+			{
+				for (l = 0; l < 3; l++)
+				{
+					if (k == l)
+					{
+						// find strike
+						if (str1[k] == str2[l])
+						{
+							strike++;
+						}
+					}
+					if( k != l )
+					{
+						// find ball
+						if (str1[k] == str2[l])
+						{
+							ball++;
+						}
+					}
+				}
+			}
+
+			if (strike != baseball[i][1] || ball != baseball[i][2])
+			{
+				balls.erase(balls.begin() + j);
+				j--;
+			}
+		}
+	}
+
+	answer = balls.size();
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<vector<int>> jobs(N, vector<int>(0,0));
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int num, strike, ball;
+		cin >> num;
+		cin >> strike;
+		cin >> ball;
+
+		jobs[i].push_back(num);
+		jobs[i].push_back(strike);
+		jobs[i].push_back(ball);
+	}
+
+	int ans = solution(jobs);
+	cout << ans << endl;
+}
+
+
+/*
+4
+123 1 1
+356 1 0
+327 2 0
+489 0 1
+
+*/

@@ -1,0 +1,85 @@
+#include<iostream>
+#include<string>
+#include<cmath>
+
+using namespace std;
+
+int answer = 0;
+
+int numbers[3] = { 0 };
+int number_index = 0;
+
+char score[3] = { 0 };
+int score_index = 0;
+
+int stars[3] = { 0 };
+int hashs[3] = { 0 };
+
+int main()
+{
+	string str;
+	cin >> str;
+
+	int len = str.size();
+	int i, j;
+
+	for (i = 0; i < len; i++)
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			if (str[i + 1] == '0')
+			{
+				numbers[number_index++] = 10;
+			}
+			else
+			{
+				numbers[number_index++] = str[i] - '0';
+			}
+		}
+		else if (str[i] == 'S' || str[i] == 'D' || str[i] == 'T')
+		{
+			score[score_index++] = str[i];
+		}
+		else if (str[i] == '*')
+		{
+			stars[number_index - 1]++;	
+			if ((number_index - 2) >= 0)
+			{
+				stars[number_index - 2]++;
+			}
+		}
+		else if (str[i] == '#')
+		{
+			hashs[number_index - 1] = 1;
+		}
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		int temp = 0;
+
+		if (score[i] == 'S')
+		{
+			temp = pow(numbers[i], 1);
+		}
+		else if (score[i] == 'D')
+		{
+			temp = pow(numbers[i], 2);
+		}
+		else if (score[i] == 'T')
+		{
+			temp = pow(numbers[i], 3);
+		}
+
+		temp = temp * pow(2, stars[i]);
+		
+		if (hashs[i] == 1)
+		{
+			temp *= -1;
+		}
+
+		answer += temp;
+	}
+
+	cout << answer << '\n';
+}

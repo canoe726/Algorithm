@@ -1,0 +1,30 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int one_to_nine[10] = { 0 };
+
+	int A, B, C;
+	cin >> A;
+	cin >> B;
+	cin >> C;
+
+	int result = A * B * C;
+
+	while (result > 0)
+	{
+		one_to_nine[result % 10]++;
+
+		result /= 10;
+	}
+
+	int i;
+	for (i = 0; i < 10; i++)
+	{
+		cout << one_to_nine[i] << '\n';
+	}
+	
+	return 0;
+}

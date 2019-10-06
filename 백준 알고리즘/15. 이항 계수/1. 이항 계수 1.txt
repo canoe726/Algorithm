@@ -1,0 +1,30 @@
+#include<iostream>
+
+using namespace std;
+
+int Answer = 0;
+
+int find_combination(int N, int K)
+{
+	if (N == K || K == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return find_combination(N - 1, K - 1) + find_combination(N - 1, K);
+	}
+}
+
+int main()
+{
+	int N, K;
+	cin >> N;
+	cin >> K;
+
+	Answer = find_combination(N, K);
+
+	cout << Answer << '\n';
+
+	return 0;
+}

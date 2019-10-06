@@ -1,0 +1,141 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+using namespace std;
+
+typedef struct MusicInfo
+{
+	string title;
+	string lyrics;
+};
+
+int main()
+{
+	vector<MusicInfo> info;
+	string melody;
+
+	string m;
+	cin >> m;
+
+	int i, j, k;
+	for (i = 0; i < m.length() - 1; i++)
+	{
+		if (m[i + 1] == '#')
+		{
+			melody.push_back(m[i] - 'A' + 'a');
+			i += 1;
+		}
+		else
+		{
+			melody.push_back(m[i]);
+		}
+	}
+	if (m[i] != '#')
+	{
+		melody.push_back(m[i]);
+	}
+
+	int num;
+	cin >> num;
+
+	for (i = 0; i < num; i++)
+	{
+		string s, e;
+		cin >> s >> e;
+
+		char s_h[3], s_m[3];
+		char e_h[3], e_m[3];
+
+		s_h[0] = s[0];
+		s_h[1] = s[1];
+		s_h[2] = '\0';
+
+		s_m[0] = s[3];
+		s_m[1] = s[4];
+		s_m[2] = '\0';
+
+		e_h[0] = e[0];
+		e_h[1] = e[1];
+		e_h[2] = '\0';
+
+		e_m[0] = e[3];
+		e_m[1] = e[4];
+		e_m[2] = '\0';
+
+		int minute = atoi(e_m) - atoi(s_m);
+		int hour = 0;
+		if (minute < 0)
+		{
+			minute = 0;
+			hour = atoi(e_h) - atoi(s_h) - 1;
+		}
+		else
+		{
+			hour = atoi(e_h) - atoi(s_h);
+		}
+		int total = hour * 60 + minute;
+
+		MusicInfo temp;
+		cin >> temp.title;
+		getchar();
+
+		string lyrics;
+		cin >> lyrics;
+
+		string tunes;
+		for (j = 0; j < lyrics.length() - 1; j++)
+		{
+			if (lyrics[j + 1] == '#')
+			{
+				tunes.push_back(lyrics[j] - 'A' + 'a');
+				j += 1;
+			}
+			else
+			{
+				tunes.push_back(lyrics[j]);
+			}
+		}
+		if (lyrics[j] != '#')
+		{
+			tunes.push_back(lyrics[j]);
+		}
+
+		for (j = 0; j < total; j++)
+		{
+			temp.lyrics.push_back(tunes[j%tunes.length()]);
+		}
+		info.push_back(temp);
+	}
+
+	for (i = 0; i < info.size(); i++)
+	{
+		int exist;
+		if (info[i].lyrics.length() >= melody.length())
+		{
+			for (j = 0; j < info[i].lyrics.length() - melody.length() + 1; j++)
+			{
+				exist = 1;
+				for (k = 0; k < melody.length(); k++)
+				{
+					if (info[i].lyrics[j + k] != melody[k])
+					{
+						exist = 0;
+						break;
+					}
+				}
+
+				if (exist == 1)
+				{
+					break;
+				}
+			}
+		}
+
+		if (exist == 1)
+		{
+			cout << info[i].title << '\n';
+			break;
+		}
+	}
+}

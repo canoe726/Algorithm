@@ -1,0 +1,88 @@
+#include<iostream>
+#include<deque>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	deque<int> deque;
+
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++)
+	{
+		char str[15];
+		cin >> str;
+
+		if (!strcmp(str, "push_front"))
+		{
+			int su;
+			cin >> su;
+			deque.push_front(su);
+		}
+		else if (!strcmp(str, "push_back"))
+		{
+			int su;
+			cin >> su;
+			deque.push_back(su);
+		}
+		else if (!strcmp(str, "pop_front"))
+		{
+			if (deque.empty())
+			{
+				cout << "-1" << '\n';
+			}
+			else
+			{
+				cout << deque.front() << '\n';
+				deque.pop_front();
+			}
+		}
+		else if (!strcmp(str, "pop_back"))
+		{
+			if (deque.empty())
+			{
+				cout << "-1" << '\n';
+			}
+			else
+			{
+				cout << deque.back() << '\n';
+				deque.pop_back();
+			}
+		}
+		else if (!strcmp(str, "size"))
+		{
+			cout << deque.size() << '\n';
+		}
+		else if (!strcmp(str, "empty"))
+		{
+			cout << deque.empty() << '\n';
+		}
+		else if (!strcmp(str, "front"))
+		{
+			if (deque.empty())
+			{
+				cout << "-1" << '\n';
+			}
+			else
+			{
+				cout << deque.front() << '\n';
+			}
+		}
+		else if (!strcmp(str, "back"))
+		{
+			if (deque.empty())
+			{
+				cout << "-1" << '\n';
+			}
+			else
+			{
+				cout << deque.back() << '\n';
+			}
+		}
+	}
+
+	return 0;
+}

@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<vector<int>> routes) {
+	int answer = 0;
+
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<vector<int>> routes(N, vector<int>(0,0));
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < 2; j++)
+		{
+			int su;
+			routes[i].push_back(su);
+		}
+	}
+	int ans = solution(routes);
+	cout << ans << endl;
+}
+
+/*
+4
+-20 15
+-14 5
+-18 -13
+-5 -3
+
+*/

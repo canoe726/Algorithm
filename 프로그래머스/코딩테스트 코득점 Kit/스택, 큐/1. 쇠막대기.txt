@@ -1,0 +1,44 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string arrangement) {
+	int answer = 0;
+
+	vector<int> count;
+	
+	int len = arrangement.size();
+	int i, j;
+
+	for (i = 0; i < len; i++)
+	{
+		// 레이저 일때
+		if (arrangement[i] == '(' && arrangement[i + 1] == ')')
+		{
+			int c_len = count.size();
+			for (j = 0; j < c_len; j++)
+			{
+				count[j]++;
+			}
+			i++;
+		}
+		// 레이저가 아닐때
+		else
+		{
+			if (arrangement[i] == '(')
+			{
+				count.push_back(1);
+			}
+			else if (arrangement[i] == ')')
+			{
+				answer += count.back();
+				count.pop_back();
+
+			}
+		}
+	}
+
+	return answer;
+}

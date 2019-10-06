@@ -1,0 +1,82 @@
+#include<iostream>
+#include<deque>
+
+using namespace std;
+
+deque<int> deq;
+int res[51];
+
+int Answer = 0;
+
+void third()
+{
+	int temp = deq.back();
+	deq.pop_back();
+	deq.push_front(temp);
+}
+
+void second()
+{
+	int temp = deq.front();
+	deq.pop_front();
+	deq.push_back(temp);
+}
+
+void first() { deq.pop_front(); }
+
+int main()
+{
+	fill_n(res, 51, 0);
+
+	int N, M;
+	cin >> N;
+	cin >> M;
+
+	for (int i = 1; i <= N; i++) { deq.push_back(i); }
+	for (int i = 0; i < M; i++)
+	{
+		int su;
+		cin >> su;
+		res[i] = su;
+	}
+
+	int pop_num = 0;
+
+	while (pop_num != M)
+	{
+		if (res[pop_num] == deq.front())
+		{
+			pop_num += 1;
+			first();
+		}
+		else
+		{
+			int size;
+			if (deq.size() % 2 == 0) { size = deq.size() / 2; }
+			else
+			{
+				if (deq.size() == 1) { size = 1; }
+				else { size = (deq.size() / 2) + 1; }
+			}
+
+			int same = 0;
+
+			for (int i = 0; i < size; i++)
+			{
+				if (deq[i] == res[pop_num])
+				{
+					same = 1;
+					break;
+				}
+			}
+
+			if (same == 1) { second(); }
+			else { third(); }
+
+			Answer += 1;
+		}
+	}
+	cout << Answer << endl;
+
+	return 0;
+}

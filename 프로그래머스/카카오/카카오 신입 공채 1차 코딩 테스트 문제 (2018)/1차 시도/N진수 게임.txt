@@ -1,0 +1,100 @@
+#include <string>
+#include <vector>
+#include<iostream>
+
+using namespace std;
+
+string solution(int n, int t, int m, int p) {
+
+	string answer = "";
+
+	// n 진수 저장
+	vector<char> nary;
+
+	int i;
+
+	char *temp_answer = new char[t + 1];
+
+	int number = 0;
+	int total_num = 0;
+	int game_order = 1;
+
+	while (total_num <= t)
+	{
+		nary.clear();
+
+		int temp_num = number;
+
+		while (1)
+		{
+			int temp = temp_num % n;
+			
+			if (temp >= 10)
+			{
+				char input;
+				switch (temp)
+				{
+				case 10:
+					input = 'A';
+					break;
+				case 11:
+					input = 'B';
+					break;
+				case 12:
+					input = 'C';
+					break;
+				case 13:
+					input = 'D';
+					break;
+				case 14:
+					input = 'E';
+					break;
+				case 15:
+					input = 'F';
+					break;
+				}
+				nary.push_back(input);
+			}
+			else
+			{
+				nary.push_back(temp + '0');
+			}
+
+			temp_num /= n;
+
+			if (temp_num == 0) { break; }
+		}
+		number++;
+
+		for (i = nary.size() - 1; i >= 0; i--)
+		{
+			if (game_order == p)
+			{
+				temp_answer[total_num++] = nary[i];
+			}
+			if (game_order == m)
+			{
+				game_order = 0;
+			}
+			game_order++;
+		}
+
+		//cout << temp_answer << endl;
+
+	}
+
+	temp_answer[t] = '\0';
+	answer = temp_answer;
+	return answer;
+}
+
+int main()
+{
+	int n, t, m, p;
+	cin >> n;
+	cin >> t;
+	cin >> m;
+	cin >> p;
+
+	cout << solution(n, t, m, p) << endl;
+}

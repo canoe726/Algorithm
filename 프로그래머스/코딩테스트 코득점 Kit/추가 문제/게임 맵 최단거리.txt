@@ -1,0 +1,96 @@
+#include<vector>
+#include<queue>
+using namespace std;
+
+vector<vector<int>> bfs_search(vector<vector<int>> maps, int n, int m)
+{
+	// y, x | ╩С, го, аб, ©Л
+	int direct[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+	queue<pair<int, int>> que;
+	pair<int, int> current; // y, x
+	int cx, cy, i;
+
+	que.push(make_pair(0, 0));
+	while (!que.empty())
+	{
+		current = que.front();
+		que.pop();
+
+		for (i = 0; i < 4; i++)
+		{
+			cy = current.first + direct[i][0];
+			cx = current.second + direct[i][1];
+
+			if (cy >= 0 && cy < n && cx >= 0 && cx < m && maps[cy][cx] == 1)
+			{
+				que.push(make_pair(cy, cx));
+				maps[cy][cx] = maps[current.first][current.second] + 1;
+			}
+		}
+	}
+
+	return maps;
+}
+
+int solution(vector<vector<int> > maps)
+{
+	int answer;
+	int n, m;
+	n = maps.size();
+	m = maps[0].size();
+
+	maps = bfs_search(maps, n, m);
+
+	answer = maps[n - 1][m - 1];
+	if (answer == 1)
+	{
+		answer = -1;
+	}
+
+	return answer;
+}
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	int m;
+	cin >> m;
+
+	vector<vector<int> > maps(n);
+
+	int i, j;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++)
+		{
+			int su;
+			cin >> su;
+			maps[i].push_back(su);
+		}
+	}
+
+	cout << solution(maps) << '\n';
+}
+
+/*
+5 5
+1 0 1 1 1
+1 0 1 0 1
+1 0 1 1 1
+1 1 1 0 1
+0 0 0 0 1
+
+5 5
+1 0 1 1 1
+1 0 1 0 1
+1 0 1 1 1
+1 1 1 0 0
+0 0 0 0 1
+
+*/

@@ -1,0 +1,26 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	char A[4];
+	cin >> A;
+
+	char B[4];
+	cin >> B;
+
+	string pA = A;
+	string pB = B;
+
+	reverse(pA.begin(), pA.end());
+	reverse(pB.begin(), pB.end());
+
+	int rA = atoi(pA.c_str());
+	int rB = atoi(pB.c_str());
+
+	if (rA > rB) { cout << rA << endl; }
+	else { cout << rB << endl; }
+}

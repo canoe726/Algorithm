@@ -1,0 +1,49 @@
+#include<iostream>
+
+using namespace std;
+
+int map1[16][16] = { 0 };
+int map2[16][16] = { 0 };
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	int i, j, num;
+	for (i = 0; i < n; i++)
+	{
+		cin >> num;
+		for (j = n - 1; j >= 0; j--)
+		{
+			map1[i][j] = num % 2;
+			num /= 2;
+		}
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		cin >> num;
+		for (j = n - 1; j >= 0; j--)
+		{
+			map2[i][j] = num % 2;
+			num /= 2;
+		}
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			if (map1[i][j] || map2[i][j])
+			{
+				cout << '#';
+			}
+			else
+			{
+				cout << ' ';
+			}
+		}
+		cout << '\n';
+	}
+}

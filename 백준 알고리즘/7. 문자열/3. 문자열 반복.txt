@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	char Answer[160];
+
+	int T;
+	cin >> T;
+
+	for (int i = 1; i <= T; i++)
+	{
+		int index = 0;
+
+		int R;
+		cin >> R;
+
+		char S[21];
+		cin >> S;
+
+		for (int j = 0; j < strlen(S); j++)
+		{
+			for (int k = 0; k < R; k++)
+			{
+				Answer[index++] = S[j];
+			}
+		}
+		
+		for (int l = 0; l < index; l++)
+		{
+			cout << Answer[l];
+		}
+		cout << endl;
+	}
+}

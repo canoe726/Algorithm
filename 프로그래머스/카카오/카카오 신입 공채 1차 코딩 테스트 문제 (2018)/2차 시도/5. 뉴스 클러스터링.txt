@@ -1,0 +1,140 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+vector<string> set1;
+vector<string> set2;
+
+int find_intersection()
+{
+	int result = 0;
+	vector<string> temp = set2;
+
+	int i, j;
+	for (i = 0; i < set1.size(); i++)
+	{
+		for (j = 0; j < temp.size(); j++)
+		{
+			if (set1[i] == temp[j])
+			{
+				result += 1;
+				temp.erase(temp.begin() + j);
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
+int find_union()
+{
+	int result = 0;
+	vector<string> temp = set2;
+
+	int i, j;
+	for (i = 0; i < set1.size(); i++)
+	{
+		for (j = 0; j < temp.size(); j++)
+		{
+			if (set1[i] == temp[j])
+			{
+				temp.erase(temp.begin() + j);
+				break;
+			}
+		}
+	}
+
+	result = set1.size() + temp.size();
+
+	return result;
+}
+
+int main()
+{
+	char str1[1001];
+	char str2[1001];
+
+	cin.getline(str1, 1001, '\n');
+	cin.getline(str2, 1001, '\n');
+
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);
+
+	int i, j;
+	for (i = 0; i < len1; i++)
+	{
+		if (str1[i] >= 'a' && str1[i] <= 'z')
+		{
+			str1[i] = str1[i] - 'a' + 'A';
+		}
+	}
+
+	for (i = 0; i < len2; i++)
+	{
+		if (str2[i] >= 'a' && str2[i] <= 'z')
+		{
+			str2[i] = str2[i] - 'a' + 'A';
+		}
+	}
+
+	for (i = 0; i < len1 - 1; i++)
+	{
+		if (str1[i] >= 'A' && str1[i] <= 'Z' &&
+			str1[i + 1] >= 'A' && str1[i + 1] <= 'Z' )
+		{
+			char first = str1[i];
+			char second = str1[i + 1];
+			char char_set[3];
+
+			char_set[0] = first;
+			char_set[1] = second;
+			char_set[2] = '\0';
+
+			set1.push_back(char_set);
+		}
+	}
+
+	for (i = 0; i < len2 - 1; i++)
+	{
+		if (str2[i] >= 'A' && str2[i] <= 'Z' &&
+			str2[i + 1] >= 'A' && str2[i + 1] <= 'Z' )
+		{
+			char first = str2[i];
+			char second = str2[i + 1];
+			char char_set[3];
+
+			char_set[0] = first;
+			char_set[1] = second;
+			char_set[2] = '\0';
+
+			set2.push_back(char_set);
+		}
+	}
+
+	sort(set1.begin(), set1.end());
+	sort(set2.begin(), set2.end());
+
+	// 교집합
+	int inter = find_intersection();
+	
+	// 합집합
+	int unions = find_union();
+	
+	double answer;
+	
+	if (unions == 0)
+	{
+		answer = 1;
+	}
+	else
+	{
+		answer = inter / (double)(unions);
+	}
+	
+	answer *= 65536;
+	cout << (int)(answer) << '\n';
+}

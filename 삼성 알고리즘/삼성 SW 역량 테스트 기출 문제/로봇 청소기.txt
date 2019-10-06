@@ -1,0 +1,205 @@
+#include<iostream>
+
+using namespace std;
+
+int N, M;
+int r, c, d;
+
+int field[50][50];
+int answer = 0;
+
+int search_four_side()
+{
+	// 북 동 남 서
+	// 0  1  2  3
+	// 현재 방향 왼쪽 : -1
+
+	int count = 0;
+
+	// 왼쪽 회전
+	d -= 1;
+	if (d < 0) { d = 3; }
+
+	// 북
+	if (d == 0)
+	{
+		if ((r - 1) >= 0 && (r - 1) < N)
+		{
+			if (field[r - 1][c] == 0)
+			{
+				r -= 1;
+				return 1;
+			}
+		}
+	}
+	// 동
+	else if (d == 1)
+	{
+		if ((c + 1) >= 0 && (c + 1) < M)
+		{
+			if (field[r][c + 1] == 0)
+			{
+				c += 1;
+				return 1;
+			}
+		}
+	}
+	// 남
+	else if (d == 2)
+	{
+		if ((r + 1) >= 0 && (r + 1) < N)
+		{
+			if (field[r + 1][c] == 0)
+			{
+				r += 1;
+				return 1;
+			}
+		}
+	}
+	// 서
+	else if (d == 3)
+	{
+		if ((c - 1) >= 0 && (c - 1) < M)
+		{
+			if (field[r][c - 1] == 0)
+			{
+				c -= 1;
+				return 1;
+			}
+		}
+	}
+
+	// 청소 안한경우
+	return 0;
+}
+
+void sweep_field()
+{
+	field[r][c] = 2;
+	answer++;
+	
+	int exist = 0;
+	int i;
+	for (i = 0; i < 4; i++)
+	{
+		exist = search_four_side();
+		if (exist == 1)
+		{
+			break;
+		}
+	}
+	
+	if (exist == 0)
+	{
+		// 후진
+		// 북
+		if (d == 0)
+		{
+			if ((r + 1) >= 0 && (r + 1) < N)
+			{
+				if (field[r + 1][c] == 1)
+				{
+					return;
+				}
+				else
+				{
+					r += 1;
+					answer -= 1;
+					sweep_field();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+		// 동
+		else if (d == 1)
+		{
+			if ((c - 1) >= 0 && (c - 1) < M)
+			{
+				if (field[r][c - 1] == 1)
+				{
+					return;
+				}
+				else
+				{
+					c -= 1;
+					answer -= 1;
+					sweep_field();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+		// 남
+		else if (d == 2)
+		{
+			if ((r - 1) >= 0 && (r - 1) < N)
+			{
+				if (field[r - 1][c] == 1)
+				{
+					return;
+				}
+				else
+				{
+					r -= 1;
+					answer -= 1;
+					sweep_field();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+		// 서
+		else if (d == 3)
+		{
+			if ((c + 1) >= 0 && (c + 1) < M)
+			{
+				if (field[r][c + 1] == 1)
+				{
+					return;
+				}
+				else
+				{
+					c += 1;
+					answer -= 1;
+					sweep_field();
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+	else
+	{
+		sweep_field();
+	}
+}
+
+int main()
+{
+	cin >> N >> M;
+
+	cin >> r >> c >> d;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			int su;
+			cin >> su;
+			field[i][j] = su;
+		}
+	}
+
+	sweep_field();
+	cout << answer << '\n';
+}

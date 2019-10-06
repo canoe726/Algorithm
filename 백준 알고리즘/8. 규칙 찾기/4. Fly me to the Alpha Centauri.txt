@@ -1,0 +1,67 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, x, y, y_x;
+	for (i = 0; i < T; i++)
+	{
+		cin >> x >> y;
+		y_x = y - x;
+
+		long long num = 1, min = 0, max = 1, answer = 1, tmin, tmax;
+
+		while (1)
+		{
+			tmin = (num*num) - min;
+			tmax = (num*num) + max;
+			if ((y_x >= tmin) && (y_x <= tmax))
+			{
+				if (y_x >= tmin && y_x <= (num*num))
+				{
+					cout << answer * 2 - 1 << endl;
+				}
+				else
+				{
+					cout << answer * 2 << endl;
+				}
+				break;
+			}
+			else
+			{
+				num += 1;
+				min += 1;
+				max += 1;
+				answer += 1;
+			}
+		}
+	}
+}
+
+/*
+1  1  1
+2  1 1  2
+3  1 1 1  3
+4  1 2 1  3
+5  1 2 1 1  4
+6  1 2 2 1  4
+7  1 2 2 1 1  5
+8  1 2 2 2 1  5
+9  1 2 3 2 1  5
+10  1 2 3 2 1 1  6
+11  1 2 3 2 2 1  6
+12  1 2 3 3 2 1  6
+13  1 2 3 3 2 1 1  7
+14  1 2 3 3 2 2 1  7
+15  1 2 3 3 3 2 1  7
+16  1 2 3 4 3 2 1  7
+17  1 2 3 4 3 2 1 1  8
+18  1 2 3 4 3 2 2 1  8
+19  1 2 3 4 3 3 2 1  8
+20  1 2 3 4 4 3 2 1  8
+....
+*/

@@ -1,0 +1,91 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
+	vector<string> answer;
+
+	vector< vector <int> > a;
+	vector< vector <int> > b;
+
+	int i, j, temp;
+
+	for (i = 0; i < n; i++)
+	{
+		vector<int> element(n);
+		a.push_back(element);
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		vector<int> element(n);
+		b.push_back(element);
+	}
+
+	// find binary number of arr1
+	for (i = 0; i<n; i++)
+	{
+		temp = arr1[i];
+		for (j = n - 1; j >= 0; j--)
+		{
+			if (temp % 2 == 0) { a[i][j] = 0; }
+			else { a[i][j] = 1; }
+			temp /= 2;
+		}
+	}
+
+	// find binary number of arr2
+	for (i = 0; i<n; i++)
+	{
+		temp = arr2[i];
+		for (j = n - 1; j >= 0; j--)
+		{
+			if (temp % 2 == 0) { b[i][j] = 0; }
+			else { b[i][j] = 1; }
+			temp /= 2;
+		}
+	}
+
+	char stemp[17];
+
+	// or operation
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			if ((a[i][j] | b[i][j]) == 1) { stemp[j] = '#'; }
+			else { stemp[j] = ' '; }
+		}
+		stemp[j] = '\0';
+		answer.push_back(stemp);
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N = 5;
+	vector<int> arr1, arr2;
+
+	arr1.push_back(9);
+	arr1.push_back(20);
+	arr1.push_back(28);
+	arr1.push_back(18);
+	arr1.push_back(11);
+
+	arr2.push_back(30);
+	arr2.push_back(1);
+	arr2.push_back(21);
+	arr2.push_back(17);
+	arr2.push_back(28);
+
+	vector<string> ans = solution(N, arr1, arr2);
+
+	for (int i = 0; i < N; i++)
+	{
+		cout << ans[i] << endl;
+	}
+}

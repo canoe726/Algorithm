@@ -1,0 +1,45 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	string A;
+	cin >> A;
+	string B;
+	cin >> B;
+
+	int a_len = strlen(A.c_str());
+	int b_len = strlen(B.c_str());
+
+	int Answer = 0;
+
+	int i, j;
+	for (i = 0; i < b_len - a_len + 1; i++)
+	{
+		int gap = 0;
+		for (j = 0; j < a_len; j++)
+		{
+			if (B[i + j] != A[j])
+			{
+				gap++;
+			}	
+		}
+
+		if (i == 0) { Answer = gap; }
+		else
+		{
+			if (gap < Answer)
+			{
+				Answer = gap;
+			}
+		}
+	}
+
+	cout << Answer << '\n';
+
+	return 0;
+}
+
+

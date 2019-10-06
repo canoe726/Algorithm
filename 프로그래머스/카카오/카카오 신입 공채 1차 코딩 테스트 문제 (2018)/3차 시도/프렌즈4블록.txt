@@ -1,0 +1,138 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int check[30][30] = { 0 };
+char map[30][30] = { '\0' };
+
+int solution(int m, int n, vector<string> board) {
+	
+	int answer = 0;
+	
+	int i, j, k, l;
+	int erase = 1;
+
+	while (erase)
+	{
+		erase = 0;
+
+		// initialize check board
+		for (i = 0; i < m; i++)
+		{
+			for (j = 0; j < n; j++)
+			{
+				check[i][j] = 0;
+			}
+		}
+
+		// whole board search
+		for (i = 0; i < m - 1; i++)
+		{
+			for (j = 0; j < n - 1; j++)
+			{
+				int count = 1;
+
+				// check 2x2
+				if (board[i][j] != '#')
+				{
+					for (k = 0; k < 2; k++)
+					{
+						for (l = 0; l < 2; l++)
+						{
+							if (k == 0 && l == 0)
+							{
+								continue;
+							}
+							else
+							{
+								if (board[i][j] == board[i + k][j + l])
+								{
+									count++;
+								}
+							}
+						}
+					}
+
+					// delete mark
+					if (count == 4)
+					{
+						for (k = 0; k < 2; k++)
+						{
+							for (l = 0; l < 2; l++)
+							{
+								check[i + k][j + l] = 1;
+								erase = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// count answer
+		for (i = 0; i < m; i++)
+		{
+			for (j = 0; j < n; j++)
+			{
+				if (check[i][j] == 1)
+				{
+					board[i][j] = '#';
+					answer++;
+				}
+			}
+		}
+
+		//  make down
+		if (erase == 1)
+		{
+			for (i = m - 2; i >= 0; i--)
+			{
+				for (j = n - 1; j >= 0; j--)
+				{
+					if (board[i][j] != '#' && board[i + 1][j] == '#')
+					{
+						int height = i;
+						
+						while (height < m - 1)
+						{
+							if (board[height + 1][j] == '#')
+							{
+								board[height + 1][j] = board[height][j];
+								board[height][j] = '#';
+								height++;
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	return answer;
+}
+
+#include<iostream>
+
+int main()
+{
+	int m, n;
+	cin >> m >> n;
+
+	vector<string> board;
+
+	int i;
+	for (i = 0; i < m; i++)
+	{
+		string str;
+		cin >> str;
+		board.push_back(str);
+	}
+
+	cout << solution(m, n, board) << endl;
+}

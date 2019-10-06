@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(vector<string> operations) {
+	vector<int> answer;
+
+	vector<int> que;
+
+	int o_len = operations.size();
+	int i;
+	for (i = 0; i < o_len; i++)
+	{
+		
+		if (operations[i][0] == 'I')
+		{
+			int su = atoi(operations[i].c_str() + 2);
+			que.push_back(su);
+		}
+		else if (operations[i][0] == 'D')
+		{
+			if (!que.empty())
+			{
+				if (operations[i][2] == '1')
+				{
+					que.erase(que.end() - 1);
+				}
+				else
+				{
+					que.erase(que.begin());
+				}
+			}
+		}
+        sort(que.begin(), que.end());
+	}
+
+	if (que.empty())
+	{
+		answer.push_back(0);
+		answer.push_back(0);
+	}
+	else
+	{
+		answer.push_back(que.back());
+		answer.push_back(que.front());
+	}
+
+	return answer;
+}

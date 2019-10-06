@@ -1,0 +1,131 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int answer = 0;
+int m, n;
+char board[31][31] = { '\0' };
+int temp_board[31][31] = { 0 };
+
+int find_block(int y, int x)
+{
+	char start = board[y][x];
+
+	if ((board[y][x] != '\0') && 
+		(board[y + 1][x] != '\0') && 
+		(board[y][x + 1] != '\0') && 
+		(board[y + 1][x + 1] != '\0')) {
+
+		if ((board[y + 1][x] == start) &&
+			(board[y][x + 1] == start) &&
+			(board[y + 1][x + 1] == start))
+		{
+			temp_board[y][x] = 1;
+			temp_board[y + 1][x] = 1;
+			temp_board[y][x + 1] = 1;
+			temp_board[y + 1][x + 1] = 1;
+
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void delete_square()
+{
+	int i, j;
+	for (i = 0; i < m; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			if (temp_board[i][j] == 1)
+			{
+				answer += 1;
+				board[i][j] = '\0';
+			}
+		}
+	}
+}
+
+void recur_down(int y, int x)
+{
+	board[y + 1][x] = board[y][x];
+	board[y][x] = '\0';
+
+	if (y + 2 <= m)
+	{
+		if (board[y + 2][x] == '\0')
+		{
+			recur_down(y + 1, x);
+		}
+	}
+}
+
+void down_each_block()
+{
+	int i, j;
+	for (i = m - 2; i >= 0; i--)
+	{
+		for (j = n - 1; j >= 0; j--)
+		{
+			if (board[i][j] != '\0' && board[i + 1][j] == '\0')
+			{
+				recur_down(i, j);
+			}
+		}
+	}
+}
+
+int main()
+{
+	cin >> m >> n;
+
+	int i, j, k;
+	for (i = 0; i < m; i++)
+	{
+		string str;
+		cin >> str;
+
+		for (j = 0; j < n; j++)
+		{
+			board[i][j] = str[j];
+		}
+	}
+
+	int count = 0;
+	while (1)
+	{
+		count = 0;
+		memset(temp_board, 0, sizeof(temp_board));
+
+		// 블록 검사
+		for (i = 0; i < m - 1; i++)
+		{
+			for (j = 0; j < n - 1; j++)
+			{
+				if (find_block(i, j) == 1)
+				{
+					count += 1;
+				}
+			}
+		}
+		if (count > 0)
+		{
+			delete_square();
+			down_each_block();
+		}
+		else
+		{
+			break;
+		}
+	}
+	cout << answer << '\n';
+}

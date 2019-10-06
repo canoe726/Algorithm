@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+string Answer;
+
+int main()
+{
+	// int a = 11;
+	// cout << to_string(a) << endl;
+
+	int T;
+	cin >> T;
+	
+	for (int i = 0; i < T; i++)
+	{
+		int H, W, N;
+		cin >> H;
+		cin >> W;
+		cin >> N;
+
+		int house;
+		int floor;
+
+		if ((N % H) == 0)
+		{
+			floor = H;
+			house = N / H;
+		}
+		else
+		{
+			floor = N % H;
+			house = (N / H) + 1;
+		}
+
+		if (house < 10) { Answer = to_string(floor) + '0' + to_string(house); }
+		else { Answer = to_string(floor) + to_string(house); }
+
+		cout << Answer << endl;
+	}
+}

@@ -1,0 +1,49 @@
+#include<iostream>
+
+using namespace std;
+
+/*
+int find_combination(int n, int k)
+{
+	if (k == 0) { return 1; }
+	else if (k == 1) { return n; }
+	else if (k == 2) { return (n*(n - 1)) / 2; }
+	else if (n == k) { return 1; }
+	else if (n / 2 <= k) { k = n - k; return find_combination(n - 1, k - 1) + find_combination(n - 1, k); }
+	else { return find_combination(n - 1, k - 1) + find_combination(n - 1, k); }
+}
+*/
+
+int main()
+{
+	int n, k;
+	
+	while (1)
+	{
+		long res = 1;
+		int div = 1;
+
+		cin >> n;
+		cin >> k;
+
+		if (n == 0 && k == 0) { break; }
+
+		if (n - k < k) { k = n - k; }
+
+		// 10 C 5
+		// 1 * 10 / 1 = 10
+		// 10 * 9 / 2 = 45
+		// 45 * 8 / 3 = 120
+		// 120 * 7 / 4 = 210
+		// 210 * 6 / 5 = 252
+
+		while (k-- > 0)
+		{
+			res *= n--;
+			res /= div++;
+		}
+		cout << res << endl;
+	}
+
+
+}

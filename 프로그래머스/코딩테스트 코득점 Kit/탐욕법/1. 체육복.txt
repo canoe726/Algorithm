@@ -1,0 +1,109 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int solution(int n, vector<int> lost, vector<int> reserve) {
+	int answer = 0;
+
+	vector<int> exist(n,1);
+
+	int i;
+	for (i = 0; i < lost.size(); i++)
+	{
+		exist[lost[i] - 1]--;
+	}
+	for (i = 0; i < reserve.size(); i++)
+	{
+		exist[reserve[i] - 1]++;
+	}
+
+	for (i = 0; i < exist.size(); i++)
+	{
+		if (exist[i] > 1)
+		{
+			if (i > 0)
+			{
+				if (exist[i - 1] < 1)
+				{
+					exist[i]--;
+					exist[i - 1]++;
+				}
+			}
+
+			if (i < exist.size() - 1)
+			{
+				if (exist[i + 1] < 1)
+				{
+					exist[i]--;
+					exist[i + 1]++;
+				}
+			}
+
+		}
+	}
+
+	for (i = 0; i < exist.size(); i++)
+	{
+		if (exist[i] >= 1)
+		{
+			answer++;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		int n;
+		cin >> n;
+
+		vector<int> lost;
+		vector<int> reserve;
+
+		int su;
+
+		int M;
+		cin >> M;
+		for (j = 0; j < M; j++)
+		{
+			cin >> su;
+			lost.push_back(su);
+		}
+
+		int K;
+		cin >> K;
+		for (j = 0; j < K; j++)
+		{
+			cin >> su;
+			reserve.push_back(su);
+		}
+
+		int answer = solution(n, lost, reserve);
+		cout << answer << endl;
+	}
+}
+
+/*
+2
+5
+2
+2 4
+3
+1 3 5
+5
+2
+2 4
+1
+3
+
+*/

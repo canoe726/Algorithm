@@ -1,0 +1,31 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int fibo[41];
+	fill_n(fibo, 41, 0);
+	
+	fibo[0] = 0;
+	fibo[1] = 1;
+
+	for (int i = 2; i < 41; i++)
+	{
+		fibo[i] = fibo[i - 1] + fibo[i - 2];
+	}
+
+	for (int i = 0; i < T; i++)
+	{
+		int N;
+		cin >> N;
+
+		if (N == 0) { cout << "1 0" << '\n'; }
+		else { cout << fibo[N - 1] << " " << fibo[N] << '\n'; }
+	}
+
+	return 0;
+}

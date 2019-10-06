@@ -1,0 +1,129 @@
+#include <string>
+#include <vector>
+#include<iostream>
+
+using namespace std;
+
+int solution(int cacheSize, vector<string> cities) {
+	
+	int answer = 0;
+
+	int i, j;
+	int cities_num = cities.size();
+
+	// 캐쉬 크기가 0 일 경우
+	if (cacheSize == 0)
+	{
+		return 5 * cities_num;
+	}
+
+	// 모든 글자를 대문자로
+	for (i = 0; i < cities_num; i++)
+	{
+		for (j = 0; j < strlen(cities[i].c_str()); j++)
+		{
+			if (cities[i][j] >= 'a' && cities[i][j] <= 'z')
+			{
+				cities[i][j] -= 32;
+			}
+		}
+	}
+
+	int *LRU = new int[cacheSize];
+	fill_n(LRU, cacheSize, 0);
+	
+	vector<string> cache;
+	int cache_index = 0;
+	for (i = 0; i < cacheSize; i++)
+	{
+		cache.push_back("");
+	}
+
+	for (i = 0; i < cities_num; i++)
+	{
+		if (cache_index == cacheSize) { cache_index = 0; }
+
+		// 원소가 없으면 캐쉬에 대입
+		if (cache[cache_index] == "")
+		{
+			answer += 5;
+			cache[cache_index] = cities[i];
+
+			LRU[cache_index]++;
+			
+			for (j = 0; j < cache_index; j++)
+			{
+				LRU[j]++;
+			}
+
+			cache_index++;
+		}
+		else
+		{
+			// 원소가 있는 경우 캐쉬 검사
+			int exist = 0;
+			for (j = 0; j < cacheSize; j++)
+			{
+				LRU[j]++;
+
+				if (cache[j] == cities[i])
+				{
+					answer += 1;
+					exist = 1;
+
+					LRU[j] = 0;
+				}
+			}
+
+			// 캐쉬에 없을 경우
+			if (exist == 0)
+			{
+				answer += 5;
+
+				int max = LRU[0];
+				int max_index = 0;
+
+				for (j = 1; j < cacheSize; j++)
+				{
+					if (max < LRU[j])
+					{
+						max = LRU[j];
+						max_index = j;
+					}
+				}
+
+				cache[max_index] = cities[i];
+				LRU[max_index] = 0;
+			}
+		}
+
+		
+		for (j = 0; j < cacheSize; j++)
+		{
+			cout << cache[j] << " : ";
+			cout << LRU[j] << ", ";
+		} cout << endl;
+		
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int cacheSize;
+	cin >> cacheSize;
+
+	vector<string> cities;
+
+	int city_num = 10;
+
+	for (int i = 0; i < city_num; i++)
+	{
+		string str;
+		cin >> str;
+		cities.push_back(str);
+	}
+
+	cout << solution(cacheSize, cities) << endl;
+}

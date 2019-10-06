@@ -1,0 +1,32 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+// 100000000
+
+vector<pair<int, int>> check_point;
+
+int main()
+{
+	int N, Q;
+	cin >> N >> Q;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int X, Y;
+		cin >> X >> Y;
+		check_point.push_back(pair<int, int>(X, Y));
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		int A, B, Xi;
+		cin >> A >> B >> Xi;
+
+
+	}
+
+
+}

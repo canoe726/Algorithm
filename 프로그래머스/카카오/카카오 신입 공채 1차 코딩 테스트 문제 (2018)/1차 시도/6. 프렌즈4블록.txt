@@ -1,0 +1,91 @@
+#include <string>
+#include <vector>
+#include<iostream>
+
+using namespace std;
+
+int solution(int m, int n, vector<string> board) {
+	int answer = 0;
+
+	char mask[2][2];
+
+	int arr[30][30] = { 0 };
+
+	int i, j, k, stop = 0;
+
+	while ( stop == 0 )
+	{
+		// check 2*2 blocks
+		for (i = 0; i < m - 1; i++)
+		{
+			for (j = 0; j < n - 1; j++)
+			{
+				if (board[0][0] == ' ') { continue; }
+				mask[0][0] = board[i][j];
+				mask[0][1] = board[i][j + 1];
+				mask[1][0] = board[i + 1][j];
+				mask[1][1] = board[i + 1][j + 1];
+
+				if (mask[0][0] == mask[0][1] && mask[0][1] == mask[1][0] &&
+					mask[1][0] == mask[1][1] && mask[1][1] == mask[0][0])
+				{
+					arr[i][j] = 1;
+					arr[i][j + 1] = 1;
+					arr[i + 1][j] = 1;
+					arr[i + 1][j + 1] = 1;
+				}
+			}
+		}
+
+		// delete block
+		for (i = 0; i < m; i++)
+		{
+			for (j = 0; j < n; j++)
+			{
+				if (arr[i][j] == 1) { board[i][j] = ' '; }
+			}
+		}
+
+		// down block
+		for (i = 0; i < n; i++)
+		{
+			for (j = 0; j < m - 1; j++)
+			{
+
+				if (board[i][j] == ' ')
+				{
+
+					for (k = j; k >= 0; k--)
+					{
+
+					}
+
+				}
+
+
+			}
+		}
+
+
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int m, n;
+	cin >> m;
+	cin >> n;
+
+	vector<string> str;
+
+	for (int i = 0; i < m; i++)
+	{
+		string s;
+		cin >> s;
+		str.push_back(s);
+	}
+
+	cout << solution(m, n, str) << endl;
+}

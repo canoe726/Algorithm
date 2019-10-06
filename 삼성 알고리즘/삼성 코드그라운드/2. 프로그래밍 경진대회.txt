@@ -1,0 +1,47 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int score[300000];
+int Answer;
+
+int main(int argc, char** argv)
+{
+	int T;
+	int N;
+	int su;
+	int i, j, k;
+
+	cin >> T;
+
+	for (i = 1; i <= T; i++)
+	{
+		Answer = 0;
+
+		cin >> N;
+		// 입력
+		for (j = 0; j < N; j++)
+		{
+			cin >> su;
+			score[j] = su;
+		}
+
+		// 정렬
+		sort(score, score + N);
+		
+		// 우승자 수 계산
+		for (k = 0; k < N; k++)
+		{
+			if ((score[k] + N) >= (score[N - 1] + 1))
+			{
+				Answer += 1;
+			}
+		}
+
+		cout << "Case #" << i << endl;
+		cout << Answer << endl;
+	}
+	
+	return 0;
+}

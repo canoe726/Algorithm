@@ -1,0 +1,55 @@
+#include<iostream>
+#include<queue>
+#include<cstring>
+
+using namespace std;
+
+int Answer = 0;
+
+int main()
+{
+	queue<int> queue;
+
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++)
+	{
+		char str[6];
+		cin >> str;
+
+		if (!strcmp(str, "push"))
+		{
+			int su;
+			cin >> su;
+			queue.push(su);
+		}
+		else if (!strcmp(str, "pop"))
+		{
+			if (queue.empty()) { cout << "-1" << '\n'; }
+			else { cout << queue.front() << '\n'; queue.pop(); }
+		}
+		else if (!strcmp(str, "size"))
+		{
+			cout << queue.size() << '\n';
+		}
+		else if (!strcmp(str, "empty"))
+		{
+			if (queue.empty()) { cout << "1" << '\n'; }
+			else { cout << "0" << '\n'; }
+		}
+		else if (!strcmp(str, "front"))
+		{
+			if (queue.empty()) { cout << "-1" << '\n'; }
+			else { cout << queue.front() << '\n'; }
+		}
+		else if (!strcmp(str, "back"))
+		{
+			if (queue.empty()) { cout << "-1" << '\n'; }
+			else { cout << queue.back() << '\n'; }
+		}
+	}
+
+	return 0;
+}
+

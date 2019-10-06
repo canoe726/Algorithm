@@ -1,0 +1,67 @@
+#include<iostream>
+
+using namespace std;
+
+int a_prize[6] = { 5000000,3000000,2000000,500000,300000,100000 };
+int b_prize[5] = { 5120000,2560000,1280000,640000,320000 };
+
+int a_range[6] = { 1,3,6,10,15,21 };
+int b_range[5] = { 1,3,7,15,31 };
+
+int find_total_prize(int a, int b)
+{
+	int sum = 0;
+
+	int i;
+	int first = 0;
+
+	if (a != 0)
+	{
+		for (i = 0; i < 6; i++)
+		{
+			if ( a > first && a <= a_range[i] )
+			{
+				sum += a_prize[i];
+				break;
+			}
+			else
+			{
+				first = a_range[i];
+			}
+		}
+	}
+
+	first = 0;
+	if (b != 0)
+	{
+		for (i = 0; i < 5; i++)
+		{
+			if (b > first && b <= b_range[i])
+			{
+				sum += b_prize[i];
+				break;
+			}
+			else
+			{
+				first = a_range[i];
+			}
+		}
+	}
+
+	return sum;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+
+		cout << find_total_prize(a, b) << '\n';
+	}
+}

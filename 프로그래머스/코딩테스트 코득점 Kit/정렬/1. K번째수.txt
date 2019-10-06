@@ -1,0 +1,73 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(vector<int> array, vector<vector<int>> commands) {
+	vector<int> answer;
+
+	vector<int> temp;
+
+	int i, j;
+	for (i = 0; i < commands.size(); i++)
+	{
+		for (j = commands[i][0] - 1; j < commands[i][1]; j++)
+		{
+			temp.push_back(array[j]);
+		}
+
+		sort(temp.begin(), temp.end());
+
+		answer.push_back(temp[commands[i][2] - 1]);
+
+		int t_len = temp.size();
+
+		for (j = 0; j < t_len; j++)
+		{
+			temp.erase(temp.begin());
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> array;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		array.push_back(su);
+	}
+	
+	int M;
+	cin >> M;
+
+	vector<vector<int>> commands(M, vector<int>(0, 0));
+
+	int start, end, k;
+	for (i = 0; i < M; i++)
+	{
+		cin >> start;
+		cin >> end;
+		cin >> k;
+
+		commands[i].push_back(start);
+		commands[i].push_back(end);
+		commands[i].push_back(k);
+	}
+
+	vector<int> ans = solution(array, commands);
+	for (i = 0; i < ans.size(); i++)
+	{
+		cout << ans[i] << endl;
+	}
+}

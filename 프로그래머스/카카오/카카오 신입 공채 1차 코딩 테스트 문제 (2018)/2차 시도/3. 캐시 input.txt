@@ -1,0 +1,35 @@
+3
+10
+Jeju Pangyo Seoul NewYork LA Jeju Pangyo Seoul NewYork LA
+
+5 5 5 5 5 5 5 5 5 5 = 50
+
+3
+9
+Jeju Pangyo Seoul Jeju Pangyo Seoul Jeju Pangyo Seoul
+
+5 5 5 1 1 1 1 1 1 = 21
+
+2
+12
+Jeju Pangyo Seoul NewYork LA SanFrancisco Seoul Rome Paris Jeju NewYork Rome
+
+5 5 = 60
+
+5
+12
+Jeju Pangyo Seoul NewYork LA SanFrancisco Seoul Rome Paris Jeju NewYork Rome
+
+5 5 5 5 5 5 1 5 5 5 5 1 = 52
+
+2
+4
+Jeju Pangyo NewYork newyork
+
+5 5 5 1 = 16
+
+0
+5
+Jeju Pangyo Seoul NewYork LA
+
+5 5 5 5 5 = 25

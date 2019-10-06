@@ -1,0 +1,56 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> heights) {
+	vector<int> answer;
+	int i, j;
+	int h_len = heights.size();
+
+	for (i = 0; i < h_len; i++)
+	{
+		answer.push_back(0);
+	}
+
+	
+	for (i = h_len - 1; i >= 0; i--)
+	{
+
+		for (j = i - 1; j >= 0; j--)
+		{
+			if (heights[i] < heights[j])
+			{
+				answer[i] = j + 1;
+				break;
+			}
+		}
+
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> heights;
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		heights.push_back(su);
+	}
+
+	vector<int> res = solution(heights);
+	for (i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << " ";
+	}
+	cout << endl;
+}
+

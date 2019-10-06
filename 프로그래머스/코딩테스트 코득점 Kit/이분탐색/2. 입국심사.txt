@@ -1,0 +1,67 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+/*
+6
+2
+7 10
+
+*/
+
+using namespace std;
+
+long long solution(int n, vector<int> times) {
+	long long answer = 0;
+	int len = times.size();
+	int i;
+	int count = 0;
+
+	sort(times.begin(), times.end());
+
+	long long left = 1, right = n * times[len - 1], mid;
+
+	while (left + 1 < right)
+	{
+		count = 0;
+
+		mid = (right + left) / 2;
+
+		for (i = 0; i < len; i++)
+		{
+			count += (mid / times[i]);
+		}
+
+		if (count >= n)
+			right = mid;
+		else
+			left = mid;
+	}
+
+	answer = mid;
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+	
+	vector<int> times;
+
+	int i;
+	
+	int M;
+	cin >> M;
+
+	for (i = 0; i < M; i++)
+	{
+		int su;
+		cin >> su;
+		times.push_back(su);
+	}
+
+	cout << solution(N, times) << endl;
+}

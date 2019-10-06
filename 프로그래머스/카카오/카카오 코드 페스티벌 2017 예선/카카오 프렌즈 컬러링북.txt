@@ -1,0 +1,114 @@
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int counts = 0;
+
+void dfs(int color, int r, int c, int r_size, int c_size,
+		vector<vector<int>> picture, int field[][101])
+{
+	field[r][c] = 1;
+	counts++;
+
+	// up
+	if (r - 1 >= 0 && r - 1 < r_size && c >= 0 && c < c_size &&
+		field[r - 1][c] == 0 && picture[r - 1][c] == color)
+	{
+		dfs(picture[r - 1][c], r - 1, c, r_size, c_size, picture, field);
+	}
+	// down
+	if (r + 1 >= 0 && r + 1 < r_size && c >= 0 && c < c_size &&
+		field[r + 1][c] == 0 && picture[r + 1][c] == color)
+	{
+		dfs(picture[r + 1][c], r + 1, c, r_size, c_size, picture, field);
+	}
+	// left
+	if (r >= 0 && r< r_size && c - 1 >= 0 && c - 1 < c_size &&
+		field[r][c - 1] == 0 && picture[r][c - 1] == color)
+	{
+		dfs(picture[r][c - 1], r, c - 1, r_size, c_size, picture, field);
+	}
+	// right
+	if (r >= 0 && r < r_size && c + 1 >= 0 && c + 1 < c_size &&
+		field[r][c + 1] == 0 && picture[r][c + 1] == color)
+	{
+		dfs(picture[r][c + 1], r, c + 1, r_size, c_size, picture, field);
+	}
+}
+
+vector<int> function(vector<vector<int>> picture)
+{
+	vector<int> result(2);
+	result[0] = 0;
+	result[1] = 0;
+
+	int field[101][101] = { 0 };
+
+	int row = picture.size();
+	int col = picture[0].size();
+
+	int i, j;
+	for (i = 0; i < row; i++)
+	{
+		for (j = 0; j < col; j++)
+		{
+			if (field[i][j] == 0 && picture[i][j] != 0)
+			{
+				counts = 0;
+				dfs(picture[i][j], i, j, row, col, picture, field);
+				result[0]++;
+
+				if (counts > result[1])
+				{
+					result[1] = counts;
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+vector<int> solution(int m, int n, vector<vector<int>> picture) {
+	int number_of_area = 0;
+	int max_size_of_one_area = 0;
+
+	vector<int> answer(2);
+	answer[0] = number_of_area;
+	answer[1] = max_size_of_one_area;
+
+	answer = function(picture);
+
+	return answer;
+}
+
+#include<iostream>
+
+int main() {
+
+	int m;
+	int n;
+
+	cin >> m >> n;
+	vector<vector<int>> picture(m);
+
+	int i, j;
+	for (i = 0; i < m; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			int su;
+			cin >> su;
+			picture[i].push_back(su);
+		}
+	}
+
+	vector<int> res = solution(m, n, picture);
+	for (i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << ' ';
+	}
+	cout << '\n';
+}

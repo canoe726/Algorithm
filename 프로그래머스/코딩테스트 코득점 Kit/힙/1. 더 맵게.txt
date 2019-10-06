@@ -1,0 +1,88 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+
+class Custom {
+
+public:
+	int value;
+	Custom(int value) : value(value) {}
+};
+
+class cmp {
+public :
+	bool operator()(Custom t, Custom u) {
+		return t.value > u.value;
+	}
+};
+
+
+int solution(vector<int> scoville, int K) {
+	int answer = 0;
+
+	priority_queue<Custom, vector<Custom>, cmp> pq;
+
+	int s_len = scoville.size();
+	int i;
+	for (i = 0; i < s_len; i++)
+	{
+		pq.push(Custom(scoville[i]));
+	}
+
+	int less_first;
+	int less_second;
+
+	while (1)
+	{
+		if (pq.top().value < K)
+		{
+            if (pq.size() == 1) { return -1; }
+            
+			less_first = pq.top().value;
+			pq.pop();
+			less_second = pq.top().value * 2;
+			pq.pop();
+			pq.push(Custom(less_first + less_second));
+
+			answer++;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+	
+	vector<int> scoville;
+
+	int i;
+	int su;
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		scoville.push_back(su);
+	}
+
+	int K;
+	cin >> K;
+
+	int res = solution(scoville, K);
+	cout << res << endl;
+}
+
+/*
+6
+1 2 3 9 10 12
+7
+*/

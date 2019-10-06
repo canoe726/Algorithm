@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<string>> clothes) {
+	int answer = 1;
+
+	vector<pair<string, int>> type;
+	int type_index = 0;
+
+	int i, j;
+	int c_len = clothes.size();
+
+	type.push_back(pair<string, int>(clothes[type_index++][1], 1));
+
+	int exist = 0;
+	for (i = 1; i < c_len; i++)
+	{
+		exist = 0;
+		for (j = 0; j < type_index; j++)
+		{
+			if (clothes[i][1] == type[j].first)
+			{
+				exist = 1;
+				type[j].second++;	
+				break;
+			}
+		}
+		if (exist == 0)
+		{
+			type.push_back(pair<string, int>(clothes[i][1], 1));
+			type_index++;
+		}
+	}
+
+	for (i = 0; i < type_index; i++)
+	{
+		answer *= (type[i].second+1);
+	}
+	
+	return answer - 1;
+}

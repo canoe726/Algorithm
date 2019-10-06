@@ -1,0 +1,52 @@
+#include<iostream>
+
+using namespace std;
+
+// 최대공약수
+int find_gcd(int a, int b)
+{
+	int result;
+	if (a < b)
+	{
+		int temp = a;
+		a = b;
+		b = temp;
+	}
+	
+	while (b)
+	{
+		result = a%b;
+		a = b;
+		b = result;
+	}
+
+	return a;
+}
+
+// 최소공배수
+int find_lcm(int a, int b)
+{
+	int gcd = find_gcd(a, b);
+
+	return a*b / gcd;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int a, b, answer;
+
+	int i;
+	for (i = 0; i < T; i++)
+	{
+		cin >> a;
+		cin >> b;
+
+		answer = find_lcm(a, b);
+		cout << answer << '\n';
+	}
+
+	return 0;
+}

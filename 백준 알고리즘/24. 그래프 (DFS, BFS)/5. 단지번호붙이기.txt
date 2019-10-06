@@ -1,0 +1,82 @@
+#include<iostream>
+#include<string>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+int house[26][26];
+int index = 1;
+int number[101];
+// up, left, down, right
+int one[4][2] = { {-1,0},{0,-1},{1,0},{0,1} };
+
+void bfs_search(int row, int col, int size)
+{
+	queue<pair<int, int>> q;
+	q.push(pair<int, int>(row, col));
+	house[row][col] = 0;
+	number[index]++;
+	
+	while (!q.empty())
+	{
+		int r1 = q.front().first;
+		int c1 = q.front().second;
+		q.pop();
+
+		int i;
+		for (i = 0; i < 4; i++)
+		{
+			int r2 = r1 + one[i][0];
+			int c2 = c1 + one[i][1];
+
+			if (r2 >= 0 && r2 <= size && c2 >= 0 && c2 <= size)
+			{
+				if (house[r2][c2] == 1)
+				{
+					q.push(pair<int, int>(r2, c2));
+					house[r2][c2] = 0;
+					number[index]++;
+				}
+			}
+		}
+
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		string str;
+		cin >> str;
+
+		for (j = 0; j < N; j++)
+		{
+			house[i][j] = str[j] - '0';
+		}
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			if (house[i][j] == 1)
+			{
+				bfs_search(i, j, N);
+				index++;
+			}
+		}
+	}
+
+	cout << index - 1 << '\n';
+	sort(number, number + (index));
+	for (i = 1; i < index; i++)
+	{
+		cout << number[i] << '\n';
+	}
+}

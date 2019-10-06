@@ -1,0 +1,64 @@
+#include<iostream>
+#include<string>
+
+#define LENGTH 1000001
+
+using namespace std;
+
+string S;
+char temp[LENGTH] = { '\0' };
+
+int find_max(string s)
+{
+	int answer = 0;
+	int size = 1;
+	int len = s.size();
+	int i;
+
+	while (size <= len)
+	{
+		if (len%size == 0)
+		{
+			for (i = 0; i < size; i++)
+			{
+				temp[i] = s[i];
+			}
+
+			string res;
+			string t = temp;
+
+			for (i = 0; i < len / size; i++)
+			{
+				res += t;
+			}
+
+			if (!s.compare(res))
+			{
+				if (answer < (len / size))
+				{
+					answer = len / size;
+				}
+			}
+		}
+		size++;
+	}
+
+	return answer;
+}
+
+int main()
+{
+	while (1)
+	{
+		cin >> S;
+
+		if (!S.compare("."))
+		{
+			break;
+		}
+
+		memset(temp, '\0', LENGTH);
+		cout << find_max(S) << '\n';
+	}
+}
+

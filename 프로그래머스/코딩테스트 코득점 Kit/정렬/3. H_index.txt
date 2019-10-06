@@ -1,0 +1,57 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+
+int solution(vector<int> citations) {
+	int answer = 0;
+
+	sort(citations.begin(), citations.end(), cmp);
+
+	int i;
+	for (i = 0; i < citations.size(); i++)
+	{
+		if (citations[i] < i+1)
+		{
+			return i;
+		}
+	}	
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i;
+	vector<int> citations;
+
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		citations.push_back(su);
+	}
+
+	int ans = solution(citations);
+	cout << ans << endl;
+}
+
+/*
+5
+3 0 6 1 2
+
+4
+1 1 1 1
+
+7
+0 15 4 0 7 10 0
+
+*/

@@ -1,0 +1,198 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(string a, string b)
+{
+	return a > b;
+}
+
+string solution(int n, int t, int m, vector<string> timetable) {
+	
+	string answer = "";
+
+	sort(timetable.begin(), timetable.end(), cmp);
+
+	string start_time_hour = "09";
+	string start_time_minute = "00";
+
+	string lastcrew_time_hour = "";
+	string lastcrew_time_minute = "";
+
+	int i, j, limit, accept;
+	for (i = 0; i < n; i++)
+	{
+		limit = m;
+		accept = 1;
+
+		string timetable_hour = "";
+		string timetable_minute = "";
+
+		for (j = timetable.size() - 1; j >= 0; j--)
+		{
+			timetable_hour = "";
+			timetable_hour.push_back(timetable[j][0]);
+			timetable_hour.push_back(timetable[j][1]);
+
+			timetable_minute = "";
+			timetable_minute.push_back(timetable[j][3]);
+			timetable_minute.push_back(timetable[j][4]);
+
+			if (atoi(start_time_hour.c_str()) > atoi(timetable_hour.c_str()))
+			{
+				lastcrew_time_hour = timetable_hour;
+				lastcrew_time_minute = timetable_minute;
+
+				timetable.pop_back();
+				limit--;
+			}
+			else if (atoi(start_time_hour.c_str()) == atoi(timetable_hour.c_str()))
+			{
+				if (atoi(start_time_minute.c_str()) >= atoi(timetable_minute.c_str()))
+				{
+					lastcrew_time_hour = timetable_hour;
+					lastcrew_time_minute = timetable_minute;
+
+					timetable.pop_back();
+					limit--;
+				}
+			}
+			else
+			{
+				accept = 0;
+			}
+
+			if (limit == 0)
+			{
+				break;
+			}
+		}
+
+		if (i < n - 1)
+		{
+			int temp_hour = atoi(start_time_hour.c_str());
+			int temp_minute = atoi(start_time_minute.c_str());
+			char temp_char = '\0';
+			temp_minute += t;
+
+			if (temp_minute >= 60)
+			{
+				temp_hour += 1;
+				temp_minute -= 60;
+
+				start_time_hour = "";
+				
+				temp_char = (temp_hour / 10) + '0';
+				start_time_hour.push_back(temp_char);
+
+				temp_char = (temp_hour % 10) + '0';
+				start_time_hour.push_back(temp_char);
+				
+			}
+			start_time_minute = "";
+
+			temp_char = (temp_minute / 10) + '0';
+			start_time_minute.push_back(temp_char);
+
+			temp_char = (temp_minute % 10) + '0';
+			start_time_minute.push_back(temp_char);
+		}
+	}
+
+	if (accept == 0)
+	{
+		answer += start_time_hour;
+		answer += ":";
+		answer += start_time_minute;
+	}
+	else if (timetable.empty() && limit != 0)
+	{
+		answer += start_time_hour;
+		answer += ":";
+		answer += start_time_minute;
+	}
+	else
+	{
+		if (start_time_hour < lastcrew_time_hour)
+		{
+			answer += start_time_hour;
+			answer += ":";
+			answer += start_time_minute;
+		}
+		else
+		{
+			int temp_hour = atoi(lastcrew_time_hour.c_str());
+			int temp_minute = atoi(lastcrew_time_minute.c_str());
+			char temp_char = '\0';
+			temp_minute -= 1;
+
+			if (temp_minute < 0)
+			{
+				temp_hour -= 1;
+				temp_minute += 60;
+			}
+
+			lastcrew_time_hour = "";
+
+			temp_char = (temp_hour / 10) + '0';
+			lastcrew_time_hour.push_back(temp_char);
+
+			temp_char = (temp_hour % 10) + '0';
+			lastcrew_time_hour.push_back(temp_char);
+
+			lastcrew_time_minute = "";
+
+			temp_char = (temp_minute / 10) + '0';
+			lastcrew_time_minute.push_back(temp_char);
+
+			temp_char = (temp_minute % 10) + '0';
+			lastcrew_time_minute.push_back(temp_char);
+
+			answer += lastcrew_time_hour;
+			answer += ":";
+			answer += lastcrew_time_minute;
+		}
+	}
+
+	return answer;
+}
+
+#include<iostream>
+
+int main()
+{
+	int n, t, m;
+	vector<string> timetable;
+
+	cin >> n >> t >> m;
+
+	int su;
+	cin >> su;
+
+	int i;
+	for (i = 0; i < su; i++)
+	{
+		string temp;
+		cin >> temp;
+		timetable.push_back(temp);
+	}
+
+	cout << solution(n, t, m, timetable) << endl;
+}
+
+/*
+1 1 5 4 08:00 08:01 08:02 08:03
+
+2 10 2 3 09:10 09:09 08:00
+
+2 1 2 4 09:00 09:00 09:00 09:00
+
+1 1 5 5 00:01 00:01 00:01 00:01 00:01
+
+1 1 1 1 23:59
+
+10 60 45 16 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59
+
+*/

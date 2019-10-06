@@ -1,0 +1,16 @@
+3
+go
+gone
+guild
+
+4
+abc
+def
+ghi
+jklm
+
+4
+word
+war
+warrior
+world

@@ -1,0 +1,92 @@
+7
+A B C
+B D .
+C E F
+E . .
+F . G
+D . .
+G . .
+#include<iostream>
+
+using namespace std;
+
+typedef struct Node
+{
+	char left;
+	char right;
+} Node;
+
+Node tree[100];
+
+void preOrder(char cur)
+{
+	if (cur != '.' )
+	{
+		cout << cur;
+		preOrder(tree[cur].left);
+		preOrder(tree[cur].right);
+	}
+	else
+	{
+		return;
+	}
+}
+
+void inOrder(char cur)
+{
+	if (cur != '.')
+	{
+		inOrder(tree[cur].left);
+		cout << cur;
+		inOrder(tree[cur].right);
+	}
+	else
+	{
+		return;
+	}
+}
+
+void postOrder(char cur)
+{
+	if (cur != '.')
+	{
+		postOrder(tree[cur].left);
+		postOrder(tree[cur].right);
+		cout << cur;
+	}
+	else
+	{
+		return;
+	}
+}
+
+int main()
+{
+	
+	int N;
+	cin >> N;
+
+	char root, left, right;
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> root >> left >> right;
+
+		tree[root].left = left;
+		tree[root].right = right;
+	}
+
+	preOrder('A');
+	cout << '\n';
+	inOrder('A');
+	cout << '\n';
+	postOrder('A');
+	cout << '\n';
+
+}
+
+
+3
+A C D
+B E .
+C B .

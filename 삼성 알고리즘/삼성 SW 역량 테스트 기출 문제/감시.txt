@@ -1,0 +1,164 @@
+#include<iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+typedef struct pos
+{
+	int number;
+	int x;
+	int y;
+};
+
+int N, M;
+int answer = INT_MAX;
+int office[8][8] = { 0 };
+int temp[8][8] = { 0 };
+
+void copy_office()
+{
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			temp[i][j] = office[i][j];
+		}
+	}
+}
+
+void find_answer()
+{
+	int result = 0;
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			if (temp[i][j] == 0)
+			{
+				result++;
+			}
+		}
+	}
+
+	if (answer > result)
+	{
+		answer = result;
+	}
+}
+
+void up(int x, int y)
+{
+	int i;
+	for (i = 0; i < y; i++)
+	{
+		if (temp[i][x] == 0) { temp[i][x] = 9; }
+		else if (temp[i][x] == 6) { break; }
+	}
+}
+
+void down(int x, int y)
+{
+	int i;
+	for (i = y + 1; i < N; i++)
+	{
+		if (temp[i][x] == 0) { temp[i][x] = 9; }
+		else if (temp[i][x] == 6) { break; }
+	}
+}
+
+
+void find_blind_spot(pos p, int mode)
+{
+	if (p.number == 1)
+	{
+		if (mode == 1) { up(p.x, p.y); }
+		else if (mode == 2) { down(p.x, p.y); }
+	}
+	else if (p.number == 2)
+	{
+
+	}
+	else if (p.number == 3)
+	{
+
+	}
+	else if (p.number == 4)
+	{
+
+	}
+	else if (p.number == 5)
+	{
+
+	}
+}
+
+void combination(int cur, vector<pos> pos, int index, vector<int> &pick, int count)
+{
+	if (index == count)
+	{
+		for (int i = 0; i < pick.size(); i++)
+		{
+			cout << pick[i] << ' ';
+		}
+		cout << '\n';
+
+		for (int i = 0; i < pick.size(); i++)
+		{
+			find_blind_spot(pos[i], pick[i]);
+		}
+
+		find_answer();
+		copy_office();
+		return;
+	}
+
+	int rot;
+	if (pos[cur].number == 1) { rot = 4; }
+	else if (pos[cur].number == 2) { rot = 2; }
+	else if (pos[cur].number == 3) { rot = 4; }
+	else if (pos[cur].number == 4) { rot = 4; }
+	else if (pos[cur].number == 5) { rot = 1; }
+
+	for (int i = 0; i < rot; i++)
+	{
+		pick.push_back(i);
+		combination(cur + 1, pos, index + 1, pick, count);
+		pick.pop_back();
+	}
+}
+
+int main()
+{
+	cin >> N >> M;
+
+	vector<pos> position;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			cin >> office[i][j];
+
+			if (office[i][j] >= 1 && office[i][j] <= 5)
+			{
+				pos temp;
+				temp.number = office[i][j];
+				temp.x = j;
+				temp.y = i;
+
+				position.push_back(temp);
+			}
+		}
+	}
+
+	copy_office();
+
+	vector<int> pick;
+	combination(0, position, 0, pick, position.size());
+	
+	cout << answer << '\n';
+}

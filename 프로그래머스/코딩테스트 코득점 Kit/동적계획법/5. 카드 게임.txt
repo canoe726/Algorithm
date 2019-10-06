@@ -1,0 +1,69 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> left, vector<int> right) {
+	int answer = 0, l_index = 0, r_index = 0, len = left.size();
+	int i = 0, exist = 0;
+
+	while ((l_index < len) && (r_index < len))
+	{
+		if (left[l_index] > right[r_index])
+		{
+			answer += right[r_index];
+			r_index++;
+		}
+		else
+		{
+			exist = 0;
+			for (i = l_index; i < len; i++)
+			{
+				if (left[i] > right[r_index])
+				{
+					exist = 1;
+					break;
+				}
+			}
+
+			if (exist == 1)
+			{
+				l_index++;
+			}
+			else
+			{
+				l_index++;
+				r_index++;
+			}
+
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N, i, su;
+	cin >> N;
+
+	vector<int> left;
+	vector<int> right;
+
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		left.push_back(su);
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		cin >> su;
+		right.push_back(su);
+	}
+
+	cout << solution(left, right) << endl;
+
+	return 0;
+}

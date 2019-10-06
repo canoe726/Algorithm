@@ -1,0 +1,68 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<int> weight) {
+	int answer = 0;
+
+	sort(weight.begin(), weight.end());
+
+	int w_len = weight.size();
+	int i, j;
+	int maximum = 0;
+	for (i = 0; i < w_len; i++)
+	{
+		maximum += weight[i];
+	}
+
+	for (i = 1; i <= maximum; i++)
+	{
+		int current = i;
+		for (j = w_len - 1; j >= 0; j--)
+		{
+			if (weight[j] <= current)
+			{
+				current -= weight[j];
+			}
+			if (current == 0)
+			{
+				break;
+			}
+		}
+		if (current != 0)
+		{
+			answer = i;
+			break;
+		}
+	}
+	
+	return answer;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	vector<int> weight;
+	
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+		weight.push_back(su);		
+	}
+
+	int ans = solution(weight);
+	cout << ans << endl;
+}
+
+/*
+7
+3 1 6 2 7 30 1
+
+*/

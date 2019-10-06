@@ -1,0 +1,72 @@
+#include<iostream>
+#include<stack>
+#include<cstring>
+
+using namespace std;
+
+int input[100001];
+char status[200001];
+
+int main()
+{
+	int input_len = 0;
+	stack<int> stack;
+
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++)
+	{
+		int su;
+		cin >> su;
+
+		input[i] = su;
+		input_len += 1;
+	}
+
+	int same = 0;
+	int s_index = 0;
+	int i_index = 0;
+	int start = 1;
+
+	stack.push(start++);
+	status[s_index++] = '+';
+
+	while ( start <= N+1)
+	{
+		if ((N == i_index) && (stack.empty() != 0)) { same = 1; break; }
+		else if ((N == i_index) && (stack.empty() == 0)) { break; }
+		
+		if (stack.empty() == 0)
+		{
+			if ((stack.top() == input[i_index]))
+			{
+				i_index += 1;
+				status[s_index++] = '-';
+				if (stack.empty()) { break; }
+				else
+				{
+					stack.pop();
+					continue;
+				}
+			}
+		}
+		stack.push(start++);
+		status[s_index++] = '+';
+	}
+	
+	if (same == 1)
+	{
+		for (int i = 0; i < s_index; i++)
+		{
+			cout << status[i] << '\n';
+		}
+	}
+	else if (same == 0)
+	{
+		cout << "NO" << '\n';
+	}
+
+	return 0;
+}
+

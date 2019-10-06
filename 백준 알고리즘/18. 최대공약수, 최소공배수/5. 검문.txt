@@ -1,0 +1,72 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int find_gcd(int a, int b)
+{
+	while (b)
+	{
+		int c = a % b;
+		a = b;
+		b = c;
+	}
+
+	return a;
+}
+
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+	int numbers[101] = { 0 };
+	int nums_gap[101] = { 0 };
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> numbers[i];
+	}
+
+	sort(numbers, numbers + N, cmp);
+
+	for (i = 1; i < N; i++)
+	{
+		nums_gap[i - 1] = numbers[i - 1] - numbers[i];
+	}
+
+	int gcd = find_gcd(nums_gap[0], nums_gap[1]);
+
+	for (i = 2; i < N - 1; i++)
+	{
+		gcd = find_gcd(gcd, nums_gap[i]);
+	}
+
+	vector<int> solution;
+
+	for (i = 1; i * i <= gcd; i++)
+	{
+		if (gcd % i == 0)
+		{
+			solution.push_back(i);
+			if (i != gcd / i)
+			{
+				solution.push_back(gcd / i);
+			}
+		}
+	}
+
+	sort(solution.begin(), solution.end());
+
+	for (i = 1; i < solution.size(); i++)
+	{
+		cout << solution[i] << ' ';
+	}
+	cout << endl;
+}

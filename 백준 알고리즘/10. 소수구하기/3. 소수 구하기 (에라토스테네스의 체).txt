@@ -1,0 +1,53 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int matrix[1000001];
+
+int main()
+{
+	int M, N;
+	cin >> M;
+	cin >> N;
+
+	fill_n(matrix, 0, N);
+
+	int start = 2;
+	int mul = 2;
+
+	while (1)
+	{
+		if ((start*start) <= N)
+		{
+			if (start*mul <= N )
+			{
+				matrix[start*mul] = 1;
+				mul += 1;
+			}
+			else
+			{
+				start += 1;
+				mul = 2;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	for (int i = M; i <= N; i++)
+	{
+		if (i == 1) { continue; }
+		else
+		{
+			if (matrix[i] == 0)
+			{
+				cout << i << '\n';
+			}
+		}
+	}
+
+}
+

@@ -1,0 +1,42 @@
+#include<iostream>
+
+using namespace std;
+
+int max(int a, int b)
+{
+	if (a > b) { return a; }
+	else { return b; }
+}
+
+int main()
+{
+	int stair[301];
+	int result[301];
+
+	int num;
+	cin >> num;
+
+	for (int i = 0; i < num; i++)
+	{
+		int su;
+		cin >> su;
+		stair[i] = su;
+	}
+
+	// 1ĭ
+	result[0] = stair[0];
+	// 2ĭ
+	result[1] = max(stair[0] + stair[1], stair[1]);
+	// 3ĭ
+	result[2] = max(stair[0] + stair[2], stair[1] + stair[2]);
+
+	for (int i = 3; i < num; i++)
+	{
+					// 1ĭ 2ĭ 1ĭ, 2ĭ 2ĭ
+		result[i] = max(result[i - 2] + stair[i], result[i - 3] + stair[i - 1] + stair[i]);
+	}
+
+	cout << result[num - 1] << endl;
+
+	return 0;
+}

@@ -1,0 +1,39 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int apartment[15][15] = { 0 };
+
+	int i, j, k;
+	for (i = 1; i < 15; i++)
+	{
+		apartment[0][i] = i;
+	}
+
+	for (i = 1; i < 15; i++)
+	{
+		for (j = 1; j < 15; j++)
+		{
+			int sum = 0;
+			for (k = 1; k <= j; k++)
+			{
+				sum += apartment[i - 1][k];
+			}
+
+			apartment[i][j] = sum;
+		}
+	}
+
+	int T;
+	cin >> T;
+
+	for (i = 0; i < T; i++)
+	{
+		int k, n;
+		cin >> k >> n;
+
+		cout << apartment[k][n] << endl;
+	}
+}

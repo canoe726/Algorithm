@@ -1,0 +1,84 @@
+#include<iostream>
+
+using namespace std;
+
+char map[21][21];
+int alphabet[27] = { 0 };
+
+int current = 0;
+int Answer = 0;
+
+void find_maximum(int R, int C, int r, int c)
+{
+	// ©Л
+	if (c+1 < C)
+	{
+		if (alphabet[map[r][c + 1] - 'A'] == 0)
+		{
+			current++;
+			alphabet[map[r][c + 1] - 'A'] = 1;
+			find_maximum(R, C, r, c + 1);
+		}
+	}
+	// го
+	if (r+1 < R)
+	{
+		if (alphabet[map[r + 1][c] - 'A'] == 0)
+		{
+			current++;
+			alphabet[map[r + 1][c] - 'A'] = 1;
+			find_maximum(R, C, r + 1, c);
+		}		
+	}
+	// аб
+	if (c-1 >= 0)
+	{
+		if (alphabet[map[r][c - 1] - 'A'] == 0)
+		{
+			current++;
+			alphabet[map[r][c - 1] - 'A'] = 1;
+			find_maximum(R, C, r, c - 1);
+		}		
+	}
+	// ╩С
+	if (r-1 >= 0)
+	{
+		if (alphabet[map[r - 1][c] - 'A'] == 0)
+		{
+			current++;
+			alphabet[map[r - 1][c] - 'A'] = 1;
+			find_maximum(R, C, r - 1, c);
+		}		
+	}
+	
+	if (current > Answer)
+	{
+		Answer = current;
+	}
+	current--;
+	alphabet[map[r][c] - 'A'] = 0;	
+}
+
+int main()
+{
+	int R, C;
+	cin >> R;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < R; i++)
+	{
+		for (j = 0; j < C; j++)
+		{
+			cin >> map[i][j];
+		}
+	}
+
+	alphabet[map[0][0] - 'A'] = 1;
+	current++;
+
+	find_maximum(R, C, 0, 0);
+	cout << Answer << endl;
+
+	return 0;
+}

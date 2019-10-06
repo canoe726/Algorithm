@@ -1,0 +1,68 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<queue>
+
+using namespace std;
+
+vector<vector<int>> graph(32001);
+int visited[32001];
+int num_of_edges[32001];
+queue<int> q;
+
+void topological_sort(int size)
+{
+	int i, j, value, graph_value;
+	for (i = 1; i <= size; i++)
+	{
+		if (num_of_edges[i] == 0)
+		{
+			q.push(i);
+		}
+	}
+
+	for (i = 1; i <= size; i++)
+	{
+		value = q.front();
+		q.pop();
+		cout << value << ' ';
+
+		for (j = 0; j < graph[value].size(); j++)
+		{
+			graph_value = graph[value][j];
+
+			num_of_edges[graph_value]--;
+
+			if (num_of_edges[graph_value] == 0)
+			{
+				q.push(graph_value);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < M; i++)
+	{
+		int left, right;
+		cin >> left >> right;
+		num_of_edges[right]++;
+		graph[left].push_back(right);		
+	}
+
+	for (i = 1; i <= N; i++)
+	{
+		if (graph[i].size() > 1)
+		{
+			sort(graph[i].begin(), graph[i].end());
+		}
+	}
+
+	topological_sort(N);
+	cout << '\n';
+}

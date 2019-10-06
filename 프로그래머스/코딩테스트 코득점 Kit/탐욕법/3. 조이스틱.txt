@@ -1,0 +1,110 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(string name) {
+	int answer = 0;
+
+	string current;
+
+	int i;
+	int n_len = name.size();
+	for (i = 0; i < n_len; i++)
+	{
+		current.append("A");
+	}
+
+	int index = 0;
+	while (1)
+	{
+		// 현재 위치 알파벳 조정
+		if (current[index] != name[index])
+		{
+			if ((name[index] - 'A') > ('Z' - name[index] + 1))
+			{
+				current[index] = name[index];
+				answer += 'Z' - name[index] + 1;
+			}
+			else
+			{
+				current[index] = name[index];
+				answer += name[index] - 'A';
+			}
+		}
+		// 현재 위치 이동
+		// 왼쪽 이동 길이
+		int left = 0;
+		int right = 0;
+		int same = 0;
+		
+		for (i = 0; i < n_len; i++)
+		{			
+			if ((index - 1) < 0)
+			{
+				index = index + n_len - 1;
+			}
+			else
+			{
+				index--;
+			}
+			left++;
+			
+			if (current[index] == name[index])
+			{
+				same++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		// 오른쪽 이동 길이
+		right = n_len - left;
+
+		if (left > right)
+		{
+			answer += right;
+		}
+		else
+		{
+			answer += left;
+		}
+
+		if (same == n_len)
+		{
+			break;
+		}
+
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++)
+	{
+		string name;
+		cin >> name;
+
+		int ans = solution(name);
+		cout << ans << endl;
+	}
+
+}
+
+/*
+4
+JAEEAA
+JAAEEA
+JEROEN
+JAN
+
+*/

@@ -1,0 +1,87 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+// unsigned long long : 0 ~ 18446744073709551615
+
+string Answer[101][101] = {"0"};
+
+#define StoD(X) (X==0? 0:X-'0')
+
+void reverse(char *arr, int len)
+{
+	char temp;
+	for (int i = 0; i < len / 2; i++)
+	{
+		temp = arr[i];
+		arr[i] = arr[len - 1 - i];
+		arr[len - 1 - i] = temp;
+	}
+}
+
+string find_combination(int N, int K)
+{
+	if ( Answer[N][K].empty() )
+	{
+		if (N == K || K == 0)
+		{
+			return "1";
+		}
+		else
+		{
+			char a[3][10002] = { 0 };
+			int len = 0, up = 0;
+
+			string s1 = find_combination(N - 1, K - 1);
+			string s2 = find_combination(N - 1, K);
+
+			strcpy(a[0], s1.c_str());
+			strcpy(a[1], s2.c_str());
+
+			if (strlen(a[0]) > strlen(a[1])) { len = strlen(a[0]); }
+			else { len = strlen(a[1]); }
+
+			reverse(a[0], strlen(a[0]));
+			reverse(a[1], strlen(a[1]));
+
+			for (int i = 0; i <= len; i++)
+			{
+				a[2][i] = (StoD(a[0][i]) + StoD(a[1][i]) + up) % 10 + '0';
+				if ((StoD(a[0][i]) + StoD(a[1][i]) + up) > 9) { up = 1; }
+				else { up = 0; }
+			}
+
+			if (a[2][len] == '0') { a[2][len] = 0; }
+			reverse(a[2], strlen(a[2]));
+
+			return a[2];
+		}
+	}
+	else
+	{
+		return Answer[N][K];
+	}
+}
+
+int main()
+{
+	int N, K;
+	cin >> N;
+	cin >> K;
+
+	for (int i = 0; i < 101; i++)
+	{
+		for (int j = 0; j <= i; j++)
+		{
+			if (i >= j)
+			{
+				Answer[i][j] = find_combination(i, j);
+			}
+		}
+	}
+
+	cout << Answer[N][K] << '\n';
+
+	return 0;
+}

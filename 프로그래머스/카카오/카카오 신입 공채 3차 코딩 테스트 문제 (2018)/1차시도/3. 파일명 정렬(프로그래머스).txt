@@ -1,0 +1,138 @@
+#include <string>
+#include <cstring>
+#include <vector>
+#pragma warning(disable:4996)
+
+using namespace std;
+
+typedef struct Filename
+{
+	string head;
+	string number;
+	string tail;
+};
+
+string make_upper(string s)
+{
+	int i;
+	for (i = 0; i < s.length(); i++)
+	{
+		if (s[i] >= 'a' && s[i] <= 'z')
+		{
+			s[i] = s[i] - 'a' + 'A';
+		}
+	}
+
+	return s;
+}
+
+vector<string> solution(vector<string> files) {
+	vector<string> answer;
+	
+	int i, j, k;
+	vector<Filename> filename;
+
+	for (i = 0; i < files.size(); i++)
+	{
+		Filename f;
+
+		int end = 0;
+		for (j = 0; j < files[i].size(); j++)
+		{
+			// number
+			if (files[i][j] >= '0' && files[i][j] <= '9')
+			{
+				f.number.push_back(files[i][j]);
+			}
+			// head
+			else
+			{
+				if (f.head.length() > 0 && f.number.length() > 0)
+				{
+					break;
+				}
+				f.head.push_back(files[i][j]);
+			}
+		}
+
+		for (k = j; k < files[i].size(); k++)
+		{
+			f.tail.push_back(files[i][k]);
+		}
+
+		filename.push_back(f);
+	}
+
+	int len = filename.size();
+	// head 사전순 정렬
+	for (i = 0; i < len - 1; i++)
+	{
+		for (j = i + 1; j < len; j++)
+		{
+			string str1 = filename[i].head.c_str();
+			string str2 = filename[j].head.c_str();
+
+			str1 = make_upper(str1);
+			str2 = make_upper(str2);
+
+			if (strcmp(str1.c_str(), str2.c_str()) > 0)
+			{
+				Filename temp = filename[i];
+				filename[i] = filename[j];
+				filename[j] = temp;
+			}
+		}
+	}
+
+	for (i = 0; i < len; i++)
+	{
+		// 같은 head 길이 세기
+		int same_len = 1;
+		string str1 = filename[i].head.c_str();
+		for (j = i + 1; j < len; j++)
+		{
+			string str2 = filename[j].head.c_str();
+
+			str1 = make_upper(str1);
+			str2 = make_upper(str2);
+
+			if (strcmp(str1.c_str(), str2.c_str()) == 0)
+			{
+				same_len += 1;
+			}
+		}
+
+		// number 사전순 정렬
+		for (j = i; j < i + same_len - 1; j++)
+		{
+			for (k = j + 1; k < i + same_len; k++)
+			{
+				string str1 = filename[j].number.c_str();
+				string str2 = filename[k].number.c_str();
+
+				int num1 = atoi(str1.c_str());
+				int num2 = atoi(str2.c_str());
+
+				if (num1 > num2)
+				{
+					Filename temp = filename[j];
+					filename[j] = filename[k];
+					filename[k] = temp;
+				}
+			}
+		}
+
+		i += (same_len - 1);
+	}
+
+	for (i = 0; i < len; i++)
+	{
+		char temp[101] = "";
+		strcat(temp, filename[i].head.c_str());
+		strcat(temp, filename[i].number.c_str());
+		strcat(temp, filename[i].tail.c_str());
+		answer.push_back(temp);
+	}
+
+	return answer;
+}

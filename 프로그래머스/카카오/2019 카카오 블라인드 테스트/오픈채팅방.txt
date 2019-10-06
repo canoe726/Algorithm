@@ -1,0 +1,142 @@
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+vector<string> solution(vector<string> record) {
+	vector<string> answer;
+
+	const string str1 = "님이 들어왔습니다.";
+	const string str2 = "님이 나갔습니다.";
+
+	map<string, string> m;
+
+	string token;
+	stringstream stream;
+	string id, nickname;
+
+	int i;
+	for (i = 0; i < record.size(); i++)
+	{
+		id = "", nickname = "";
+		stream = stringstream(record[i]);
+
+		stream >> token;
+		switch (record[i][0])
+		{
+		case 'L':
+			break;
+
+		case 'E':
+			while (stream >> token)
+			{
+				if (id == "")
+				{
+					id = token;
+				}
+				else
+				{
+					nickname = token;
+				}
+			}
+
+			if (m.find(id) == m.end())
+			{
+				m.insert(make_pair(id, nickname));
+			}
+			else
+			{
+				m.find(id)->second = nickname;
+			}
+			break;
+
+		case 'C':
+			while (stream >> token)
+			{
+				if (id == "")
+				{
+					id = token;
+				}
+				else
+				{
+					nickname = token;
+				}
+			}
+			m.find(id)->second = nickname;
+			break;
+		}
+	}
+
+	int idx = 0;
+
+	for (i = 0; i < record.size(); i++)
+	{
+		id = "", nickname = "";
+		stream = stringstream(record[i]);
+
+		stream >> token;
+		while (stream >> token)
+		{
+			if (id == "")
+			{
+				id = token;
+			}
+			else
+			{
+				nickname = token;
+			}
+		}
+		
+		switch (record[i][0])
+		{
+		case 'E':
+			answer.push_back(m.find(id)->second + str1);
+			break;
+
+		case 'L':
+			answer.push_back(m.find(id)->second + str2);
+			break;
+		}
+	}
+
+	return answer;
+}
+
+#include <iostream>
+
+int main()
+{
+	int n;
+	cin >> n;
+	getchar();
+
+	vector<string> record;
+	vector<string> result;
+
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		string str;
+		getline(cin, str);
+		record.push_back(str);
+	}
+
+	result = solution(record);
+
+	for (i = 0; i < result.size(); i++)
+	{
+		cout << result[i] << endl;
+	}
+}
+
+/*
+5
+Enter uid1234 Muzi
+Enter uid4567 Prodo
+Leave uid1234
+Enter uid1234 Prodo
+Change uid4567 Ryan
+
+*/

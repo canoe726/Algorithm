@@ -1,0 +1,50 @@
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int prime_number[50001];
+
+void find_prime_numbers()
+{
+	int i, j;
+	for (i = 2; i < 50001; i++)
+	{
+		prime_number[i] = 1;
+	}
+
+	for (i = 2; i < 50001; i++)
+	{
+		if (prime_number[i] == 1)
+		{
+			for (j = i * 2; j < 50001; j += i)
+			{
+				prime_number[j] = 0;
+			}
+		}
+	}	
+}
+
+int solution(vector<int> nums) {
+	int answer = 0;
+
+	find_prime_numbers();
+
+	int size = nums.size();
+
+	int i, j, k;
+	for (i = 0; i < size - 2; i++)
+	{
+		for (j = i + 1; j < size - 1; j++)
+		{
+			for (k = j + 1; k < size; k++)
+			{
+				if (prime_number[nums[i] + nums[j] + nums[k]] == 1)
+				{
+					answer++;
+				}
+			}
+		}
+	}
+
+	return answer;
+}

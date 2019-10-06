@@ -1,0 +1,42 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int cup[3] = { 1,2,3 };
+
+	int i, j;
+	int temp;
+	int a, b;
+	int left, right;
+	for (i = 0; i < N; i++)
+	{
+		cin >> a;
+		cin >> b;
+
+		for (j = 0; j < 3; j++)
+		{
+			if (cup[j] == a)
+			{
+				left = j;
+				continue;
+			}
+			if (cup[j] == b)
+			{
+				right = j;
+				continue;
+			}
+		}
+
+		temp = cup[left];
+		cup[left] = cup[right];
+		cup[right] = temp;
+	}
+	cout << cup[0] << '\n';
+	
+	return 0;
+}

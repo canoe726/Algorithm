@@ -1,0 +1,281 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void fill_black_cube(vector<vector<int>> &b)
+{
+	int size = b.size();
+	int i, j;
+	for (i = 0; i < size; i++)
+	{
+		int index = -1;
+		for (j = 0; j < size; j++)
+		{
+			if (b[j][i] == 0 || b[j][i] == -1)
+			{
+				index = j;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		for (j = index; j >= 0; j--)
+		{
+			b[j][i] = -1;
+		}
+	}
+}
+
+int width_block_check(vector<vector<int>> &b)
+{
+	// 0 0 0
+	// 0 0 0
+
+	int i, j, k, l, result = 0;
+
+	int size = b.size();
+
+	for (i = 0; i <= size - 2; i++)
+	{
+		for (j = 0; j <= size - 3; j++)
+		{
+			int color_block = 0, black_block = 0, color_block_number;
+
+			// 순회
+			for (k = 0; k < 2; k++)
+			{
+				for (l = 0; l < 3; l++)
+				{
+					if (b[i + k][j + l] > 0)
+					{
+						if (color_block == 0)
+						{
+							color_block_number = b[i + k][j + l];
+							color_block++;
+						}
+						else
+						{
+							if (color_block_number == b[i + k][j + l])
+							{
+								color_block++;
+							}
+						}
+					}
+					else if (b[i + k][j + l] == -1)
+					{
+						black_block++;
+					}
+					else
+					{
+						continue;
+					}
+				}
+			}
+
+			if (color_block == 4 && black_block == 2)
+			{
+				result++;
+
+				for (k = 0; k < 2; k++)
+				{
+					for (l = 0; l < 3; l++)
+					{
+						b[i + k][j + l] = 0;						
+					}
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+int height_block_check(vector<vector<int>> &b)
+{
+	// 0 0
+	// 0 0
+	// 0 0
+
+	int i, j, k, l, result = 0;
+
+	int size = b.size();
+
+	for (i = 0; i <= size - 3; i++)
+	{
+		for (j = 0; j <= size - 2; j++)
+		{
+			int color_block = 0, black_block = 0, color_block_number;
+
+			// 순회
+			for (k = 0; k < 3; k++)
+			{
+				for (l = 0; l < 2; l++)
+				{
+					if (b[i + k][j + l] > 0)
+					{
+						if (color_block == 0)
+						{
+							color_block_number = b[i + k][j + l];
+							color_block++;
+						}
+						else
+						{
+							if (color_block_number == b[i + k][j + l])
+							{
+								color_block++;
+							}
+						}
+					}
+					else if (b[i + k][j + l] == -1)
+					{
+						black_block++;
+					}
+					else
+					{
+						continue;
+					}
+				}
+			}
+
+			if (color_block == 4 && black_block == 2)
+			{
+				result++;
+
+				for (k = 0; k < 3; k++)
+				{
+					for (l = 0; l < 2; l++)
+					{
+						b[i + k][j + l] = 0;
+					}
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+int solution(vector<vector<int>> board) {
+	int answer = 0;
+
+	int size = board.size();
+
+	vector<vector<int>> black_board = board;
+	fill_black_cube(black_board);
+	// show_board(black_board);
+
+	while (1)
+	{
+		int width = 0, height = 0;
+
+		// 가로 검사
+		width = width_block_check(black_board);
+		if (width >= 1)
+		{
+			fill_black_cube(black_board);
+		}
+		// show_board(black_board);
+
+		// 세로 검사
+		height = height_block_check(black_board);
+		if (height >= 1)
+		{
+			fill_black_cube(black_board);
+		}
+		// show_board(black_board);
+
+		if (width + height == 0)
+		{
+			break;
+		}
+		else
+		{
+			answer += (width + height);
+		}
+	}
+
+	return answer;
+}
+
+#include <iostream>
+
+/*
+void show_board(vector<vector<int>> b)
+{
+	int i, j;
+	int size = b.size();
+
+	for (i = 0; i < size; i++)
+	{
+		for (j = 0; j < size; j++)
+		{
+			printf("%2d ", b[i][j]);
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+}
+*/
+
+int main()
+{
+	int n;
+	cin >> n;
+
+	vector<vector<int>> board(n);
+
+	int i, j;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < 10; j++)
+		{
+			int su;
+			cin >> su;
+			board[i].push_back(su);
+		}
+	}
+
+	cout << solution(board) << endl;
+}
+
+/*
+10
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 4 0 0 0
+0 0 0 0 0 4 4 0 0 0
+0 0 0 0 3 0 4 0 0 0
+0 0 0 2 3 0 0 0 5 5
+1 2 2 2 3 3 0 0 0 5
+1 1 1 0 0 0 0 0 0 5
+
+10
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 4 0 0 0
+0 0 0 0 0 4 4 0 0 0
+0 6 0 0 3 0 4 0 0 0
+6 6 6 2 3 0 0 0 5 5
+1 2 2 2 3 3 0 0 0 5
+1 1 1 0 0 0 0 0 0 5
+
+10
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 3 0 0 0
+1 0 0 2 0 0 3 4 4 4
+1 1 2 2 2 3 3 0 4 0
+
+*/

@@ -1,0 +1,56 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int graph[1002];
+int visited[1002];
+
+int answer = 0;
+
+void cycle_check(int edge, int target)
+{
+	if (edge == target)
+	{
+		answer++;
+		return;
+	}
+	else
+	{
+		cycle_check(graph[edge], target);
+		visited[edge] = 1;
+	}
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		answer = 0;
+		memset(graph, 0, sizeof(graph));
+		memset(visited, 0, sizeof(visited));
+
+		int N;
+		cin >> N;
+
+		for (j = 1; j <= N; j++)
+		{
+			cin >> graph[j];
+		}
+
+		for (j = 1; j <= N; j++)
+		{
+			if (visited[j] == 0)
+			{
+				visited[j] = 1;
+				cycle_check(graph[j], j);
+			}
+		}
+
+		cout << answer << '\n';
+	}
+}

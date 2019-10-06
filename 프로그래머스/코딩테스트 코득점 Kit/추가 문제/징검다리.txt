@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int distance, vector<int> rocks, int n) {
+	int answer = 0;
+
+
+
+	return answer;
+}
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int distance, n;
+	cin >> distance;
+
+	vector<int> rocks;
+
+	int i, count, m;
+	cin >> count;
+	for (i = 0; i < n; i++)
+	{
+		cin >> m;
+		rocks.push_back(m);
+	}
+
+	cin >> n;
+
+	cout << solution(distance, rocks, n) << '\n';
+}
+
+/*
+25
+5
+2 14 11 21 17
+2
+*/

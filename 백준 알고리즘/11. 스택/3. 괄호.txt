@@ -1,0 +1,45 @@
+#include<iostream>
+#include<stack>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++)
+	{
+		stack<char> stack;
+		int em = 0;
+
+		char str[51];
+		cin >> str;
+
+		for (int j = 0; j < strlen(str); j++)
+		{
+			if (str[j] == '(')
+			{
+				stack.push('(');
+			}
+			else if (str[j] == ')')
+			{
+				if (stack.empty()) { em = 1; break; }
+				stack.pop();
+			}
+		}
+
+		if (stack.empty() && em == 0)
+		{
+			cout << "YES" << endl;
+		}
+		else
+		{
+			cout << "NO" << endl;
+		}
+	}
+	
+	return 0;
+}
+

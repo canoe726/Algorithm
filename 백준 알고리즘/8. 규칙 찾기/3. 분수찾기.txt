@@ -1,0 +1,51 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int X;
+	cin >> X;
+
+	int cur = 0;
+	int count = 1;
+	// 0 : upper > lower
+	int flag = 0;
+	while (X > cur + count)
+	{
+		cur += count;
+		count += 1;
+
+		if (flag == 0) { flag = 1; }
+		else { flag = 0; }
+	}
+
+	int i, upper, lower;
+	
+	if (flag == 0)
+	{
+		upper = count;
+		lower = 1;
+	}
+	else
+	{
+		upper = 1;
+		lower = count;
+	}
+	
+	for (i = 0; i < X - cur - 1; i++)
+	{
+		if (flag == 0)
+		{
+			upper -= 1;
+			lower += 1;
+		}
+		else
+		{
+			upper += 1;
+			lower -= 1;
+		}
+	}
+
+	cout << upper << "/" << lower << endl;
+}

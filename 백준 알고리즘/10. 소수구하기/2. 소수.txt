@@ -1,0 +1,47 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int Answer = 0;
+
+int main()
+{
+	int M, N;
+	cin >> M;
+	cin >> N;
+
+	int primeNumber = 1;
+	int sum = 0;
+	int min = 10001;
+
+	for (int i = M; i <= N; i++)
+	{
+		if (i == 1) { continue; }
+		primeNumber = 1;
+		for (int j = 2; j < i; j++)
+		{
+			if (i%j == 0)
+			{
+				primeNumber = 0;
+				break;
+			}
+		}
+		if (primeNumber == 1)
+		{
+			sum += i;
+			if (min >= i) { min = i; }
+		}
+	}
+
+	if (sum != 0)
+	{
+		cout << sum << endl;
+		cout << min << endl;
+	}
+	else
+	{
+		cout << -1 << endl;
+	}
+}
+

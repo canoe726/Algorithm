@@ -1,0 +1,60 @@
+#include<iostream>
+
+#define P 1000000007
+
+using namespace std;
+
+long long find_pow(long long a, long long b)
+{
+	long long result = 1;
+
+	while (b > 0)
+	{
+		if (b % 2 == 1)
+		{
+			result *= a;
+			result %= P;
+		}
+		a *= a;
+		a %= P;
+		b /= 2;
+	}
+	return result;
+}
+
+long long find_bino(int n, int k)
+{
+	long long n_factorial = 1;
+	long long a = 1;
+
+	for (long long i = n; i >= 1; i--)
+	{
+		n_factorial *= i;
+		n_factorial %= P;
+	}
+
+	for (long long i = k; i >= 1; i--)
+	{
+		a *= i;
+		a %= P;
+	}
+
+	for (long long i = (n - k); i >= 1; i--)
+	{
+		a *= i;
+		a %= P;
+	}
+
+	return (n_factorial * find_pow(a, P - 2)) % P;
+}
+
+int main()
+{
+	int N, K;
+	cin >> N;
+	cin >> K;
+
+	cout << find_bino(N, K) << '\n';
+	
+	return 0;
+}

@@ -1,0 +1,62 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int dp[1001][1001] = { 0 };
+
+int find_LCS(string a, string b, int a_len, int b_len)
+{
+	int Answer = 0;
+	int i, j, increase;
+
+	for (i = 1; i <= b_len; i++)
+	{
+		increase = 0;
+
+		for (j = 1; j <= a_len; j++)
+		{
+			if (b[i - 1] == a[j - 1])
+			{
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+				increase = 1;
+			}
+			else
+			{
+				if (increase == 0)
+				{
+					dp[i][j] = dp[i - 1][j];
+				}
+				else
+				{
+					if (dp[i][j - 1] < dp[i - 1][j])
+					{
+						dp[i][j] = dp[i - 1][j];
+						increase = 0;
+					}
+					else
+					{
+						dp[i][j] = dp[i][j - 1];
+					}
+				}
+				
+			}
+		}
+	}
+
+	Answer = dp[b_len][a_len];
+
+	return Answer;
+}
+
+int main()
+{
+	string a;
+	string b;
+	cin >> a;
+	cin >> b;
+
+	cout << find_LCS(a, b, strlen(a.c_str()), strlen(b.c_str())) << endl;
+
+	return 0;
+}

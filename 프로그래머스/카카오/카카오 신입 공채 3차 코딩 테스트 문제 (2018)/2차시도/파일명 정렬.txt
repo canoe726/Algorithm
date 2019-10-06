@@ -1,0 +1,178 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<string> solution(vector<string> files) {
+	vector<string> answer;
+
+	vector<string> head(files.size());
+	vector<string> number(files.size());
+
+	int i, j, k, l;
+	for (i = 0; i < files.size(); i++)
+	{
+		int flag = 0;
+
+		for (j = 0; j < files[i].size(); j++)
+		{
+			if (files[i][j] >= '0' && files[i][j] <= '9')
+			{
+				if (flag == 0)
+				{
+					flag++;
+				}
+				number[i].push_back(files[i][j]);
+			}
+			else
+			{
+				if (flag == 1)
+				{
+					break;
+				}
+				if (files[i][j] >= 'a' && files[i][j] <= 'z')
+				{
+					head[i].push_back(files[i][j] - 'a' + 'A');
+				}
+				else
+				{
+					head[i].push_back(files[i][j]);
+				}
+			}
+		}
+	}
+
+	// sort character
+	for (i = files.size() - 1; i > 0; i--)
+	{
+		for (j = 0; j < i; j++)
+		{
+			if ( head[j] > head[j + 1] )
+			{
+				string temp = files[j];
+				files[j] = files[j + 1];
+				files[j + 1] = temp;
+
+				temp = head[j];
+				head[j] = head[j + 1];
+				head[j + 1] = temp;
+
+				temp = number[j];
+				number[j] = number[j + 1];
+				number[j + 1] = temp;
+			}
+		}
+	}
+	
+	// sort number
+	int start = -1, end = -1, exist = 0;
+	for (k = 0; k < files.size() - 1; k++)
+	{
+		if (head[k] == head[k + 1])
+		{
+			exist = 1;
+			if (start == -1)
+			{
+				start = k, end = k + 1;
+			}
+			else
+			{
+				end++;
+			}
+		}
+		else
+		{
+			if( exist == 1 )
+			{
+				for (i = end; i >= start; i--)
+				{
+					for (j = start; j < i; j++)
+					{
+						if (atoi(number[j].c_str()) > atoi(number[j + 1].c_str()))
+						{
+							string temp = files[j];
+							files[j] = files[j + 1];
+							files[j + 1] = temp;
+
+							temp = number[j];
+							number[j] = number[j + 1];
+							number[j + 1] = temp;
+						}
+					}
+				}
+				start = -1, end = -1, exist = 0;
+			}
+		}
+	}
+	
+	if (exist == 1)
+	{
+		for (i = end; i >= start; i--)
+		{
+			for (j = start; j < i; j++)
+			{
+				if (atoi(number[j].c_str()) > atoi(number[j + 1].c_str()))
+				{
+					string temp = files[j];
+					files[j] = files[j + 1];
+					files[j + 1] = temp;
+
+					temp = number[j];
+					number[j] = number[j + 1];
+					number[j + 1] = temp;
+				}
+			}
+		}
+		start = -1, end = -1, exist = 0;
+	}
+
+	answer = files;
+
+	return answer;
+}
+
+#include <iostream>
+
+int main()
+{
+	vector<string> files;
+	vector<string> result;
+
+	int n;
+	cin >> n;
+	getchar();
+
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		string str;
+		getline(cin, str);
+		files.push_back(str);
+	}
+
+	result = solution(files);
+	for (i = 0; i < result.size(); i++)
+	{
+		cout << result[i] << endl;
+	}
+}
+
+/*
+6
+img12.png
+img10.png
+img02.png
+img1.png
+IMG01.GIF
+img2.JPG
+
+7
+F-5 Freedom Fighter
+B-50 Superfortress
+F-01 Freedom Fighter
+E-05 Freedom Fighter
+A-10 Thunderbolt II
+F-14 Tomcat
+E-01 Freedom Fighter
+
+*/

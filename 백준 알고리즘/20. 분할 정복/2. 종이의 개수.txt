@@ -1,0 +1,59 @@
+#include<iostream>
+
+using namespace std;
+
+int paper[2188][2188];
+int answer[3];
+
+void check(int row, int col, int size)
+{
+	int i, j;
+
+	bool exist = true;
+
+	for (i = row; i < row + size; i++)
+	{
+		for (j = col; j < col + size; j++)
+		{
+			if (paper[i][j] != paper[row][col])
+			{
+				exist = false;
+			}
+		}
+	}
+
+	if (exist == true) { answer[paper[row][col] + 1] ++; }
+	else
+	{
+		int newsize = size / 3;
+		for (i = 0; i < 3; i++)
+		{
+			for (j = 0; j < 3; j++)
+			{
+				check(row + i * newsize, col + j * newsize, newsize);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			cin >> paper[i][j];
+		}
+	}
+
+	check(0, 0, N);
+
+	cout << answer[0] << '\n';
+	cout << answer[1] << '\n';
+	cout << answer[2] << '\n';
+}

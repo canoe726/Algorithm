@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+class Custom
+{
+public :
+	int value;
+	Custom(int value) : value(value) {}
+};
+
+class cmp
+{
+public :
+	bool operator() (Custom a, Custom b)
+	{
+		return a.value < b.value;
+	}
+};
+
+int solution(int stock, vector<int> dates, vector<int> supplies, int k) {
+	int answer = 0;
+
+	priority_queue<int> pq;
+
+	int i;
+	int start = 0;
+	
+	while (k - stock > 0)
+	{
+		for (i = start; i < dates.size(); i++)
+		{
+			if (stock >= dates[i])
+			{
+				pq.push(supplies[i]);
+			}
+			else
+			{
+				start = i;
+				break;
+			}
+		}		
+
+		stock += pq.top();
+		pq.pop();
+
+		answer++;
+	}
+	
+	return answer;
+}

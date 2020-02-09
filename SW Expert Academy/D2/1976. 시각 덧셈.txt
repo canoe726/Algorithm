@@ -1,0 +1,38 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++) {
+		
+		int m1, s1, m2, s2;
+		cin >> m1 >> s1 >> m2 >> s2;
+
+		int r_m, r_s;
+		r_m = m1 + m2;
+		r_s = s1 + s2;
+
+		if (r_s >= 60) {
+			r_m += 1;
+			r_s -= 60;
+		}
+
+		if (r_m >= 12) {
+			if (r_m == 12) {
+				r_m = 1;
+			}
+			else {
+				r_m -= 12;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << r_m << " " << r_s << "\n";
+	}
+
+	return 0;
+}

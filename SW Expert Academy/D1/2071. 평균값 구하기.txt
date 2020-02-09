@@ -1,0 +1,26 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		double average = 0.0;
+		for (j = 0; j < 10; j++)
+		{
+			int n;
+			cin >> n;
+			average += n;
+		}
+		average = (average / 10.0) + 0.5;
+
+		cout << "#" << i + 1 << " " << int(average) << "\n";
+	}
+
+	return 0;
+}

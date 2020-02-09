@@ -1,0 +1,51 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		
+		int dist = 0;
+		int people = 0;
+
+		int N;
+		cin >> N;
+
+		int minus[100001] = { 0 };
+		int plus[100001] = { 0 };
+
+		for (j = 0; j < N; j++) {
+			int num;
+			cin >> num;
+
+			if (num >= 0) {
+				plus[num]++;
+			}
+			else {
+				minus[(num*-1)]++;
+			}
+		}
+
+		for (j = 0; j <= 100000; j++) {
+			if (plus[j] || minus[j]) {
+				dist = j;
+				if (plus[j]) {
+					people += plus[j];
+				}
+				if (minus[j]) {
+					people += minus[j];
+				}
+				break;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << dist << " " << people << "\n";
+	}
+
+	return 0;
+}

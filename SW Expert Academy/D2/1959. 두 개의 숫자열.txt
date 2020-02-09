@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int answer = 0;
+		vector<int> A, B;
+		
+		int a_size, b_size;
+		cin >> a_size >> b_size;
+
+		for (j = 0; j < a_size; j++) {
+			int num;
+			cin >> num;
+			A.push_back(num);
+		}
+		
+		for (j = 0; j < b_size; j++) {
+			int num;
+			cin >> num; 
+			B.push_back(num);
+		}
+		
+		// A가 항상 크게
+		if (A.size() < B.size()) {
+			vector<int> temp = A;
+			A = B;
+			B = temp;
+		}
+
+		int start = 0;
+		while (start + B.size() <= A.size()) {
+			int sum = 0;
+			for (j = start; j < start + B.size(); j++) {
+				sum += (A[j] * B[j - start]);
+			}
+			start += 1;
+
+			if (answer < sum) { answer = sum; }
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

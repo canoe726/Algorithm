@@ -1,0 +1,30 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		string input;
+		cin >> input;
+
+		bool same = true;
+
+		for (j = 0; j < input.size() / 2; j++) {
+			if (input[j] != input[input.size() - 1 - j]) {
+				same = false;
+				break;
+			}
+		}
+
+		if( same ) { cout << "#" << i + 1 << " " << 1 << "\n"; }
+		else { cout << "#" << i + 1 << " " << 0 << "\n"; }
+	}
+
+	return 0;
+}

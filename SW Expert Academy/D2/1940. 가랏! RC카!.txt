@@ -1,0 +1,42 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int cur_v = 0;
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			int a, v;
+			cin >> a;
+
+			if (a == 0) {
+				answer += cur_v;
+			}
+			else if (a == 1) {
+				cin >> v;
+				cur_v += v;
+				answer += cur_v;
+			}
+			else {
+				cin >> v;
+				cur_v -= v;
+				if (cur_v < 0) { cur_v = 0; }
+				answer += cur_v;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

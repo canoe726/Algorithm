@@ -1,0 +1,67 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+bool buffer[24];
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++)
+	{
+		memset(buffer, false, sizeof(buffer));
+
+		string input;
+		cin >> input;
+		
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < input.size() / 4; j++)
+		{
+			string sub = input.substr(4 * j, 4);
+
+			int index = 0;
+			for (k = 0; k < sub.size(); k++)
+			{
+				if (sub[k] >= 'A' && sub[k] <= 'Z') { sub[k] -= 'A'; }
+				else if (sub[k] >= 'a' && sub[k] <= 'z') { sub[k] = sub[k] - 'a' + 26; }
+				else if (sub[k] >= '0' && sub[k] <= '9') { sub[k] = sub[k] - '0' + 52; }
+				else if (sub[k] == '+') { sub[k] = 62; }
+				else { sub[k] = 63; }
+
+				int value = 32;
+ 				for (l = index; l < index + 6; l++)
+				{
+					if (sub[k] >= value) { buffer[l] = true; sub[k] -= value; }
+					else { buffer[l] = false; }
+					value /= 2;
+				}
+				index += 6;
+			}
+
+			int value = 128;
+			char res = 0;
+			for (k = 1; k <= 24; k++)
+			{
+				if (buffer[k - 1]) { res += value; }
+				if (k % 8 == 0) { cout << res; res = 0, value = 128; continue; }
+				value /= 2;
+			}
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}
+/*
+01001100 01101001 01100110
+L            i            f
+76          105         102
+
+010011 000110 100101 100110
+T        G         l         m
+19       6         37       38
+*/

@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#pragma warning(disable:4996)
+
+using namespace std;
+
+int day_length[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++)
+	{
+		string input;
+		cin >> input;
+
+		string year = "";
+		year.push_back(input[0]);
+		year.push_back(input[1]);
+		year.push_back(input[2]);
+		year.push_back(input[3]);
+
+		string month = "";
+		month.push_back(input[4]);
+		month.push_back(input[5]);
+
+		string day = "";
+		day.push_back(input[6]);
+		day.push_back(input[7]);
+
+		int y = atoi(year.c_str());
+		int m = atoi(month.c_str());
+		int d = atoi(day.c_str());
+
+		bool pass = true;
+
+		if ((m < 1 || m > 12) || (d < 1 || d > day_length[m - 1])) { pass = false; }
+
+		if (pass) { cout << "#" << i + 1 << " " << year << "/" << month << "/" << day << "\n"; }
+		else { cout << "#" << i + 1 << " " << -1 << "\n"; }
+	}
+
+	return 0;
+}

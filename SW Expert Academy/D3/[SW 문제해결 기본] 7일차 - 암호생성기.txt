@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	const int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int N;
+		cin >> N;
+
+		vector<int> code;
+
+		for (j = 0; j < 8; j++) {
+			int num;
+			cin >> num;
+			code.push_back(num);
+		}
+
+		int cycle = 1;
+		while (1) {
+			int temp = code[0] - cycle;
+			code.erase(code.begin());
+
+			if (temp <= 0) {
+				code.push_back(0);
+				break;
+			}
+
+			code.push_back(temp);
+			cycle++;
+			if (cycle > 5) {
+				cycle = 1;
+			}
+		}
+
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < 8; j++) {
+			cout << code[j] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}

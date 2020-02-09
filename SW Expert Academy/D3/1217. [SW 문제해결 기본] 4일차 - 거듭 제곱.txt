@@ -1,0 +1,29 @@
+#include <iostream>
+
+using namespace std;
+
+int power(int n, int start, int m) {
+	if (start >= m) { return n; }
+
+	return n * power(n, start + 1, m);
+}
+
+int main()
+{
+	const int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int number;
+		cin >> number;
+
+		int n, m;
+		cin >> n >> m;
+
+		cout << "#" << i + 1 << " " << power(n, 1, m) << "\n";
+	}
+
+	return 0;
+}

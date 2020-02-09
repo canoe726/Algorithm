@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int answer = 0;
+
+		string input;
+		cin >> input;
+
+		int index = 0;
+		string token;		
+		while (!answer) {
+			token.push_back(input[index++]);
+
+			bool pass = true;
+			for (j = token.size(); j < input.size(); j++) {
+				for (k = 0; k < token.size(); k++) {
+					if (input[j + k] != token[k]) {
+						pass = false;
+						break;
+					}
+				}
+
+				if (!pass) { break; }
+				else {
+					if (answer < token.size()) {
+						answer = token.size();
+						break;
+					}
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

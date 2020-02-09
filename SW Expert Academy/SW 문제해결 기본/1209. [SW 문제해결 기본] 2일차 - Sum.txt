@@ -1,0 +1,85 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{	
+	int size = 100;
+
+	int i, j, k;
+	for (i = 0; i < 10; i++)
+	{
+		int arr[100][100] = { 0 };
+
+		int num;
+		cin >> num;
+		
+		int diagonal = 0;
+		int width = 0;
+		int height = 0;
+		
+		int temp_left_diagonal = 0;
+		int temp_right_diagonal = 0;
+		int temp_width = 0;
+		int temp_height = 0;
+
+		for (j = 0; j < size; j++)
+		{
+			for (k = 0; k < size; k++)
+			{
+				cin >> arr[j][k];
+			}
+		}
+
+		for (j = 0; j < size; j++)
+		{
+			temp_width = 0;
+			temp_height = 0;
+
+			for (k = 0; k < size; k++)
+			{
+				if (j == k)
+				{
+					temp_left_diagonal += arr[j][k];
+				}
+				if ((j + k) == (size - 1))
+				{
+					temp_right_diagonal += arr[j][k];
+				}
+
+				temp_width += arr[j][k];
+				temp_height += arr[k][j];
+			}
+
+			if (temp_width > width)
+			{
+				width = temp_width;
+			}
+			if (temp_height > height)
+			{
+				height = temp_height;
+			}
+		}
+
+
+		if (temp_left_diagonal > temp_right_diagonal)
+		{
+			diagonal = temp_left_diagonal;
+		}
+		else
+		{
+			diagonal = temp_right_diagonal;
+		}
+
+		int result[3];
+		result[0] = diagonal;
+		result[1] = width;
+		result[2] = height;
+
+		sort(result, result + 3);
+
+		cout << "#" << i + 1 << " " << result[2] << endl;
+	}
+}

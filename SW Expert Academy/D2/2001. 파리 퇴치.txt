@@ -1,0 +1,44 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l, m;
+	for (i = 0; i < T; i++) {
+		
+		int answer = 0;
+		int floor[15][15] = { 0 };
+
+		int N, M;
+		cin >> N >> M;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> floor[j][k];
+			}
+		}
+
+		for (j = 0; j <= N - M; j++) {
+			for (k = 0; k <= N - M; k++) {
+				
+				int sum = 0;
+				for (l = 0; l < M; l++) {
+					for (m = 0; m < M; m++) {
+						sum += floor[j + l][k + m];
+					}
+				}
+
+				if (sum > answer) { answer = sum; }
+			}
+		}
+
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

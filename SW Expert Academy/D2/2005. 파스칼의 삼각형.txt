@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		
+		int triangle[11][11] = { 0 };
+		triangle[1][1] = 1;
+
+		int N;
+		cin >> N;
+
+		int width = 2;
+		for (j = 2; j <= N; j++) {
+			for (k = 1; k <= width; k++) {
+				triangle[j][k] = triangle[j - 1][k - 1] + triangle[j - 1][k];
+			}
+			width++;
+		}
+
+		width = 1;
+		cout << "#" << i + 1 << "\n";
+		for (j = 1; j <= N; j++) {
+			for (k = 1; k <= width; k++) {
+				cout << triangle[j][k] << " ";
+			}
+			width++;
+			cout << "\n";
+		}
+	}
+
+	return 0;
+}

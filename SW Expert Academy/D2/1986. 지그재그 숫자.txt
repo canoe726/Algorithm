@@ -1,0 +1,27 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		int N;
+		cin >> N;
+
+		int mul = 1;
+		int sum = 0;
+		for (j = 1; j <= N; j++)
+		{
+			sum += (j * mul);
+			mul *= -1;
+		}
+		cout << "#" << i + 1 << " " << sum << "\n";
+	}
+
+	return 0;
+}

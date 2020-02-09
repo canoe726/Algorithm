@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	const int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		vector<int> code;
+		
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			int num;
+			cin >> num;
+			code.push_back(num);
+		}
+
+		int cnt;
+		cin >> cnt;
+		
+		for (j = 0; j < cnt; j++) {
+
+			char input;
+			cin >> input;
+
+			int x, y;
+
+			if (input == 'I') {
+				cin >> x >> y;
+
+				for (k = 0; k < y; k++) {
+					int next;
+					cin >> next;
+					code.insert(code.begin() + x + k, next);
+				}
+			}
+			else if (input == 'D') {
+				cin >> x >> y;
+				
+				for (k = 0; k < y; k++) {
+					code.erase(code.begin() + (x - 1));
+				}
+			}
+			else {
+				int s;
+				cin >> s;
+
+				for (k = 0; k < s; k++) {
+					int next;
+					cin >> next;
+					code.push_back(next);
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < 10; j++) {
+			cout << code[j] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}

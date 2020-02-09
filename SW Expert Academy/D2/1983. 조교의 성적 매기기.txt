@@ -1,0 +1,54 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+string ranks[10] = { "A+","A0","A-","B+","B0","B-","C+","C0","C-","D0" };
+
+bool cmp(double a, double b) {
+	return a > b;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int N, K;
+		cin >> N >> K;
+
+		int ratio = N / 10;
+		double total[100] = { 0 };
+		double increase[100] = { 0 };
+		for (j = 0; j < N; j++) {
+			double mid, fin, asign;
+			cin >> mid >> fin >> asign;
+
+			total[j] = (mid * 0.35) + (fin * 0.45) + (asign * 0.20);
+			increase[j] = total[j];
+		}
+
+		sort(increase, increase + N, cmp);
+
+		bool find = false;
+		int order = -1;
+		for (j = 0; j < N; j+=ratio) {
+			for (k = 0; k < ratio; k++) {
+				if (increase[j + k] == total[K - 1]) {
+					find = true;
+				}
+			}
+			order++;
+			if (find) { break; }
+		}
+		
+		cout << "#" << i + 1 << " " << ranks[order] << "\n";
+	}
+	cout << "\n";
+
+	return 0;
+}

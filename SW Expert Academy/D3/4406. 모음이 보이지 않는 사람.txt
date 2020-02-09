@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+char strs[5] = { 'a','e','i','o','u' };
+
+int main()
+{
+	int T = 10;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		string input;
+		cin >> input;
+
+		for (j = 0; j < input.size(); j++) {
+			for (k = 0; k < 5; k++) {
+				if (input[j] == strs[k]) {
+					input.erase(input.begin() + j);
+					j--;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << input << "\n";
+	}
+
+	return 0;
+}

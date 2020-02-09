@@ -1,0 +1,38 @@
+#include <iostream>
+
+using namespace std;
+
+int days[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+
+		int m1, d1, m2, d2;
+		cin >> m1 >> d1 >> m2 >> d2;
+
+		int answer = 0;
+
+		for (j = m1 + 1; j < m2; j++) {
+			answer += days[j];
+		}
+
+		if (m1 == m2) {
+			answer += d2 - d1;
+			answer += 1;
+		}
+		else {
+			answer += days[m1] - d1;
+			answer += d2;
+			answer += 1;
+		}
+		
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

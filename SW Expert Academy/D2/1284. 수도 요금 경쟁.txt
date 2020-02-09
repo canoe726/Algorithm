@@ -1,0 +1,32 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		int P, Q, R, S, W;
+		cin >> P >> Q >> R >> S >> W;
+
+		int A = P * W;
+		int B = 0;
+
+		if (R >= W) { B = Q; }
+		else
+		{
+			B = Q;
+			B += S * (W - R);
+		}
+
+		cout << "#" << i + 1 << " ";
+		if (A < B) { cout << A << "\n"; }
+		else { cout << B << "\n"; }
+	}
+
+	return 0;
+}

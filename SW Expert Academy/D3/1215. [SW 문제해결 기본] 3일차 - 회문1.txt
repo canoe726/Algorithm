@@ -1,0 +1,75 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int N;
+char board[8][8] = { '\0' };
+
+bool isPalindrome(string temp) {
+
+	bool ret = true;
+
+	int i;
+	for (i = 0; i < temp.size() / 2; i++) {
+		if (temp[i] != temp[temp.size() - 1 - i]) {
+			ret = false;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int main()
+{
+	const int T = 10;
+	// cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+
+		int answer = 0;
+
+		cin >> N;
+
+		memset(board, '\0', sizeof(board));
+		for (j = 0; j < 8; j++) {
+			for (k = 0; k < 8; k++) {
+				cin >> board[j][k];
+			}
+		}
+
+		// row
+		for (j = 0; j < 8; j++) {
+			for (k = 0; k <= 8 - N; k++) {
+				string temp = "";
+
+				for (l = 0; l < N; l++) {
+					temp.push_back(board[j][k + l]);
+				}
+				if (isPalindrome(temp)) {
+					answer++;
+				}
+			}
+		}
+
+		// column
+		for (j = 0; j < 8; j++) {
+			for (k = 0; k <= 8 - N; k++) {
+				string temp = "";
+
+				for (l = 0; l < N; l++) {
+					temp.push_back(board[k + l][j]);
+				}
+				if (isPalindrome(temp)) {
+					answer++;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

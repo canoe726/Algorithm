@@ -1,0 +1,38 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int N;
+		cin >> N;
+
+		pair<char, int> inputs[10];
+		for (j = 0; j < N; j++) {
+			cin >> inputs[j].first;
+			cin >> inputs[j].second;
+		}
+
+		cout << "#" << i + 1 << "\n";
+		int cnt = 0;
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < inputs[j].second; k++) {
+				cout << inputs[j].first;
+				cnt++;
+				if (cnt == 10) {
+					cout << "\n";
+					cnt = 0;
+				}
+			}
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}

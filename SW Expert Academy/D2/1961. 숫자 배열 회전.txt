@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> rotationArray(vector<vector<int>> arr) {
+	int N = arr.size();
+	vector<vector<int>> res(N, vector<int>(N));
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			res[i][j] = arr[N - 1 - j][i];
+		}
+	}
+
+	return res;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		vector<vector<int>> arr(N, vector<int>(N));
+		vector<vector<int>> arr90;
+		vector<vector<int>> arr180;
+		vector<vector<int>> arr270;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> arr[j][k];
+			}
+		}
+		
+		arr90 = rotationArray(arr);
+		arr180 = rotationArray(arr90);
+		arr270 = rotationArray(arr180);
+
+		cout << "#" << i + 1 << "\n";
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cout << arr90[j][k];
+			}
+			cout << " ";
+
+			for (k = 0; k < N; k++) {
+				cout << arr180[j][k];
+			}
+			cout << " ";
+
+			for (k = 0; k < N; k++) {
+				cout << arr270[j][k];
+			}
+			cout << "\n";
+		}
+	}
+
+	return 0;
+}

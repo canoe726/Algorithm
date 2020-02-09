@@ -1,0 +1,31 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int num[10] = { 0 };
+		for (j = 0; j < 10; j++) {
+			cin >> num[j];
+		}
+
+		sort(num, num + 10);
+
+		double avg = 0.0;
+		for (j = 1; j < 9; j++) {
+			avg += num[j];
+		}
+		avg = avg / 8.0;
+		avg = (avg + 0.5);
+		cout << "#" << i + 1 << " " << int(avg) << "\n";
+	}
+
+	return 0;
+}

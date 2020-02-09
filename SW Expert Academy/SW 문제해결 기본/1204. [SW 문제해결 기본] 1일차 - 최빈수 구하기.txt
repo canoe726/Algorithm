@@ -1,0 +1,56 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++)
+	{
+		int num;
+		cin >> num;
+
+		int students[1000] = { 0 };
+		for (j = 0; j < 1000; j++)
+		{
+			cin >> students[j];
+		}
+
+		sort(students, students + 1000);
+
+		int mode = 0, count = 1, before_count = 0;
+		int value = students[0];
+		for (j = 1; j < 1000; j++)
+		{
+			if (value == students[j])
+			{
+				count++;
+			}
+			else
+			{
+				if (count >= before_count)
+				{
+					mode = value;
+					before_count = count;
+				}
+				count = 1;
+				value = students[j];
+			}
+		}
+
+		count++;
+		if (count >= before_count)
+		{
+			mode = value;
+			before_count = count;
+		}
+		value = students[j];
+
+		cout << "#" << i + 1 << " " << mode << endl;
+	}
+}

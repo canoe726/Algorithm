@@ -1,0 +1,32 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int i, j;
+	for (i = 0; i < 10; i++)
+	{
+		int dump;
+		cin >> dump;
+
+		int box[100] = { 0 };
+		for (j = 0; j < 100; j++)
+		{
+			cin >> box[j];
+		}
+		
+		for (j = 0; j < dump; j++)
+		{
+			sort(box, box + 100);
+
+			box[99]--;
+			box[0]++;
+		}
+		sort(box, box + 100);
+		
+		cout << "#" << i + 1 << ' ' << box[99] - box[0] << endl;
+	}
+}

@@ -1,0 +1,50 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int i, j, k;
+	for (i = 0; i < 10; i++)
+	{
+		int building[1001] = { 0 };
+		int width, landscape = 0;
+		cin >> width;
+
+		for (j = 0; j < width; j++)
+		{
+			cin >> building[j];
+		}
+
+		for (j = 2; j < width - 2; j++)
+		{
+			int max_value = building[j - 2];
+			if (building[j - 2] < building[j] &&
+				building[j - 1] < building[j] &&
+				building[j + 1] < building[j] &&
+				building[j + 2] < building[j] )
+			{
+				for (k = -1; k <= 2; k++)
+				{
+					if (k == 0)
+					{
+						continue;
+					}
+					else
+					{
+						if (max_value < building[j + k])
+						{
+							max_value = building[j + k];
+						}
+					}
+				}
+
+				landscape += (building[j] - max_value);
+			}
+		}
+
+		cout << "#" << i + 1 << " " << landscape << endl;
+	}
+}

@@ -1,0 +1,92 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l, m;
+	for (i = 0; i < T; i++) {
+		int answer = 1;
+		
+		int sudoku[9][9] = { 0 };
+		for (j = 0; j < 9; j++) {
+			for (k = 0; k < 9; k++) {
+				cin >> sudoku[j][k];
+			}
+		}
+
+		int number[10];
+		// 가로
+		for (j = 0; j < 9; j++) {
+			int cnt = 0;
+			memset(number, 0, sizeof(number));
+			for (k = 0; k < 9; k++) {
+				number[sudoku[j][k]]++;
+			}
+
+			for (k = 0; k < 10; k++) {
+				if (number[k] == 1) {
+					cnt++;
+				}
+			}
+
+			if (cnt != 9) {
+				answer = 0;
+			}
+		}
+
+		// 세로
+		if (answer) {
+			for (j = 0; j < 9; j++) {
+				int cnt = 0;
+				memset(number, 0, sizeof(number));
+				for (k = 0; k < 9; k++) {
+					number[sudoku[k][j]]++;
+				}
+
+				for (k = 0; k < 10; k++) {
+					if (number[k] == 1) {
+						cnt++;
+					}
+				}
+
+				if (cnt != 9) {
+					answer = 0;
+				}
+			}
+		}
+
+		// 3*3
+		if (answer) {
+			for (j = 0; j < 9; j+=3) {
+				for (k = 0; k < 9; k+=3) {
+					int cnt = 0;
+					memset(number, 0, sizeof(number));
+					for (l = 0; l < 3; l++) {
+						for (m = 0; m < 3; m++) {
+							number[sudoku[j + l][k + m]]++;
+						}
+					}
+
+					for (k = 0; k < 10; k++) {
+						if (number[k] == 1) {
+							cnt++;
+						}
+					}
+
+					if (cnt != 9) {
+						answer = 0;
+					}
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+bool containNumber(bool num[])
+{
+	int i;
+	for (i = 0; i < 10; i++)
+	{
+		if (!num[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		bool num[10];
+		memset(num, false, sizeof(num));
+
+		int mul = 1;
+		int N;
+		cin >> N;
+
+		long long res = 0;
+		while (!containNumber(num)) {
+			res = N * mul;
+			
+			while (res) {
+				num[res % 10] = true;
+				res /= 10;
+			}
+			mul++;
+		}
+
+		cout << "#" << i + 1 << " " << N * (mul - 1) << "\n";
+	}
+
+	return 0;
+}

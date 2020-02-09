@@ -1,0 +1,34 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int answer = -1;
+		
+		int L, U, X;
+		cin >> L >> U >> X;
+
+		if (X >= L && X <= U) {
+			answer = 0;
+		}
+		else if (X > U) {
+			answer = -1;
+		}
+		else {
+			answer = L - X;
+		}
+		
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

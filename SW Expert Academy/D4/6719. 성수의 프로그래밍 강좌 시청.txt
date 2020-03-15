@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		double answer = 0.0;
+		
+		int N, K;
+		cin >> N >> K;
+
+		vector<int> level(N);
+		for (j = 0; j < N; j++) {
+			cin >> level[j];
+		}
+
+		sort(level.begin(), level.end());
+
+		for (j = K - 1; j >= 0; j--) {
+			answer = (answer + level[level.size() - 1 - j]) / 2.0;
+		}
+
+		printf("#%d %6lf\n", i + 1, answer);
+	}
+
+	return 0;
+}

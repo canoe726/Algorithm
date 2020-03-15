@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+
+		string A, B;
+		cin >> A >> B;
+
+		// A가 항상 크다
+		if (B.size() > A.size()) {
+			string temp = A;
+			A = B;
+			B = temp;
+		}
+
+		int plus = 0;
+		for (j = 0; j < B.size(); j++) {
+			int cur_A = A[A.size() - 1 - j] - '0';
+			if (plus) {
+				cur_A += 1;
+				plus = 0;
+			}
+			int cur_B = B[B.size() - 1 - j] - '0';
+
+			int sum = cur_A + cur_B;
+			if (sum >= 10) {
+				plus = 1;
+				sum -= 10;
+			}
+			A[A.size() - 1 - j] = sum + '0';
+		}
+
+		for (j = A.size() - 1 - B.size(); j >= 0; j--) {
+			int cur = A[j] - '0';
+			if (plus) {
+				cur += 1;
+				plus = 0;
+			}
+
+			if (cur >= 10) {
+				plus = 1;
+				cur -= 10;
+			}
+			A[j] = cur + '0';
+		}
+
+		if (plus && A[0] == '0') {
+			A.insert(A.begin(), '1');
+		}
+
+		cout << "#" << i + 1 << " " << A << "\n";
+	}
+
+	return 0;
+}

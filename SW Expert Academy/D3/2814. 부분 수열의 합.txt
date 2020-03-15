@@ -1,0 +1,39 @@
+#include<iostream>
+
+using namespace std;
+
+int find_sum(int arr[], int N, int K, int idx, int sum) {
+	if (idx == N) {
+		if (sum == K) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	int ret = 0;
+	ret += find_sum(arr, N, K, idx + 1, sum);
+	ret += find_sum(arr, N, K, idx + 1, sum + arr[idx]);
+
+	return ret;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (int i = 0; i < T; i++) {
+		int N, K;
+		cin >> N >> K;
+
+		int arr[20] = { 0 };
+		for (j = 0; j < N; j++) {
+			cin >> arr[j];
+		}
+
+		cout << "#" << i + 1 << " " << find_sum(arr, N, K, 0, 0) << "\n";
+	}
+}

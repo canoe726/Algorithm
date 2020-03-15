@@ -1,0 +1,49 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int INF = 987654321;
+
+int find_answer(int people[], int cur, int idx, int N, int B) {
+	if (idx >= N) {
+		if (cur >= B) {
+			return cur - B;
+		}
+		else {
+			return INF;
+		}
+	}
+
+	int ret = INF;
+
+	// 현재 점원의 키를 더하지 않는 경우
+	ret = min(find_answer(people, cur, idx + 1, N, B), ret);
+
+	// 현재 점원의 키를 더하는 경우
+	ret = min(find_answer(people, cur + people[idx], idx + 1, N, B), ret);
+
+	return ret;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N, B;
+		cin >> N >> B;
+
+		int people[20] = { 0 };
+
+		for (j = 0; j < N; j++) {
+			cin >> people[j];
+		}
+
+		cout << "#" << i + 1 << " " << find_answer(people, 0, 0, N, B) << "\n";
+	}
+}

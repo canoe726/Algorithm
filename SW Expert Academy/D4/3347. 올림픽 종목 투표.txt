@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int A[1001];
+int B[1001];
+int vote[1001];
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(A, 0, sizeof(A));
+		memset(B, 0, sizeof(B));
+		memset(vote, 0, sizeof(vote));
+
+		int total = -1;
+		int answer = -1;
+
+		int N, M;
+		cin >> N >> M;
+
+		for (j = 1; j <= N; j++) {
+			cin >> A[j];
+		}
+
+		for (j = 1; j <= M; j++) {
+			cin >> B[j];
+		}
+
+		for (j = 1; j <= M; j++) {
+			for (k = 1; k <= N; k++) {
+				if (B[j] >= A[k]) {
+					vote[k]++;
+
+					if (total < vote[k]) {
+						total = vote[k];
+						answer = k;
+					}
+
+					break;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

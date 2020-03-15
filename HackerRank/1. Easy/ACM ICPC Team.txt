@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Complete the acmTeam function below.
+vector<int> acmTeam(vector<string> topic) {
+
+	vector<int> answer;
+
+	int max_count = 0;
+	int ways = 0;
+
+	int i, j, k;
+	for (i = 0; i < topic.size() - 1; i++)
+	{
+		for (j = i + 1; j < topic.size(); j++)
+		{
+			int count = 0;
+
+			for (k = 0; k < topic[0].size(); k++)
+			{
+				if ((topic[i][k] - '0') | (topic[j][k] - '0'))
+				{
+					count++;
+				}
+			}
+
+			if (max_count < count)
+			{
+				ways = 1;
+				max_count = count;
+			}
+			else if (max_count == count)
+			{
+				ways++;
+			}
+		}
+	}
+
+	answer.push_back(max_count);
+	answer.push_back(ways);
+
+	return answer;
+}
+
+int main()
+{
+	int n, m;
+	cin >> n >> m;
+	getchar();
+
+	vector<string> topic(n);
+
+	for (int i = 0; i < n; i++) {
+		string topic_item;
+		getline(cin, topic_item);
+
+		topic[i] = topic_item;
+	}
+
+	vector<int> result = acmTeam(topic);
+
+	for (int i = 0; i < result.size(); i++) {
+		cout << result[i];
+
+		if (i != result.size() - 1) {
+			cout << "\n";
+		}
+	}
+
+	return 0;
+}

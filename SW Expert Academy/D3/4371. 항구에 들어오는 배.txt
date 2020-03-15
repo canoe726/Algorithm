@@ -1,0 +1,46 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		int happy_day[5001] = { 0 };
+		int visited[5001] = { 0 };
+		for (j = 0; j < N; j++) {
+			cin >> happy_day[j];
+		}
+		visited[0] = 1;
+
+		int gap;
+		for (j = 1; j < N; j++) {
+			if (!visited[j]) {
+				answer++;
+				gap = happy_day[j] - 1;
+
+				int cur = happy_day[j];
+				visited[j] = 1;
+				for (k = j + 1; k < N; k++) {
+					if (cur + gap == happy_day[k]) {
+						visited[k] = 1;
+						cur += gap;
+					}
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

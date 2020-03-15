@@ -1,0 +1,45 @@
+#include <iostream>
+
+using namespace std;
+
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int N, B, E;
+		cin >> N >> B >> E;
+
+		int timer[100] = { 0 };
+		for (j = 0; j < N; j++) {
+			cin >> timer[j];
+		}
+
+		int answer = 0;
+
+		int min = B - E;
+		if (min < 0) {
+			min = 0;
+		}
+		int max = B + E;
+
+		for (j = 0; j < N; j++) {
+			int temp = timer[j];
+			
+			while (temp <= max) {
+				if (temp >= min && temp <= max) {
+					answer++;
+					break;
+				}
+				temp += timer[j];
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

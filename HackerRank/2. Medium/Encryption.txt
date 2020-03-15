@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+// Complete the encryption function below.
+string encryption(string s) {
+
+	string answer = "";
+
+	// maximun size of string : 81 => 9*9 matrix
+	char matrix[10][10] = { '\0' };
+
+	int len = s.size();
+	len = sqrt(len);
+
+	int row, col;
+	row = (int)len;
+	col = (int)len;
+
+	if (row*col < s.size())
+	{
+		col++;
+	}
+	if (row*col < s.size())
+	{
+		row++;
+	}
+
+	int i, j, index = 0;
+	for (i = 0; i < row; i++)
+	{
+		for (j = 0; j < col; j++)
+		{
+			matrix[i][j] = s[index++];
+
+			if (index >= s.size())
+			{
+				break;
+			}
+		}
+		if (index >= s.size())
+		{
+			break;
+		}
+	}
+	
+	for (i = 0; i < col; i++)
+	{
+		for (j = 0; j < row; j++)
+		{
+			if (matrix[j][i] != '\0')
+			{
+				answer.push_back(matrix[j][i]);
+			}
+		}
+		if (i != col - 1)
+		{
+			answer.push_back(' ');
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	string s;
+	getline(cin, s);
+
+	string result = encryption(s);
+
+	cout << result << "\n";
+
+	return 0;
+}

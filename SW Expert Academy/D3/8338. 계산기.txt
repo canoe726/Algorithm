@@ -1,0 +1,32 @@
+#include <iostream>
+#include <algorithm>
+#pragma warning(disable:4996)
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int N;
+		scanf("%d", &N);
+
+		int num[10] = { 0 };
+		int answer;
+
+		scanf("%d", &num[0]);
+		answer = num[0];
+
+		for (j = 1; j < N; j++) {
+			scanf("%d", &num[j]);
+			answer = max(answer + num[j], answer * num[j]);
+		}
+
+		printf("#%d %d\n", i + 1, answer);
+	}
+
+	return 0;
+}

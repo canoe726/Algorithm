@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+ // Complete the saveThePrisoner function below.
+int saveThePrisoner(int n, int m, int s) {
+
+	int result = ((s - 1) + m) % n;
+
+	if (result)
+	{
+		return result;
+	}
+	else
+	{
+		return n;
+	}
+}
+
+int main()
+{
+	int t, n, m, s;
+	cin >> t;
+
+	int i;
+	for (i = 0; i < t; i++)
+	{
+		cin >> n >> m >> s;
+
+		int result = saveThePrisoner(n, m, s);
+
+		cout << result << "\n";
+	}
+
+	return 0;
+}

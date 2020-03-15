@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		int answer = -1;
+
+		int num[1001] = { 0 };
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			scanf("%d", &num[j]);
+		}
+
+		for (j = 0; j < N - 1; j++) {
+			for (k = j + 1; k < N; k++) {
+				int val = num[j] * num[k];
+
+				if (answer < val) {
+					bool increase = true;
+					
+					int temp = val;
+					int back = temp % 10;
+					while (temp) {
+						temp /= 10;
+						int front = temp % 10;
+
+						if (front > back) {
+							increase = false;
+							break;
+						}
+
+						back = front;
+					}
+
+					if (increase) {
+						if (answer < val) {
+							answer = val;
+						}
+					}
+				}
+			}
+		}
+
+		printf("#%d %d\n", i + 1, answer);
+	}
+
+	return 0;
+}

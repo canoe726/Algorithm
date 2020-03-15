@@ -1,0 +1,37 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int P;
+		cin >> P;
+
+		int min, max;
+
+		int n;
+		cin >> n;
+
+		min = max = n;
+		for (j = 1; j < P; j++) {
+			cin >> n;
+			
+			if (min > n) {
+				min = n;
+			}
+			if (max < n) {
+				max = n;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << min * max << "\n";
+	}
+
+	return 0;
+}

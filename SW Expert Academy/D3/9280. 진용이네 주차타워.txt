@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <queue>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+
+		int answer = 0;
+
+		int n, m;
+		cin >> n >> m;
+
+		int cost[101] = { 0 };
+		for (j = 1; j <= n; j++) {
+			cin >> cost[j];
+		}
+
+		int weight[2001] = { 0 };
+		for (j = 1; j <= m; j++) {
+			cin >> weight[j];
+		}
+
+		int garage[101] = { 0 };
+		queue<int> waiting;
+		for (j = 0; j < 2 * m; j++) {
+			int car;
+			cin >> car;
+			 
+			// 차량이 들어옴
+			if (car >= 0) {
+				bool empty = false;
+				for (k = 1; k <= n; k++) {
+					if (!garage[k]) {
+						garage[k] = car;
+						answer += (cost[k] * weight[car]);
+						empty = true;
+						break;
+					}
+				}
+
+				if (!empty) {
+					waiting.push(car);
+				}
+			}
+			// 차량이 나감
+			else {
+				for (k = 1; k <= n; k++) {
+					if (garage[k] == car * -1) {
+						garage[k] = 0;
+
+						if (!waiting.empty()) {
+							answer += cost[k] * weight[waiting.front()];
+							garage[k] = waiting.front();
+							waiting.pop();
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

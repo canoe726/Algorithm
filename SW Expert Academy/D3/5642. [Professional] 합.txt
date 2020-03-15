@@ -1,0 +1,44 @@
+#include <iostream>
+#include <climits>
+#include <cstring>
+
+using namespace std;
+
+int arr[100001];
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		memset(arr, 0, sizeof(arr));
+		
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			cin >> arr[j];
+		}
+		
+		int answer = INT_MIN;
+
+		int sum = 0;
+		for (j = 0; j < N; j++) {
+			sum += arr[j];
+
+			if (sum > answer) {
+				answer = sum;
+			}
+
+			if (sum < 0) {
+				sum = 0;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

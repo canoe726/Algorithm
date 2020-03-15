@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+stack<char> s;
+stack<int> res;
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = -1;
+
+		int N;
+		cin >> N;
+		getchar();
+
+		string input;
+		cin >> input;
+
+		string post = "";
+
+		for (j = 0; j < input.size(); j++) {
+			if (input[j] == '(') {
+				s.push(input[j]);
+			}
+			else if (input[j] >= '0' && input[j] <= '9') {
+				post.push_back(input[j]);
+			}
+			else if (input[j] == ')') {
+				while (s.top() != '(') {
+					post.push_back(s.top());
+					s.pop();
+				}
+				s.pop();
+			}
+			else {
+				if (s.empty()) {
+					s.push(input[j]);
+				}
+				else {
+					if (s.top() == '(') {
+						s.push(input[j]);
+					}
+					else {
+						if (input[j] == '*' && s.top() == '+') {
+							s.push(input[j]);
+						}
+						else {
+							post.push_back(s.top());
+							s.pop();
+							s.push(input[j]);
+						}
+					}
+				}
+			}
+		}
+		while (!s.empty()) {
+			post.push_back(s.top());
+			s.pop();
+		}
+
+		for (j = 0; j < post.size(); j++) {
+			if (post[j] >= '0' && post[j] <= '9') {
+				res.push(post[j] - '0');
+			}
+			else {
+				int a = res.top();
+				res.pop();
+
+				int b = res.top();
+				res.pop();
+
+				if (post[j] == '*') {
+					res.push(a * b);
+				}
+				else {
+					res.push(a + b);
+				}
+			}
+		}
+		
+		cout << "#" << i + 1 << " " << res.top() << "\n";
+		res.pop();
+	}
+
+	return 0;
+}

@@ -1,0 +1,35 @@
+#include <iostream>
+
+using namespace std;
+
+int find_answer(unsigned long long n) {
+	if (n < 10) { return n; }
+
+	int ret = 0;
+
+	unsigned long long sum = 0;
+	while (n) {
+		sum += (n % 10);
+		n /= 10;
+	}
+
+	ret = find_answer(sum);
+
+	return ret;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		unsigned long long n;
+		scanf("%llu", &n);
+
+		printf("#%d %d\n", i + 1, find_answer(n));
+	}
+
+	return 0;
+}

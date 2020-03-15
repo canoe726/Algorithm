@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		
+		int answer = -1;
+
+		unsigned long long K;
+		cin >> K;
+
+		if (K <= 3) {
+			if (K == 1 || K == 2) {
+				answer = 0;
+			}
+			else {
+				answer = 1;
+			}
+		}
+		else {
+			unsigned long long mid = 1;
+			int cnt = 0;
+
+			while (mid < K) {
+				mid *= 2;
+			}
+
+			while (K > 3) {
+				K = mid - K;
+
+				while (mid >= K && K > 0) {
+					mid /= 2;
+				}
+
+				mid *= 2;
+				cnt++;
+			}
+
+			if (K == 1 || K == 2) {
+				if (cnt % 2 == 0) {
+					answer = 0;
+				}
+				else {
+					answer = 1;
+				}
+			}
+			else {
+				if (cnt % 2 == 0) {
+					answer = 1;
+				}
+				else {
+					answer = 0;
+				}
+			}
+		}
+
+		printf("#%d %d\n", i + 1, answer);
+	}
+
+	return 0;
+}

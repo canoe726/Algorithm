@@ -1,0 +1,42 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int X1, Y1, X2, Y2;
+		cin >> X1 >> Y1 >> X2 >> Y2;
+
+		int N;
+		cin >> N;
+
+		int in = 0, on = 0, out = 0;
+
+		for (j = 0; j < N; j++) {
+			int x, y;
+			cin >> x >> y;
+
+			// 내부에 있는지 검사
+			if ((x > X1 && x < X2) &&
+				(y > Y1 && y < Y2)) {
+				in++;
+			}
+			else if ((x < X1 || x > X2) ||
+					 (y < Y1 || y > Y2)) { // 외부에 있는지 검사
+				out++;
+			}
+			else { // 선 위에 있는지 검사
+				on++;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << in << " " << on << " " << out << "\n";
+	}
+
+	return 0;
+}

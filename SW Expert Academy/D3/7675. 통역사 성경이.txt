@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int N;
+		cin >> N;
+		getchar();
+
+		string str;
+		getline(cin, str);
+
+		vector<string> res;
+		string token;
+		stringstream ss(str);
+		
+		while (getline(ss, token, ' ')) {
+			res.push_back(token);
+		}
+
+		int sentence[5] = { 0 };
+		int idx = 0;
+
+		// 문장 구분자 : '.', '?', '!'
+		for (j = 0; j < res.size(); j++) {
+
+			bool next = false;
+			int cnt = 0;
+			if (res[j][0] >= 'A' && res[j][0] <= 'Z') {
+				for (k = 1; k < res[j].size(); k++) {
+					if (res[j][k] >= 'a' && res[j][k] <= 'z') {
+						cnt++;
+					}
+					else if (res[j][k] == '.' || res[j][k] == '!' || res[j][k] == '?') {
+						cnt++;
+						next = true;
+					}
+					else {
+						continue;
+					}
+				}
+			}
+
+			if (cnt + 1 == res[j].size()) {
+				sentence[idx]++;
+			}
+
+			if (next) {
+				idx++;
+			}
+		}
+		
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < N; j++) {
+			cout << sentence[j] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}

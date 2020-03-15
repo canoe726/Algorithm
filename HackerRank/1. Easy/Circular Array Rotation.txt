@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Complete the circularArrayRotation function below.
+vector<int> circularArrayRotation(vector<int> a, int k, vector<int> queries) {
+
+	vector<int> result(a.size());
+
+	int i;
+	for (i = 0; i < a.size(); i++)
+	{
+		result[(i + k) % a.size()] = a[i];
+	}
+
+	return result;
+}
+
+int main()
+{
+	int n, k, q;
+	cin >> n >> k >> q;
+
+	string a_temp_temp;
+	getline(cin, a_temp_temp);
+
+	vector<int> a(n);
+
+	for (int i = 0; i < n; i++) {
+		int a_item;
+		cin >> a_item;
+
+		a[i] = a_item;
+	}
+
+	vector<int> queries(q);
+
+	for (int i = 0; i < q; i++) {
+		int queries_item;
+		cin >> queries_item;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+		queries[i] = queries_item;
+	}
+
+	vector<int> result = circularArrayRotation(a, k, queries);
+
+	for (int i = 0; i < queries.size(); i++) {
+		cout << result[queries[i]];
+
+		if (i != queries.size() - 1) {
+			cout << "\n";
+		}
+	}
+	cout << "\n";
+
+	return 0;
+}

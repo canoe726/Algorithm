@@ -1,0 +1,50 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int dp[101][1001] = { 0 };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(dp, 0, sizeof(dp));
+
+		int answer = -1;
+
+		int N, K;
+		cin >> N >> K;
+
+		int volume[101] = { 0 };
+		int cost[101] = { 0 };
+		for (j = 1; j <= N; j++) {
+			cin >> volume[j];
+			cin >> cost[j];
+		}
+
+		// 가치 index
+		for (j = 1; j <= N; j++) {
+			// 부피 index
+			for (k = 1; k <= K; k++) {
+				if (k - volume[j] < 0) {
+					dp[j][k] = dp[j - 1][k];
+				}
+				else {
+					dp[j][k] = max(cost[j] + dp[j - 1][k - volume[j]], dp[j - 1][k]);
+				}
+				if (answer < dp[j][k]) {
+					answer = dp[j][k];
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

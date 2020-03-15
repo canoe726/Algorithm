@@ -1,0 +1,23 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++) {
+		unsigned long long L;
+		scanf("%llu", &L);
+
+		unsigned long long order = (L - 1) / 2;
+
+		unsigned long long answer = order * order;
+
+		printf("#%d %llu\n", i + 1, answer);
+	}
+
+	return 0;
+}

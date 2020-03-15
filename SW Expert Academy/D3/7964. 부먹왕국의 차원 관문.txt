@@ -1,0 +1,52 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int cities[300002];
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int answer = 0;
+
+		int N, D;
+		cin >> N >> D;
+		memset(cities, 0, sizeof(cities));
+
+		cities[0] = cities[N + 1] = 1;
+		for (j = 1; j <= N; j++) {
+			cin >> cities[j];
+		}
+
+		for (j = 0; j <= N; j++) {
+			if (!cities[j + 1]) {
+				int len = D;
+				bool exist = false;
+				for (k = D; k >= 1; k--) {
+					if (cities[j + k]) {
+						exist = true;
+						len = k;
+						break;
+					}
+				}
+
+				if (!exist) {
+					cities[j + len] = 1;
+					answer++;
+				}
+				j = j + len - 1;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

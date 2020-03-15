@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int isPalindrome(string str)
+{
+	int same = 1;
+
+	int i;
+	for (i = 0; i < str.size() / 2; i++)
+	{
+		if (str[i] != str[str.size() - 1 - i])
+		{
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
+// Complete the palindromeIndex function below.
+int palindromeIndex(string s) {
+
+	if (isPalindrome(s))
+	{
+		return -1;
+	}
+	else
+	{
+		int i;
+		for (i = 0; i < s.size(); i++)
+		{
+			string temp = s;
+			temp.erase(temp.begin() + i);
+
+			if (isPalindrome(temp))
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+}
+
+int main()
+{
+	int q;
+	cin >> q;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	for (int q_itr = 0; q_itr < q; q_itr++) {
+		string s;
+		getline(cin, s);
+
+		int result = palindromeIndex(s);
+
+		cout << result << "\n";
+	}
+
+	return 0;
+}

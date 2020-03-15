@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// CEFGHIJKLMNSTUVWXYZ
+char zero[19] = { 'C','E','F','G','H','I','J','K','L','M','N','S','T','U','V','W','X','Y','Z' };
+// ADOPQR
+char one[6] = { 'A','D','O','P','Q','R' };
+// B
+char two = 'B';
+
+int find_num_of_hole(char ch) {
+	int hole = -1;
+	int i;
+	// zero
+	for (i = 0; i < 19; i++) {
+		if (ch == zero[i]) {
+			hole = 0;
+			break;
+		}
+	}
+	// one
+	if (hole == -1) {
+		for (i = 0; i < 6; i++) {
+			if (ch == one[i]) {
+				hole = 1;
+				break;
+			}
+		}
+	}
+	if (hole == -1) {
+		hole = 2;
+	}
+
+	return hole;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		string A, B;
+		cin >> A >> B;
+		
+		bool res = true;
+
+		if (A.size() != B.size()) {
+			res = false;
+		}
+		else {
+			for (j = 0; j < A.size(); j++) {
+				int A_num = find_num_of_hole(A[j]);
+				int B_num = find_num_of_hole(B[j]);
+
+				if (A_num != B_num) {
+					res = false;
+					break;
+				}
+			}
+		}
+		
+
+		if (!res) {
+			cout << "#" << i + 1 << " " << "DIFF" << "\n";
+		}
+		else {
+			cout << "#" << i + 1 << " " << "SAME" << "\n";
+		}
+	}
+
+	return 0;
+}

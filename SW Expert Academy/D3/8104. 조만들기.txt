@@ -1,0 +1,39 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (int i = 0; i < T; i++) {
+		int N, K;
+		cin >> N >> K;
+
+		int team[20] = { 0 };
+
+		int val = 1;
+		for (j = 0; j < N; j++) {
+			// 정순
+			if (j % 2 == 0) {
+				for (k = 0; k < K; k++) {
+					team[k] += val++;
+				}
+			}
+			// 역순
+			else {
+				for (k = 0; k < K; k++) {
+					team[K - k - 1] += val++;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < K; j++) {
+			cout << team[j] << " ";
+		}
+		cout << "\n";
+	}
+}

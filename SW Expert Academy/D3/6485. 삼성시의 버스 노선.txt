@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int visited[5001] = { 0 };
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			int A, B;
+			cin >> A >> B;
+
+			for (k = A; k <= B; k++) {
+				visited[k]++;
+			}
+		}
+
+		int P;
+		cin >> P;
+
+		vector<int> res(P);
+		for (j = 0; j < P; j++) {
+			cin >> res[j];
+		}
+
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < P; j++) {
+			cout << visited[res[j]] << " ";
+		}
+		cout << "\n";
+	}
+
+	return 0;
+}

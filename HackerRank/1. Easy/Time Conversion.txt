@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+/*
+ * Complete the timeConversion function below.
+ */
+string timeConversion(string s) {
+	
+	string result = "";
+	int i;
+	for (i = 0; i < s.size() - 2; i++)
+	{
+		result.push_back(s[i]);
+	}
+
+	string tail = "";
+	tail.push_back(s[s.size() - 2]);
+	tail.push_back(s[s.size() - 1]);
+	
+	string hours;
+	hours.push_back(result[0]);
+	hours.push_back(result[1]);
+
+	int h = stoi(hours);
+
+	if (tail == "AM")
+	{
+		if (h == 12)
+		{
+			result[0] = '0';
+			result[1] = '0';
+		}
+	}
+	else
+	{
+		if (h != 12)
+		{
+			h += 12;
+
+			hours = to_string(h);
+
+			result[0] = hours[0];
+			result[1] = hours[1];
+		}
+	}
+	
+	return result;
+}
+
+int main()
+{
+	string current_time;
+	getline(cin, current_time);
+
+	string result = timeConversion(current_time);
+
+	cout << result << "\n";
+
+	return 0;
+}

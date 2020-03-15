@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+bool cmp(string a, string b)
+{
+	if (a.size() == b.size())
+	{
+		return a < b;
+	}
+	else
+	{
+		return a.size() < b.size();
+	}
+}
+
+// Complete the bigSorting function below.
+vector<string> bigSorting(vector<string> unsorted) {
+
+	sort(unsorted.begin(), unsorted.end(), cmp);
+
+	return unsorted;
+}
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	vector<string> unsorted(n);
+
+	for (int i = 0; i < n; i++) {
+		string unsorted_item;
+		getline(cin, unsorted_item);
+
+		unsorted[i] = unsorted_item;
+	}
+
+	vector<string> result = bigSorting(unsorted);
+
+	for (int i = 0; i < result.size(); i++) {
+		cout << result[i];
+
+		if (i != result.size() - 1) {
+			cout << "\n";
+		}
+	}
+
+	cout << "\n";
+
+	return 0;
+}

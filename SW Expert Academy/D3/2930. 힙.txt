@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+priority_queue<int> heap;
+vector<int> answer;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+
+		int index = 0;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			int mode;
+			cin >> mode;
+
+			// heap 삽입
+			if (mode == 1) {
+				int num;
+				cin >> num;
+
+				heap.push(num);
+			}
+			// heap 삭제
+			else {
+				// 비어있다면 -1 출력
+				if (heap.empty()) {
+					answer.push_back(-1);
+				}
+				// 루트 노드 출력
+				else {
+					answer.push_back(heap.top());
+
+					heap.pop();
+				}
+			}
+		}
+		
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < answer.size(); j++) {
+			cout << answer[j] << " ";
+		}
+		cout << "\n";
+
+		while (!heap.empty()) {
+			heap.pop();
+		}
+
+		answer.clear();
+	}
+
+	return 0;
+}

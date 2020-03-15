@@ -1,0 +1,58 @@
+#include <iostream>
+
+using namespace std;
+
+bool prime_number[1000001] = { 0 };
+
+void find_prime() {
+
+	int i, j;
+	for (i = 2; i <= 1000000; i++) {
+		prime_number[i] = true;
+	}
+
+	for (i = 2; i*i <= 1000000; i++) {
+		if (prime_number[i]) {
+			for (j = i*i; j <= 1000000; j+=i) {
+				prime_number[j] = false;
+			}
+		}
+	}
+}
+
+int main()
+{
+	find_prime();
+
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int D, A, B;
+		cin >> D >> A >> B;
+
+		int answer = 0;
+
+		for (j = A; j <= B; j++) {
+			if (prime_number[j]) {
+				bool exist = false;
+				int temp = j;
+				while (temp) {
+					if (temp % 10 == D) {
+						exist = true;
+						break;
+					}
+					else {
+						temp /= 10;
+					}
+				}
+				if (exist) { answer++; }
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

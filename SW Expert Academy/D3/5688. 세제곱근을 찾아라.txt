@@ -1,0 +1,29 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++) {
+		unsigned long long N;
+		cin >> N;
+
+		double answer = pow(N, 1.0 / 3.0);
+
+		int res = round(answer);
+
+		if (fabs(res - answer) <= 1e-8) {
+			cout << "#" << i + 1 << " " << res << "\n";
+		}
+		else {
+			cout << "#" << i + 1 << " " << -1 << "\n";
+		}
+	}
+
+	return 0;
+}

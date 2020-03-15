@@ -1,0 +1,201 @@
+#include <iostream>
+
+using namespace std;
+
+// (y,x) -> 북, 남, 동, 서, 왼쪽위, 왼쪽아래, 오른쪽위, 오른쪽아래
+int dir[8][2] = { {-1,0},{1,0},{0,1},{0,-1},{-1,-1},{1,-1},{-1,1},{1,1} };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int black = 0;
+		int white = 0;
+
+		int cnt = 4;
+
+		// 1 : 흑돌, 2 : 백돌
+		int board[8][8] = { 0 };
+
+		int N, M;
+		cin >> N >> M;
+
+		// 정가운데 돌을 놓고 시작
+		// 백돌
+		board[N / 2 - 1][N / 2 - 1] = 2;
+		board[N / 2][N / 2] = 2;
+		// 흑돌
+		board[N / 2][N / 2 - 1] = 1;
+		board[N / 2 - 1][N / 2] = 1;
+
+		for (j = 0; j < M; j++) {
+			int x, y, stone;
+			cin >> x >> y >> stone;
+
+			y -= 1;
+			x -= 1;
+
+			board[y][x] = stone;
+
+			for (k = 0; k < 8; k++) {
+				int cur_y = y + dir[k][0];
+				int cur_x = x + dir[k][1];
+
+				// 뒤집을 수 있는지 검사
+				bool exist = false;
+				while ((cur_y >= 0 && cur_y < N) &&
+					(cur_x >= 0 && cur_x < N)) {
+
+					if (board[cur_y][cur_x] == 0) { break; }
+
+					if (board[cur_y][cur_x] == stone) {
+						exist = true;
+						break;
+					}
+
+					cur_y += dir[k][0];
+					cur_x += dir[k][1];
+				}
+
+				// 뒤집기
+				if (exist) {
+					cur_y = y + dir[k][0];
+					cur_x = x + dir[k][1];
+
+					while ((cur_y >= 0 && cur_y < N) &&
+						(cur_x >= 0 && cur_x < N)) {
+
+						if (board[cur_y][cur_x] == stone) {
+							break;
+						}
+
+						board[cur_y][cur_x] = stone;
+
+						cur_y += dir[k][0];
+						cur_x += dir[k][1];
+					}
+				}
+			}
+
+			cnt++;
+			// 보드가 꽉 찬 상태
+			if (cnt == N * N) { break; }
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (board[j][k] == 1) {
+					black++;
+				}
+				else if (board[j][k] == 2) {
+					white++;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << black << " " << white << "\n";
+	}
+
+	return 0;
+}
+
+/*
+1
+4 12
+1 2 1
+1 1 2
+4 3 1
+4 4 2
+2 1 1
+4 2 2
+3 4 1
+1 3 2
+2 4 1
+1 4 2
+4 1 2
+3 1 2
+
+// 기본
+0 0 0 0
+0 2 1 0
+0 1 2 0
+0 0 0 0
+
+// 1 2 1
+0 0 0 0
+1 1 1 0
+0 1 2 0
+0 0 0 0
+
+// 1 1 2
+2 0 0 0
+1 2 1 0
+0 1 2 0
+0 0 0 0
+
+// 4 3 1
+2 0 0 0
+1 2 1 0
+0 1 1 1
+0 0 0 0
+
+// 4 4 2
+2 0 0 0
+1 2 1 0
+0 1 2 1
+0 0 0 2
+
+// 2 1 1
+2 1 0 0
+1 1 1 0
+0 1 2 1
+0 0 0 2
+
+// 4 2 2
+2 1 0 0
+1 1 1 2
+0 1 2 2
+0 0 0 2
+
+// 3 4 1
+2 1 0 0
+1 1 1 2
+0 1 1 2
+0 0 1 2
+
+// 1 3 2
+2 1 0 0
+2 1 1 2
+2 2 2 2
+0 0 1 2
+
+// 2 4 1
+2 1 0 0
+2 1 1 2
+2 1 2 2
+0 1 1 2
+
+// 1 4 2
+2 1 0 0
+2 1 1 2
+2 1 2 2
+2 2 2 2
+
+// 4 1 2
+2 1 0 2
+2 1 2 2
+2 2 2 2
+2 2 2 2
+
+// 3 1 2
+2 2 2 2
+2 2 2 2
+2 2 2 2
+2 2 2 2
+*/

@@ -1,0 +1,53 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int N, M, K;
+		cin >> N >> M >> K;
+
+		int cake[11112] = { 0 };
+		for (j = 0; j <= 11111; j += M) {
+			cake[j] += K;
+		}
+		cake[0] = 0;
+
+		int come[101] = { 0 };
+		for (j = 0; j < N; j++) {
+			cin >> come[j];
+		}
+
+		bool res = true;
+
+		for (j = 0; j < N; j++) {
+			bool exist = false;
+			for (k = come[j]; k > 0; k--) {
+				if (cake[k] > 0) {
+					cake[k] -= 1;
+					exist = true;
+					break;
+				}
+			}
+			
+			if (!exist) {
+				res = false;
+				break;
+			}
+		}
+
+		if (res) {
+			cout << "#" << i + 1 << " " << "Possible" << "\n";
+		}
+		else {
+			cout << "#" << i + 1 << " " << "Impossible" << "\n";
+		}
+	}
+
+	return 0;
+}

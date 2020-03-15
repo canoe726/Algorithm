@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		string str;
+		cin >> str;
+
+		bool exist = true;
+		for (j = 0; j < str.size() / 2; j++) {
+			if (str[j] == '*' || str[str.size() - 1 - j] == '*') {
+				break;
+			}
+
+			if (str[j] != str[str.size() - 1 - j]) {
+				exist = false;
+				break;
+			}
+		}
+
+		if (!exist) { cout << "#" << i + 1 << " " << "Not exist" << "\n"; }
+		else { cout << "#" << i + 1 << " " << "Exist" << "\n"; }
+	}
+
+	return 0;
+}

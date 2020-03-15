@@ -1,0 +1,44 @@
+// https://twinw.tistory.com/126
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int common[1001][1001] = { 0 };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(common, 0, sizeof(common));
+
+		int answer = -1;
+
+		string A, B;
+		cin >> A >> B;
+
+		for (j = 0; j < B.size(); j++) {
+			for (k = 0; k < A.size(); k++) {
+
+				if (A[k] == B[j]) {
+					common[j + 1][k + 1] = common[j - 1 + 1][k - 1 + 1] + 1;
+				}
+				else {
+					common[j + 1][k + 1] = max(common[j - 1 + 1][k + 1], common[j + 1][k - 1 + 1]);
+				}
+
+				if (answer < common[j + 1][k + 1]) {
+					answer = common[j + 1][k + 1];
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

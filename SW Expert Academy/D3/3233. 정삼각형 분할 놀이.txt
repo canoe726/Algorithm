@@ -1,0 +1,21 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int A, B;
+		cin >> A >> B;
+
+		long long answer = A / B;
+		cout << "#" << i + 1 << " " << answer * answer << "\n";
+	}
+
+	return 0;
+}

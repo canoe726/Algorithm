@@ -1,0 +1,73 @@
+#include<iostream>
+#include<string>
+#include<sstream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int answer;
+
+void dfs_search(vector<vector<int>> graph, int visited[], int cur) {
+	if (answer == 1) {
+		return;
+	}
+
+	if (cur == 99) {
+		answer = 1;
+		return;
+	}
+
+	for (int i = 0; i < graph[cur].size(); i++) {
+		if (!visited[graph[cur][i]]) {
+			visited[graph[cur][i]] = 1;
+			dfs_search(graph, visited, graph[cur][i]);
+			visited[graph[cur][i]] = 0;
+		}
+	}
+}
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		vector<vector<int>> graph(100);
+		int visited[101] = { 0 };
+
+		int N;
+		cin >> N;
+
+		int len;
+		cin >> len;
+		getchar();
+
+		string input;
+		getline(cin, input);
+
+		vector<int> node;
+
+		string token;
+		stringstream stream(input);
+		while (stream >> token) {
+			node.push_back(atoi(token.c_str()));
+		}
+
+		for (j = 0; j < node.size(); j += 2) {
+			graph[node[j]].push_back(node[j + 1]);
+		}
+
+		for (j = 0; j < graph.size(); j++) {
+			sort(graph[j].begin(), graph[j].end());
+		}
+
+		answer = 0;
+		visited[0] = 1;
+		dfs_search(graph, visited, 0);
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+}

@@ -1,0 +1,130 @@
+/*
+0. num_map 배열을 만들어서 우선 별의 숫자를 기록한 맵을 만든다. (*:-1)
+1. num_map 의 값이 0 이면 bfs 탐색을 한다, answer 값을 1 추가한다.
+2. bfs 탐색 도중 num_map의 값이 0 이면 큐에 push하고 그렇지 않으면 방문처리를 한다.
+3. 모두 순회했어도 방문하지 않고 num_map의 값이 0 초과이면 answer 값을 1 추가한다.
+*/
+
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+char map[300][300];
+int num_map[300][300];
+bool visited[300][300];
+
+// (y,x), 왼쪽위, 위, 오른쪽위, 오른쪽, 오른쪽아래, 아래, 왼쪽아래, 왼쪽
+int dir[8][2] = { {-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1} };
+
+void find_star_num(int y, int x, int N) {
+
+	int cnt = 0;
+
+	int i;
+	for (i = 0; i < 8; i++) {
+		int cur_y = y + dir[i][0];
+		int cur_x = x + dir[i][1];
+
+		if ((cur_y >= 0 && cur_y < N) &&
+			(cur_x >= 0 && cur_x < N)) {
+
+			if (map[cur_y][cur_x] == '*') {
+				cnt++;
+			}
+		}
+	}
+
+	num_map[y][x] = cnt;
+}
+
+void bfs_search(int y, int x, int N) {
+
+	queue<pair<int, int>> pos;
+	pos.push(make_pair(y, x));
+	visited[y][x] = true;
+
+	while (!pos.empty()) {
+		pair<int, int> cur = pos.front();
+		pos.pop();
+
+		int i;
+		for (i = 0; i < 8; i++) {
+			int next_y = cur.first + dir[i][0];
+			int next_x = cur.second + dir[i][1];
+
+			if ((next_y >= 0 && next_y < N) &&
+				(next_x >= 0 && next_x < N)) {
+
+				if (num_map[next_y][next_x] == 0 && !visited[next_y][next_x]) {
+					pos.push(make_pair(next_y, next_x));
+				}
+
+				visited[next_y][next_x] = true;
+			}
+		}
+	}
+
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(map, '\0', sizeof(map));
+		memset(num_map, 0, sizeof(num_map));
+		memset(visited, false , sizeof(visited));
+
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (map[j][k] == '*') {
+					// * : -1
+					num_map[j][k] = -1;
+				}
+				else {
+					// . : * 의 개수
+					find_star_num(j, k, N);
+				}
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (num_map[j][k] == 0 && !visited[j][k]) {
+					answer++;
+					bfs_search(j, k, N);
+				}
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (num_map[j][k] > 0 && !visited[j][k]) {
+					answer++;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

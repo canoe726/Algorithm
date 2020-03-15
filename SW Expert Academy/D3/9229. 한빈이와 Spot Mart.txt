@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+
+		int answer = -1;
+
+		int N, M;
+		cin >> N >> M;
+
+		int snack[1001];
+		
+		for (j = 0; j < N; j++) {
+			cin >> snack[j];
+		}
+
+		for (j = 0; j < N - 1; j++) {
+			for (k = j + 1; k < N; k++) {
+				if (snack[j] + snack[k] <= M && snack[j] + snack[k] > answer) {
+					answer = snack[j] + snack[k];
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

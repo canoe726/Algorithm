@@ -1,0 +1,25 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j;
+
+	long long num[101] = { 1,1,1,2, };
+	for (i = 4; i < 101; i++) {
+		num[i] = num[i - 3] + num[i - 2];
+	}
+
+	for (i = 0; i < T; i++) {
+		int N;
+		cin >> N;
+		cout << "#" << i + 1 << " " << num[N - 1] << "\n";
+	}
+
+	return 0;
+}

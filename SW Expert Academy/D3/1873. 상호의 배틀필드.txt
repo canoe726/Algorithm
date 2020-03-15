@@ -1,0 +1,173 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+
+		int tank_y_pos = -1;
+		int tank_x_pos = -1;
+		// up : 0, down : 1, left : 2, right : 3
+		int dir = 0;
+
+		int H, W;
+		cin >> H >> W;
+
+		char map[20][20] = { '\0' };
+		for (j = 0; j < H; j++) {
+			for (k = 0; k < W; k++) {
+				cin >> map[j][k];
+
+				if (map[j][k] == '^' ||
+					map[j][k] == 'v' ||
+					map[j][k] == '<' ||
+					map[j][k] == '>') {
+
+					tank_y_pos = j;
+					tank_x_pos = k;
+					if (map[j][k] == '^')
+						dir = 0;
+					if (map[j][k] == 'v')
+						dir = 1;
+					if (map[j][k] == '<')
+						dir = 2;
+					if (map[j][k] == '>')
+						dir = 3;
+				}
+			}
+		}
+
+		int N;
+		cin >> N;
+
+		char command[101] = { '\0' };
+		for (j = 0; j < N; j++) {
+			cin >> command[j];
+		}
+
+		for (j = 0; j < N; j++) {
+			switch (command[j]) {
+			case 'U':
+				dir = 0;
+				if (map[tank_y_pos - 1][tank_x_pos] == '.') {
+					map[tank_y_pos][tank_x_pos] = '.';
+					map[tank_y_pos - 1][tank_x_pos] = '^';
+					tank_y_pos = tank_y_pos - 1;
+				}
+				else {
+					map[tank_y_pos][tank_x_pos] = '^';
+				}
+				break;
+			case 'D':
+				dir = 1;
+				if (map[tank_y_pos + 1][tank_x_pos] == '.') {
+					map[tank_y_pos][tank_x_pos] = '.';
+					map[tank_y_pos + 1][tank_x_pos] = 'v';
+					tank_y_pos = tank_y_pos + 1;
+				}
+				else {
+					map[tank_y_pos][tank_x_pos] = 'v';
+				}
+				break;
+			case 'L':
+				dir = 2;
+				if (map[tank_y_pos][tank_x_pos - 1] == '.') {
+					map[tank_y_pos][tank_x_pos] = '.';
+					map[tank_y_pos][tank_x_pos - 1] = '<';
+					tank_x_pos = tank_x_pos - 1;
+				}
+				else {
+					map[tank_y_pos][tank_x_pos] = '<';
+				}
+				break;
+			case 'R':
+				dir = 3;
+				if (map[tank_y_pos][tank_x_pos + 1] == '.') {
+					map[tank_y_pos][tank_x_pos] = '.';
+					map[tank_y_pos][tank_x_pos + 1] = '>';
+					tank_x_pos = tank_x_pos + 1;
+				}
+				else {
+					map[tank_y_pos][tank_x_pos] = '>';
+				}
+				break;
+			case 'S':
+				int temp_y_pos = tank_y_pos;
+				int temp_x_pos = tank_x_pos;
+
+				switch (dir) {
+				// UP
+				case 0:
+					while (temp_y_pos - 1 >= 0) {
+						if (map[temp_y_pos - 1][temp_x_pos] == '#') {
+							break;
+						}
+						if (map[temp_y_pos - 1][temp_x_pos] == '*') {
+							map[temp_y_pos - 1][temp_x_pos] = '.';
+							break;
+						}
+						temp_y_pos = temp_y_pos - 1;
+					}
+					break;
+				// DOWN
+				case 1:
+					while (temp_y_pos + 1 < H) {
+						if (map[temp_y_pos + 1][temp_x_pos] == '#') {
+							break;
+						}
+						if (map[temp_y_pos + 1][temp_x_pos] == '*') {
+							map[temp_y_pos + 1][temp_x_pos] = '.';
+							break;
+						}
+						temp_y_pos = temp_y_pos + 1;
+					}
+					break;
+				// LEFT
+				case 2:
+					while (temp_x_pos - 1 >= 0) {
+						if (map[temp_y_pos][temp_x_pos - 1] == '#') {
+							break;
+						}
+						if (map[temp_y_pos][temp_x_pos - 1] == '*') {
+							map[temp_y_pos][temp_x_pos - 1] = '.';
+							break;
+						}
+						temp_x_pos = temp_x_pos - 1;
+					}
+					break;
+				// RIGHT
+				case 3:
+					while (temp_x_pos + 1 < W) {
+						if (map[temp_y_pos][temp_x_pos + 1] == '#') {
+							break;
+						}
+						if (map[temp_y_pos][temp_x_pos + 1] == '*') {
+							map[temp_y_pos][temp_x_pos + 1] = '.';
+							break;
+						}
+						temp_x_pos = temp_x_pos + 1;
+					}
+					break;
+				}
+				break;
+			}
+		}
+
+		cout << "#" << i + 1 << " ";
+		for (j = 0; j < H; j++) {
+			for (k = 0; k < W; k++) {
+				cout << map[j][k];
+			}
+			cout << "\n";
+		}
+	}
+
+	return 0;
+}

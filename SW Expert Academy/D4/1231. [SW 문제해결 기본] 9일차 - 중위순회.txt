@@ -1,0 +1,56 @@
+#include<iostream>
+#include<string>
+#include<sstream>
+#include<vector>
+
+using namespace std;
+
+string answer = "";
+
+void in_order(string binary_tree[], int index) {
+	if (index <= 100 && binary_tree[index] != "\0") {
+		// 왼쪽 자식
+		in_order(binary_tree, index * 2);
+		// 자신
+		answer += binary_tree[index];
+		// 오른쪽
+		in_order(binary_tree, index * 2 + 1);
+	}
+}
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		string binary_tree[101] = { "\0" };
+		
+		int N;
+		cin >> N;
+		getchar();
+
+		for (j = 0; j < N; j++) {
+			vector<string> symbol;
+
+			string input;
+			getline(cin, input);
+
+			string token;
+			stringstream stream(input);
+			while (stream >> token) {
+				symbol.push_back(token);
+			}
+
+			int index = atoi(symbol[0].c_str());
+			binary_tree[index] = symbol[1];
+		}
+
+		answer = "";
+		
+		in_order(binary_tree, 1);
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+}

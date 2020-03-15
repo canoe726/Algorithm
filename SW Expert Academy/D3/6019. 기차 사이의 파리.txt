@@ -1,0 +1,25 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	//const int T = 10;
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		double answer = 0.0;
+		
+		double D, A, B, F;
+		cin >> D >> A >> B >> F;
+
+		double H = D / (A + B);
+		answer = F * H;
+
+		printf("#%d %lf\n", i + 1, answer);
+	}
+
+	return 0;
+}

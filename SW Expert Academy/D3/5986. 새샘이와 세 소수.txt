@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int p_size = 1000;
+bool primeNum[1001] = { 0 };
+vector<int> prime;
+
+void find_primeNumber() {
+	int i, j;
+	for (i = 2; i < p_size; i++) {
+		primeNum[i] = true;
+	}
+
+	for (i = 2; i*i < p_size; i++) {
+		if (primeNum[i]) {
+			for (j = i * i; j < p_size; j += i) {
+				primeNum[j] = false;
+			}
+		}
+	}
+}
+
+int main()
+{
+	find_primeNumber();
+
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 2; i < p_size; i++) {
+		if (primeNum[i]) {
+			prime.push_back(i);
+		}
+	}
+
+	for (i = 0; i < T; i++) {
+		int N;
+		cin >> N;
+
+		int answer = 0;
+
+		// x
+		for (j = 0; j < prime.size(); j++) {
+			// y
+			for (k = j; k < prime.size(); k++) {
+
+				int z = N - prime[j] - prime[k];
+				
+				// x <= y <= z
+				if( prime[k] > z ) {
+					break;
+				}
+
+				if (primeNum[z]) {
+					answer++;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

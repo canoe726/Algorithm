@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		stack<char> s;
+		
+		int answer = 0;
+
+		int n;
+		cin >> n;
+
+		string input;
+		cin >> input;
+
+		for (j = 0; j < input.size(); j++) {
+			if (input[j] == '(' || input[j] == '[' || input[j] == '{' || input[j] == '<') {
+				s.push(input[j]);
+			}
+			else {
+				if (s.empty()) {
+					break;
+				}
+				else {
+					if (input[j] == ')') {
+						if (s.top() == '(') {
+							s.pop();
+						}
+						else {
+							break;
+						}
+					}
+					else if (input[j] == ']') {
+						if (s.top() == '[') {
+							s.pop();
+						}
+						else {
+							break;
+						}
+					}
+					else if (input[j] == '}') {
+						if (s.top() == '{') {
+							s.pop();
+						}
+						else {
+							break;
+						}
+					}
+					else {
+						if (s.top() == '<') {
+							s.pop();
+						}
+						else {
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (s.empty()) {
+			cout << "#" << i + 1 << " " << answer + 1 << "\n";
+		}
+		else {
+			cout << "#" << i + 1 << " " << answer << "\n";
+		}
+	}
+
+	return 0;
+}

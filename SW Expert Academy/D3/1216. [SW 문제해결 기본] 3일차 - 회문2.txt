@@ -1,0 +1,111 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+char grid[100][100];
+
+const int SIZE = 100;
+
+bool chk_palindrome(string str) {
+
+	bool ret = true;
+
+	int i, j;
+	for (i = 0; i < str.size() / 2; i++) {
+		if (str[i] != str[str.size() - 1 - i]) {
+			ret = false;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		memset(grid, '\0', sizeof(grid));
+
+		int answer = -1;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < SIZE; j++) {
+			for (k = 0; k < SIZE; k++) {
+				cin >> grid[j][k];
+			}
+		}
+
+		bool exist = false;
+		int len = SIZE;
+
+		// 가로
+		while (len && !exist) {
+			for (j = 0; j < SIZE; j++) {
+				for (k = 0; k <= SIZE - len; k++) {
+
+					string str = "";
+					for (l = k; l < k + len; l++) {
+						str.push_back(grid[j][l]);
+					}
+
+					if (chk_palindrome(str)) {
+						exist = true;
+						if (answer < len) {
+							answer = len;
+						}
+					}
+				}
+			}
+			len--;
+		}
+
+		// 세로
+		exist = false;
+		len = SIZE;
+
+		while (len && !exist) {
+			for (j = 0; j < SIZE; j++) {
+				for (k = 0; k <= SIZE - len; k++) {
+
+					string str = "";
+					for (l = k; l < k + len; l++) {
+						str.push_back(grid[l][j]);
+					}
+
+					if (chk_palindrome(str)) {
+						exist = true;
+						if (answer < len) {
+							answer = len;
+						}
+					}
+				}
+			}
+			len--;
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}
+
+/*
+1
+CBCABBAC
+BBABCABA
+ABCBCCCA
+BACCAABB
+BCBCACBC
+CABACACB
+CAAACCAB
+CBABACAC
+
+*/

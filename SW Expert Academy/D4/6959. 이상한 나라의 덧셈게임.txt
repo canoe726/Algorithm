@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+// 어떤 순서로 덧셈을 하던 결과는 동일하다는 성질을 이용한다.
+
+int main()
+{
+	int T;
+	cin >> T;
+	getchar();
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		char answer = 'B';
+		
+		string input;
+		cin >> input;
+
+		while (input.size() > 1) {
+			int a = input[input.size() - 1] - '0';
+			int b = input[input.size() - 2] - '0';
+
+			input.pop_back();
+			input.pop_back();
+
+			int c = a + b;
+			if (c >= 10) {
+				a = c / 10;
+				b = c % 10;
+
+				input.push_back(a + '0');
+				input.push_back(b + '0');
+			}
+			else {
+				a = c;
+				input.push_back(a + '0');
+			}
+
+			if (answer == 'A') {
+				answer = 'B';
+			}
+			else {
+				answer = 'A';
+			}
+		}
+		
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

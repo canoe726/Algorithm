@@ -1,0 +1,54 @@
+2
+4
+3 2 3 2
+6
+6 4 5 5 5 5
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int clothes[100001];
+int check[100001];
+
+bool cmp(int a, int b) {
+	return a > b;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {		
+		memset(clothes, 0, sizeof(clothes));
+		memset(check, 0, sizeof(check));
+		
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			cin >> clothes[j];
+		}
+
+		sort(clothes, clothes + N, cmp);
+
+		for (j = 2; j < N; j += 3) {
+			check[j] = 1;
+		}
+
+		for (j = 0; j < N; j++) {
+			if (!check[j]) {
+				answer += clothes[j];
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << " " << "\n";
+	}
+
+	return 0;
+}

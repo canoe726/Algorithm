@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N;
+		cin >> N;
+		getchar();
+
+		int farm[50][50] = { 0 };
+
+		for (j = 0; j < N; j++) {
+			string input;
+			cin >> input;
+
+			for (k = 0; k < input.size(); k++) {
+				farm[j][k] = input[k] - '0';
+			}
+		}
+
+		for (j = 0; j < N / 2; j++) {
+			for (k = 0; k < N / 2 - j; k++) {
+				farm[j][k] = 0;
+			}
+
+			for (k = N / 2 + 1 + j; k < N; k++) {
+				farm[j][k] = 0;
+			}
+		}
+
+		for (j = N / 2 + 1; j < N; j++) {
+			for (k = 0; k < j - N / 2; k++) {
+				farm[j][k] = 0;
+			}
+
+			for (k = N / 2 + (N - j); k < N; k++) {
+				farm[j][k] = 0;
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				answer += farm[j][k];
+			}
+		}
+
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

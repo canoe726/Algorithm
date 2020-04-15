@@ -1,0 +1,122 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class MAP {
+public:
+	int width;
+	int height;
+	int res;
+
+	MAP(int w, int h, int r) {
+		width = w;
+		height = h;
+		res = r;
+	}
+};
+
+int map[100][100];
+int visited[100][100];
+vector<MAP> info;
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+bool cmp(MAP a, MAP b) {
+	if (a.res == b.res) {
+		return a.height < b.height;
+	}
+	else {
+		return a.res < b.res;
+	}
+}
+
+void bfs_search(int y, int x, int N) {
+
+	pair<int, int> leftUp = make_pair(y, x);
+	pair<int, int> rightDown = make_pair(y, x);
+
+	queue<pair<int, int>> pos;
+	pos.push(make_pair(y, x));
+	visited[y][x] = 1;
+
+	while (!pos.empty()) {
+		pair<int, int > cur = pos.front();
+		pos.pop();
+
+		int i;
+		for (i = 0; i < 4; i++) {
+			pair<int, int > next;
+			next = make_pair(cur.first + dir[i][0], cur.second + dir[i][1]);
+
+			if ((next.first >= 0 && next.first < N) &&
+				(next.second >= 0 && next.second < N)) {
+
+				if (!visited[next.first][next.second] && map[next.first][next.second] > 0) {
+					visited[next.first][next.second] = 1;
+					pos.push(make_pair(next.first, next.second));
+
+					if (rightDown.first <= next.first &&
+						rightDown.second <= next.second) {
+
+						rightDown.first = next.first;
+						rightDown.second = next.second;
+					}
+				}
+			}
+		}
+	}
+
+	pair<int, int> s = make_pair(rightDown.first - leftUp.first + 1, rightDown.second - leftUp.second + 1);
+	info.push_back(MAP(s.second, s.first, s.first * s.second));
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(map, 0, sizeof(map));
+		memset(visited, 0, sizeof(visited));
+
+		int answer = 0;
+		
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+		
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (!visited[j][k] && map[j][k] > 0) {
+					bfs_search(j, k, N);
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << info.size() << " ";
+
+		sort(info.begin(), info.end(), cmp);
+
+		for (j = 0; j < info.size(); j++) {
+			cout << info[j].height << " " << info[j].width << " ";
+		}
+
+		cout << "\n";
+
+		info.clear();
+	}
+
+	return 0;
+}

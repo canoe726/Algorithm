@@ -1,0 +1,51 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+vector<string> name;
+
+bool cmp(string a, string b) {
+	if (a.size() == b.size()) {
+		return a < b;
+	}
+	else {
+		return a.size() < b.size();
+	}
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N;
+		cin >> N;
+		getchar();
+
+		name = vector<string>(N);
+
+		for (j = 0; j < N; j++) {
+			cin >> name[j];
+		}
+
+		sort(name.begin(), name.end(), cmp);
+		name.erase(unique(name.begin(), name.end()), name.end());
+
+		cout << "#" << i + 1 << "\n";
+		for (j = 0; j < name.size(); j++) {
+			cout << name[j] << "\n";
+		}
+
+		name.clear();
+	}
+
+	return 0;
+}

@@ -1,0 +1,140 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+int map[20][20];
+bool operated[20][20];
+
+// (y,x), 상 하 좌 우 [0,1,2,3]
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+void move_tile(int y, int x, int mode, int N) {
+
+	int cur_y = y;
+	int cur_x = x;
+
+	while (true) {
+
+		int next_y = cur_y + dir[mode][0];
+		int next_x = cur_x + dir[mode][1];
+
+		if ((next_y >= 0 && next_y < N) &&
+			(next_x >= 0 && next_x < N)) {
+
+			// 0 이면 계속 위로 mode 방향으로 옮김
+			if (map[cur_y][cur_x] != 0 && map[next_y][next_x] == 0) {
+				map[next_y][next_x] = map[cur_y][cur_x];
+				map[cur_y][cur_x] = 0;
+
+				cur_y = next_y;
+				cur_x = next_x;
+			}
+			// 연산되지 않은 인덱스이면서, 더할 수 있다면 연산
+			else if (!operated[next_y][next_x] &&
+					 !operated[cur_y][cur_x] &&
+	 				 map[next_y][next_x] != 0 &&
+					 map[cur_y][cur_x] != 0 &&
+					 (map[next_y][next_x] == map[cur_y][cur_x])) {
+				
+				operated[next_y][next_x] = true;
+				map[next_y][next_x] *= 2;
+				map[cur_y][cur_x] = 0;
+
+				cur_y = next_y;
+				cur_x = next_x;
+			}
+			else {
+				break;
+			}
+		}
+		else {
+			break;
+		}
+	}
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(map, 0, sizeof(map));
+		memset(operated, false, sizeof(operated));
+
+		int N;
+		cin >> N;
+
+		string direction;
+		cin >> direction;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+
+		int mode = -1;
+
+		if (direction == "up" || direction == "left") {
+			if (direction == "up") {
+				mode = 0;
+			}
+			else {
+				mode = 2;
+			}
+
+			for (j = 0; j < N; j++) {
+				for (k = 0; k < N; k++) {
+					move_tile(j, k, mode, N);
+				}
+			}
+		}
+		else {
+			if (direction == "down") {
+				mode = 1;
+			}
+			else {
+				mode = 3;
+			}
+
+			for (j = N - 1; j >= 0; j--) {
+				for (k = N - 1; k >= 0; k--) {
+					move_tile(j, k, mode, N);
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << "\n";
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cout << map[j][k] << " ";
+			}
+			cout << "\n";
+		}
+	}
+
+	return 0;
+}
+
+/*
+1. 일단 0,0 -> N,N 까지 전부 dir 방향으로 이동시킨다.
+(이미 값이 바뀐 곳이면 값 바꾸기 금지)
+
+up
+8 8 4 8 8
+8 4 4 2 4
+2 4 2 0 8
+0 0 0 0 0
+0 0 0 0 0
+
+1 0 1 1 0
+0 0 1 0 0
+0 1 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+*/

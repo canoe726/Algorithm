@@ -1,0 +1,56 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+void swap(char *a, char *b) {
+	char *temp = a;
+	a = b;
+	b = temp;
+}
+
+int dfs_search(string input, int idx, int cnt, int limit) {
+
+	if (cnt == limit) {
+		return atoi(input.c_str());
+	}
+
+	int ret = 0;
+
+	int i, j;
+	for (i = idx; i < input.size(); i++) {
+		for (j = i + 1; j < input.size(); j++) {
+			if (input[i] <= input[j]) {
+				swap(input[i], input[j]);
+				ret = max(ret, dfs_search(input, i, cnt + 1, limit));
+				swap(input[i], input[j]);
+			}
+		}
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = -1;
+
+		int num, cnt;
+		cin >> num >> cnt;
+
+		string input = to_string(num);
+
+		answer = dfs_search(input, 0, 0, cnt);
+		
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

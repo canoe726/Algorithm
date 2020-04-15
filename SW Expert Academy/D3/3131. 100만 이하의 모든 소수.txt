@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+const int SIZE = 1000000;
+
+bool prime[SIZE + 1];
+
+void find_prime() {
+	memset(prime, true, sizeof(prime));
+
+	prime[0] = false;
+	prime[1] = false;
+
+	int i, j;
+
+	for (i = 2; i * i <= SIZE; i++) {
+		if (prime[i]) {
+			for (j = i * 2; j <= SIZE; j += i) {
+				prime[j] = false;
+			}
+		}
+	}
+}
+
+int main()
+{
+	find_prime();
+
+	int T = 1;
+	// cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		for (j = 0; j <= SIZE; j++) {
+			if (prime[j]) {
+				printf("%d ", j);
+			}
+		}
+		printf("\n");
+	}
+
+	return 0;
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+int diamond[1000];
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(diamond, 0, sizeof(diamond));
+
+		int answer = 0;
+
+		int N, K;
+		cin >> N >> K;
+
+		for (j = 0; j < N; j++) {
+			cin >> diamond[j];
+		}
+
+		sort(diamond, diamond + N);
+
+		int max_cnt = -1;
+		int cnt;
+		for (j = 0; j < N - 1; j++) {
+			cnt = 1;
+			for (k = j + 1; k < N; k++) {
+				if (abs(diamond[j] - diamond[k]) <= K) {
+					cnt++;
+				}
+				else {
+					break;
+				}
+			}
+
+			if (max_cnt < cnt) {
+				max_cnt = cnt;
+			}
+		}
+
+		answer = max_cnt;
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

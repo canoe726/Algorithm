@@ -1,0 +1,42 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+stack<char> pipe;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+		
+		string input;
+		cin >> input;
+
+		for (j = 0; j < input.size(); j++) {
+			if (input[j] == '(') {
+				pipe.push(input[j]);
+			}
+			else {
+				if (input[j - 1] == '(') {
+					answer += pipe.size() - 1;
+					pipe.pop();
+				}
+				else {
+					answer += 1;
+					pipe.pop();
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

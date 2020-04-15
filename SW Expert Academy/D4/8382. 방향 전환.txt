@@ -1,0 +1,51 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int x1, y1, x2, y2;
+		cin >> x1 >> y1 >> x2 >> y2;
+
+		int x_gap = abs(x1 - x2);
+		int y_gap = abs(y1 - y2);
+
+		if (abs(x_gap - y_gap) == 0 || abs(x_gap - y_gap) == 1) {
+			answer = x_gap + y_gap;
+		}
+		else {
+			if ((x_gap % 2 == 0 && y_gap % 2 == 0) ||
+				(x_gap % 2 == 1 && y_gap % 2 == 1)) {
+
+				if (x_gap > y_gap) {
+					answer = x_gap * 2;
+				}
+				else {
+					answer = y_gap * 2;
+				}
+			}
+			else {
+				if (x_gap > y_gap) {
+					answer = x_gap * 2 - 1;
+				}
+				else {
+					answer = y_gap * 2 - 1;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

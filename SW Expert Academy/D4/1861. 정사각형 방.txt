@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int map[1000][1000];
+int dp[1000][1000];
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+void dfs_search(int y, int x, int N) {
+
+	dp[y][x] = 1;
+
+	int i;
+	for (i = 0; i < 4; i++) {
+		pair<int, int > next = make_pair(y + dir[i][0], x + dir[i][1]);
+
+		if ((next.first >= 0 && next.first < N) &&
+			(next.second >= 0 && next.second < N)) {
+
+			if (map[y][x] + 1 == map[next.first][next.second]) {
+				
+				if (dp[next.first][next.second] == 0) {
+					dfs_search(next.first, next.second, N);
+				}
+
+				dp[y][x] = max(dp[y][x], dp[next.first][next.second] + 1);
+			}
+		}
+	}
+
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(map, 0, sizeof(map));
+		memset(dp, 0, sizeof(dp));
+
+		int room = 987654321;
+		int cnt = -1;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (dp[j][k] == 0) {
+					dfs_search(j, k, N);
+				}
+			}
+		}
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (cnt < dp[j][k]) {
+					cnt = dp[j][k];
+					room = map[j][k];
+				}
+				else if (cnt == dp[j][k]) {
+					room = min(room, map[j][k]);
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << room << " " << cnt << "\n";
+	}
+
+	return 0;
+}

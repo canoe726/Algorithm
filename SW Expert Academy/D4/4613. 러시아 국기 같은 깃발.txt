@@ -1,0 +1,75 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+char flag[50][50];
+// 0 : W, 1 : B, 2 : R
+int flag_cnt[50][3];
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		memset(flag, '\0', sizeof(flag));
+		memset(flag_cnt, 0, sizeof(flag_cnt));
+
+		int answer;
+
+		int N, M;
+		cin >> N >> M;
+
+		int sum = 0;
+
+		int w_cnt = 0, b_cnt = 0, r_cnt = 0;
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < M; k++) {
+				cin >> flag[j][k];
+
+				if (flag[j][k] == 'W') {
+					flag_cnt[j][0]++;
+				}
+				else if (flag[j][k] == 'B') {
+					flag_cnt[j][1]++;
+				}
+				else {
+					flag_cnt[j][2]++;
+				}
+			}
+		}
+
+		for (j = 0; j < N - 2; j++) {
+			for (k = j + 1; k < N - 1; k++) {
+				w_cnt = 0;
+				b_cnt = 0;
+				r_cnt = 0;
+
+				// White range
+				for (l = 0; l <= j; l++) {
+					w_cnt += flag_cnt[l][0];
+				}
+				// Blue range
+				for (l = j + 1; l <= k; l++) {
+					b_cnt += flag_cnt[l][1];
+				}
+				// Red range
+				for (l = k + 1; l < N; l++) {
+					r_cnt += flag_cnt[l][2];
+				}
+
+				sum = max(sum, w_cnt + b_cnt + r_cnt);
+			}
+		}
+
+		answer = N * M - sum;
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

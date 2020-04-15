@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = -1;
+
+		int croak[5] = { 0 };
+
+		bool frogs = true;
+
+		string input;
+		cin >> input;
+
+		for (j = 0; j < input.size(); j++) {
+
+			switch (input[j]) {
+			case 'c':
+				croak[0]++;
+				break;
+
+			case 'r':
+				croak[0]--;
+				croak[1]++;
+				if (croak[0] < 0) {
+					frogs = false;
+				}
+				break;
+
+			case 'o':
+				croak[1]--;
+				croak[2]++;
+				if (croak[1] < 0) {
+					frogs = false;
+				}
+				break;
+
+			case 'a':
+				croak[2]--;
+				croak[3]++;
+				if (croak[2] < 0) {
+					frogs = false;
+				}
+				break;
+
+			case 'k':
+				croak[3]--;
+				if (croak[3] < 0) {
+					frogs = false;
+				}
+				break;
+			}
+
+			if (!frogs) {
+				break;
+			}
+
+			answer = max(answer, croak[0] + croak[1] + croak[2] + croak[3]);
+		}
+
+		for (j = 0; j < 5; j++) {
+			if (croak[j] > 0) {
+				frogs = false;
+			}
+		}
+
+		if (!frogs) {
+			answer = -1;
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

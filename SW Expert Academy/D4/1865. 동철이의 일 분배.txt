@@ -1,0 +1,66 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+int visited[16];
+int work[16][16];
+
+double answer = 0.0;
+
+void dfs_search(int row, int N, double res) {
+	if (row == N) {
+		if (answer < res) {
+			answer = res;
+		}
+		return;
+	}
+
+	int i;
+	for (i = 0; i < N; i++) {
+		if (!visited[i] && work[row][i] != 0) {
+			res *= (work[row][i] * 0.01);
+			visited[i] = 1;
+
+			if (answer < res) {
+				dfs_search(row + 1, N, res);
+			}
+			
+			res /= (work[row][i] * 0.01);
+			visited[i] = 0;
+		}
+	}
+
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		answer = 0.0;
+		memset(visited, 0, sizeof(visited));
+		memset(work, 0, sizeof(work));
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> work[j][k];
+			}
+		}
+
+		dfs_search(0, N, 1.0);
+
+		answer *= 100;
+
+		printf("#%d %06lf\n", i + 1, answer);
+		// cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+unsigned long long find_decimal(string binary, string tenary) {
+
+	unsigned long long two = 0;
+	unsigned long long three = 0;
+
+	int i;
+	for (i = 0; i < binary.size(); i++) {
+		if (binary[binary.size() - 1 - i] == '1') {
+			two += pow(2, i);
+		}
+	}
+
+	for (i = 0; i < tenary.size(); i++) {
+		if (tenary[tenary.size() - 1 - i] >= '1') {
+			three += (pow(3, i) * (tenary[tenary.size() - 1 - i] - '0'));
+		}
+	}
+
+	if (two == three) {
+		return two;
+	}
+	else {
+		return 0;
+	}
+}
+
+unsigned long long find_money(string binary, string tenary) {
+
+	unsigned long long ret = 0;
+
+	int i, j, k, l;
+	for (i = 0; i < binary.size(); i++) {
+
+		for (j = 0; j < tenary.size(); j++) {
+
+			for (k = 0; k < 2; k++) {
+
+				if (binary[i] == '1') { binary[i] = '0'; }
+				else { binary[i] = '1'; }
+
+				for (l = 0; l < 3; l++) {
+
+					tenary[j] += 1;
+					if (tenary[j] == '3') { tenary[j] = '0'; }
+
+					ret = find_decimal(binary, tenary);
+					if (ret != 0) {
+						return ret;
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++) {
+		unsigned long long answer = 0;
+		getchar();
+
+		string binary;
+		cin >> binary;
+
+		string tenary;
+		cin >> tenary;
+
+		answer = find_money(binary, tenary);
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

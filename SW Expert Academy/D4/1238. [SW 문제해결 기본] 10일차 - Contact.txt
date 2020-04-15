@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int visited[101];
+vector<vector<int>> graph;
+vector<int> nodes;
+vector<pair<int, int>> pos;
+
+int graph_search() {
+	
+	int i, j;
+	bool leaf = true;
+	int ret = -1;
+	int len = nodes.size();
+	
+	for (i = 0; i < len; i++) {
+		int node = nodes[0];
+		nodes.erase(nodes.begin());
+
+		if (ret < node) {
+			ret = node;
+		}
+
+		for (j = 0; j < graph[node].size(); j++) {
+			int cur_node = graph[node][j];
+
+			if (!visited[cur_node]) {
+				visited[cur_node] = 1;
+				nodes.push_back(cur_node);
+				leaf = false;
+			}
+		}
+	}
+
+	if (leaf) { return ret; }
+	else { graph_search(); }
+}
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		memset(visited, 0, sizeof(visited));
+		graph.clear();
+		pos.clear();
+		nodes.clear();
+		graph = vector<vector<int>>(101);
+
+		int answer = 0;
+
+		int N, node;
+		cin >> N >> node;
+		for (j = 0; j < N; j+=2) {
+			int from, to;
+			cin >> from >> to;
+
+			pos.push_back(make_pair(from, to));
+		}
+
+		unique(pos.begin(), pos.end());
+		sort(pos.begin(), pos.end());
+
+		for (j = 0; j < pos.size(); j++) {
+			graph[pos[j].first].push_back(pos[j].second);
+		}
+		
+		for (j = 0; j < 101; j++) {
+			sort(graph[j].begin(), graph[j].end());
+		}
+
+		nodes.push_back(node);
+		visited[node] = 1;
+		
+		answer = graph_search();
+
+		cout << "#" << i + 1 << " " << answer << " " << "\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<pair<long long, long long>> answer(91);
+
+int main()
+{
+	int K = 1;
+
+	long long start = 2;
+	long long end = start - 1;
+
+	while (K <= 90) {
+		answer[K] = make_pair(start, end);
+
+		long long temp = end;
+
+		end = start;
+		start = start + temp;
+
+		K += 1;
+	}
+
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int k;
+		cin >> k;
+
+		cout << "#" << i + 1 << " " << answer[k].first << " " << answer[k].second << "\n";
+
+		answer.clear();
+	}
+
+	return 0;
+}

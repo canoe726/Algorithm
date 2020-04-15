@@ -48,3 +48,62 @@ int main()
 		cout << "#" << i + 1 << " " << landscape << endl;
 	}
 }
+
+// 수정 본
+#include <iostream>
+#include <cstring>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int T = 10;
+	// cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		
+		int answer = 0;
+
+		int home[1001];
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			cin >> home[j];
+		}
+
+		for (j = 2; j < N - 2; j++) {
+
+			int max = -1;
+			bool exist = true;
+
+			for (k = -2; k <= 2; k++) {
+				if (k == 0) { 
+					continue;
+				}
+				else {
+					if (home[j] > home[j - k]) {
+						if (max < home[j - k]) {
+							max = home[j - k];
+						}
+					}
+					else {
+						exist = false;
+						break;
+					}
+				}
+			}
+
+			if (exist) {
+				answer += (home[j] - max);
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

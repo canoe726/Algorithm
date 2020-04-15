@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+vector<vector<int>> graph;
+int visited[101];
+
+int find_group(int cur) {
+
+	queue<int> node;
+	node.push(cur);
+	visited[cur] = 1;
+
+	while (!node.empty()) {
+
+		int n = node.front();
+		node.pop();
+
+		int i;
+		for (i = 0; i < graph[n].size(); i++) {
+			int next = graph[n][i];
+
+			if (!visited[next]) {
+				visited[next] = 1;
+				node.push(next);
+			}
+		}
+	}
+
+	return 1;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		memset(visited, 0, sizeof(visited));
+
+		int answer = 0;
+
+		int N, M;
+		cin >> N >> M;
+		getchar();
+
+		graph = vector<vector<int>>(N + 1);
+
+		for (j = 0; j < M; j++) {
+			int left, right;
+			cin >> left >> right;
+
+			graph[left].push_back(right);
+			graph[right].push_back(left);
+		}
+
+		for (j = 1; j < N + 1; j++) {
+			sort(graph[j].begin(), graph[j].end());
+		}
+
+ 		for (j = 1; j < N + 1; j++) {
+			if (!visited[j]) {
+				answer += find_group(j);
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

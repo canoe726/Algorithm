@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+
+string keyboard[8] = { "abc","def","ghi","jkl","mno","pqrs","tuv","wxyz" };
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j, k, l;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		string S;
+		cin >> S;
+
+		int N;
+		cin >> N;
+		getchar();
+
+		string input;
+		getline(cin, input);
+		 
+		vector<string> str;
+		string token;
+		stringstream stream(input);
+		while (stream >> token) {
+			str.push_back(token); 
+		}
+
+		for (j = 0; j < N; j++) {
+			if (S.size() == str[j].size()) {
+				int cnt = 0;
+				for (k = 0; k < str[j].size(); k++) {
+					for (l = 0; l < keyboard[S[k] - '0' - 2].size(); l++) {
+						if (str[j][k] == keyboard[S[k] - '0' - 2][l]) {
+							cnt++;
+							break;
+						}
+					}
+				}
+
+				if (cnt == S.size()) {
+					answer++;
+				}
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	vector<long long> num;
+
+	int i, j, k;
+	for (i = 0; i < 10; i++) {
+		for (j = 0; j < 10; j++) {
+			long long res = pow(2.0, i) * pow(5.0, j);
+			num.push_back(res);
+		}
+	}
+	
+	sort(num.begin(), num.end());
+
+	for (i = 0; i < num.size(); i++) {
+		for (j = 1; j < 10; j++) {
+			string temp = "";
+			temp.push_back(j + '0');
+			temp += to_string(num[i]);
+
+			long long res = atoll(temp.c_str());
+
+			if (res % num[i] != 0) {
+				num.erase(num.begin() + i);
+				i--;
+				break;
+			}
+		}
+	}
+	
+	int T;
+	cin >> T;
+
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+		
+		int X;
+		cin >> X;
+
+		for (j = 0; j < num.size(); j++) {
+			if (X >= num[j]) {
+				answer++;
+			}
+			else {
+				break;
+			}
+		}
+
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

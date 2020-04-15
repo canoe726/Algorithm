@@ -1,0 +1,90 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+// 퀸 : -1, 퀸이 이동한 누적 횟수: 0~...
+int map[10][10];
+// (y,x), 왼쪽위, 위, 오른쪽위, 오른쪽, 오른쪽아래, 아래, 왼쪽아래, 왼쪽
+int dir[8][2] = { {-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1} };
+
+// 퀸의 이동할 수 있는 범위 계산
+void fill_map(int y, int x, int N, int mode) {
+
+	int i;
+	for (i = 0; i < 8; i++) {
+		int cur_y = y;
+		int cur_x = x;
+
+		while (true) {
+			cur_y += dir[i][0];
+			cur_x += dir[i][1];
+
+			if ((cur_y >= 0 && cur_y < N) &&
+				(cur_x >= 0 && cur_x < N)) {
+
+				if (mode == 1) {	// 1 이면 퀸 이동거리 누적
+					map[cur_y][cur_x] += 1;
+				}
+				else {				// -1 이면 누적된 퀸 이동거리 제거
+					map[cur_y][cur_x] -= 1;
+				}
+			}
+			else {
+				break;
+			}
+		}
+	}
+}
+
+int n_queen_search(int y, int x, int N, int cnt) {
+	// 퀸이 N 개면 정답 1 증가
+	if (cnt == N) {
+		return 1;
+	}
+
+	int ret = 0;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		if (map[i][x] == 0) {
+			map[i][x] = -1;		// 맵에 퀸 표시
+			fill_map(i, x, N, 1);
+
+			ret += n_queen_search(i, x + 1, N, cnt + 1);
+
+			map[i][x] = 0;		// 퀸 표시 제거
+			fill_map(i, x, N, -1);
+		}
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {		
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			memset(map, 0, sizeof(map));
+
+			// 0~N 열, 0 행 부터 재귀적으로 탐색
+			map[j][0] = -1;
+			fill_map(j, 0, N, 1);
+
+			answer += n_queen_search(j, 1, N, 1);
+		}
+
+		cout << "#" << i + 1 << " " << answer << " " << "\n";
+	}
+
+	return 0;
+}

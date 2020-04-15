@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int T;
+	cin >> T;
+	getchar();
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		string input;
+		getline(cin, input);
+
+		vector<string> str;
+		string token;
+		stringstream stream(input);
+		while (stream >> token) {
+			str.push_back(token);
+		}
+
+		string A = str[0];
+		string B = str[1];
+
+		bool same;
+		for (j = 0; j < (A.size() - B.size() + 1); j++) {
+			same = true;
+			if (A[j] == B[0]) {
+				for (k = 0; k < B.size(); k++) {
+					if (A[j + k] != B[k]) {
+						same = false;
+						break;
+					}
+				}
+
+				if (same) {
+					answer++;
+					j += B.size() - 1;
+					continue;
+				}
+			}
+
+			answer++;
+		}
+
+		if (j != A.size()) {
+			answer += (A.size() - j);
+		}
+		
+		cout << "#" << i + 1 << " " << answer << "\n";
+	}
+
+	return 0;
+}

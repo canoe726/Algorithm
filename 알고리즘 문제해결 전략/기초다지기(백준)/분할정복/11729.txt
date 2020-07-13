@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+/*
+1. ¿øÆÇÀÌ 1°³ => 1¹ø
+2. ¿øÆÇÀÌ n°³
+   1) n-1°³ (1)¹ø ±âµÕ -> (2)¹ø ±âµÕ
+   2)   1°³ (1)¹ø ±âµÕ -> (3)¹ø ±âµÕ
+   3) n-1°³ (2)¹ø ±âµÕ -> (3)¹ø ±âµÕ
+*/
+
+vector<pair<int, int>> step;
+int answer = 0;
+
+void move(int from, int to)
+{
+	step.push_back(make_pair(from, to));
+	answer++;
+}
+
+void hanoi(int N, int from, int by, int to)
+{
+	if (N == 1)
+	{
+		move(from, to);
+	}
+	else
+	{
+		hanoi(N - 1, from, to, by);
+		move(from, to);
+		hanoi(N - 1, by, from, to);
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	hanoi(N, 1, 2, 3);
+
+	cout << answer << '\n';
+
+	int i;
+	for (i = 0; i < step.size(); i++)
+	{
+		printf("%d %d\n", step[i].first, step[i].second);
+	}
+}

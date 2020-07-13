@@ -1,0 +1,88 @@
+#include<iostream>
+#include<queue>
+#include<string>
+
+using namespace std;
+
+int registers[10000] = { 0 };
+
+string find_min_commend(int A, int B)
+{	
+	queue<pair<int, string>> q;
+	q.push(make_pair(A, ""));
+	registers[A] = 1;
+
+	while (!q.empty())
+	{
+		int cur_num = q.front().first;
+		string cur_com = q.front().second;
+		q.pop();
+
+		if (cur_num == B)
+		{
+			return cur_com;
+		}
+		
+		int change;
+		// D
+		change = cur_num * 2;
+		if (change > 9999)
+		{
+			change = change % 10000;
+		}
+
+		if (!registers[change])
+		{
+			registers[change] = 1;
+			q.push(make_pair(change, cur_com + 'D'));
+		}
+
+		// S
+		change = cur_num - 1;
+		if (change < 0)
+		{
+			change = 9999;
+		}
+
+		if (!registers[change])
+		{
+			registers[change] = 1;
+			q.push(make_pair(change, cur_com + 'S'));
+		}
+
+		// L
+		change = (cur_num % 1000) * 10 + cur_num / 1000;
+		if (!registers[change])
+		{
+			registers[change] = 1;
+			q.push(make_pair(change, cur_com + 'L'));
+		}
+
+		// R
+		change = (cur_num % 10) * 1000 + cur_num / 10;
+		if (!registers[change])
+		{
+			registers[change] = 1;
+			q.push(make_pair(change, cur_com + 'R'));
+		}
+	}
+
+	return "";
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++)
+	{
+		memset(registers, 0, sizeof(registers));
+
+		int A, B;
+		cin >> A >> B;
+
+		cout << find_min_commend(A, B) << "\n";
+	}
+}

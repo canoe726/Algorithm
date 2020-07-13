@@ -1,0 +1,23 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main()
+{
+	while(1)
+	{
+		string str;
+		getline(cin, str);
+
+		if ((str[0] == '0') && (str[2] == '0'))
+		{
+			break;
+		}
+		else
+		{
+			int sum = (str[0] - '0') + (str[2] - '0');
+			cout << sum << endl;
+		}
+	}
+}

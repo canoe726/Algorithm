@@ -1,0 +1,24 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main()
+{
+	int x, y;
+	cin >> x >> y;
+
+	int month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	string days[7] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+	
+	int total_days = 0;
+	int i;
+	for (i = 0; i < x - 1; i++)
+	{
+		total_days += month[i];
+	}
+	total_days += y;
+
+	cout << days[total_days % 7] << endl;
+
+}

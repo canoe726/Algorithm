@@ -1,0 +1,73 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int N, C;
+int pos[200001] = { 0 };
+
+int same_dist(int dist)
+{
+	int cnt = 0;
+	int prev = pos[0];
+
+	int i;
+	for (i = 1; i < N; i++)
+	{
+		if (pos[i] - prev >= dist)
+		{
+			cnt++;
+			prev = pos[i];
+		}
+	}
+
+	if (cnt >= (C - 1))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int max_dist()
+{
+	int result = 0;
+	int start = 1;
+	int end = pos[N - 1] - pos[0];
+
+	while (start <= end)
+	{
+		int mid = (start + end) / 2;
+
+		if (same_dist(mid))
+		{
+			result = max(result, mid);
+			start = mid + 1;
+		}
+		else
+		{
+			end = mid - 1;
+		}
+	}
+
+	return end;
+}
+
+int main()
+{
+	cin >> N >> C;
+	
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> pos[i];
+	}
+
+	sort(pos, pos + N);
+
+	cout << max_dist() << endl;
+}
+
+

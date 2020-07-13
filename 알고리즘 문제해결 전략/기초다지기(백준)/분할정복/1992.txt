@@ -1,0 +1,63 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int quadtree[65][65] = { 0 };
+string answer = "";
+
+void compress(int y, int x, int size)
+{
+	int i, j, same = 1;
+	for (i = y; i < y + size; i++)
+	{
+		for (j = x; j < x + size; j++)
+		{
+			if (quadtree[i][j] != quadtree[y][x])
+			{
+				same = 0;
+			}
+		}
+	}
+
+	if (same == 0)
+	{
+		answer.push_back('(');
+		int newsize = size / 2;
+		for (i = 0; i < 2; i++)
+		{
+			for (j = 0; j < 2; j++)
+			{
+				compress(y + i * newsize, x + j * newsize, newsize);
+			}
+		}
+		answer.push_back(')');
+	}
+	else
+	{
+		answer.push_back(quadtree[y][x] + '0');
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		string str;
+		cin >> str;
+
+		for (j = 0; j < str.size(); j++)
+		{
+			quadtree[i][j] = str[j] - '0';
+		}
+	}
+
+	compress(0, 0, N);
+
+
+	cout << answer << "\n";
+}

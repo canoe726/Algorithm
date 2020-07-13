@@ -1,0 +1,28 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	int loop1 = N - 1, loop2 = 1, plus = 1;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 1; j <= loop1; j++)
+		{
+			cout << " ";
+		}
+		for (j = 1; j <= loop2; j++)
+		{
+			cout << "* ";
+		}
+		cout << endl;
+		
+		loop1 -= plus;
+		loop2 += plus;
+	}
+}

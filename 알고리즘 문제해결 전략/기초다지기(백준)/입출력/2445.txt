@@ -1,0 +1,41 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	int loop1 = 1, loop2 = 2 * N - 2, plus1 = 1, plus2 = 2;
+	for (i = 0; i < (2 * N - 1); i++)
+	{
+		for (j = 1; j <= loop1; j++)
+		{
+			cout << "*";
+		}
+		for (j = 1; j <= loop2; j++)
+		{
+			cout << " ";
+		}
+		for (j = 1; j <= loop1; j++)
+		{
+			cout << "*";
+		}
+		cout << endl;
+		
+		if (loop1 == N)
+		{
+			plus1 *= -1;
+		}
+		loop1 += plus1;
+
+		if (loop2 == 0)
+		{
+			plus2 *= -1;
+		}
+		loop2 -= plus2;
+	}
+}

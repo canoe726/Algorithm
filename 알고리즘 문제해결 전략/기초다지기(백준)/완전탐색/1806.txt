@@ -1,0 +1,53 @@
+#include<iostream>
+#include<climits>
+
+using namespace std;
+
+int arr[100001] = { 0 };
+
+int main()
+{
+	int N, S;
+	cin >> N >> S;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> arr[i];
+	}
+
+	int start = 0, end = 0;
+	int min_length = INT_MAX, sum = 0;
+
+	while (start < N)
+	{
+		if (sum < S && end < N)
+		{
+			sum += arr[end];
+			end++;
+		}
+		else
+		{
+			sum -= arr[start];
+			start++;
+		}
+
+		if (sum >= S)
+		{
+			if (min_length > (end - start))
+			{
+				min_length = end - start;
+			}
+		}
+	}
+
+	if (min_length == INT_MAX)
+	{
+		cout << 0 << "\n";
+	}
+	else
+	{
+		cout << min_length << "\n";
+	}
+}
+

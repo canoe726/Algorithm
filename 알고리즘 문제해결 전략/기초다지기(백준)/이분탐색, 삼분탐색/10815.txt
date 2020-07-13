@@ -1,0 +1,63 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int my_card[500001] = { 0 };
+int all_card[500001] = { 0 };
+
+int binary_search(int N, int target)
+{
+	int start = 0;
+	int end = N;
+	int mid;
+	int answer = 0;
+
+	while (start <= end)
+	{
+		mid = (start + end) / 2;
+
+		if (my_card[mid] == target)
+		{
+			answer = 1;
+			break;
+		}
+
+		if (target < my_card[mid])
+		{
+			end = mid - 1;
+		}
+		else
+		{
+			start = mid + 1;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int N, M;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> my_card[i];
+	}
+
+	cin >> M;
+	for (i = 0; i < M; i++)
+	{
+		cin >> all_card[i];
+	}
+
+	sort(my_card, my_card + N);
+
+	for (i = 0; i < M - 1; i++)
+	{
+		cout << binary_search(N, all_card[i]) << " ";
+	}
+	cout << binary_search(N, all_card[i]) << "\n";
+}

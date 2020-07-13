@@ -1,0 +1,50 @@
+#include <iostream>
+#include <climits>
+
+using namespace std;
+
+int lan_cable[10001] = { 0 };
+
+long long binary_search(int K, int N)
+{
+	long long start = 0;
+	long long end = LLONG_MAX;
+	long long mid;
+	int divide;
+
+	while (start <= end)
+	{
+		divide = 0;
+		mid = (start + end) / 2;
+
+		for (int i = 0; i < K; i++)
+		{
+			divide += (lan_cable[i] / mid);
+		}
+
+		if (divide < N)
+		{
+			end = mid - 1;
+		}
+		else
+		{
+			start = mid + 1;
+		}
+	}
+
+	return end;
+}
+
+int main()
+{
+	int K, N;
+	cin >> K >> N;
+
+	int i;
+	for (i = 0; i < K; i++)
+	{
+		cin >> lan_cable[i];
+	}
+
+	cout << binary_search(K, N) << "\n";
+}

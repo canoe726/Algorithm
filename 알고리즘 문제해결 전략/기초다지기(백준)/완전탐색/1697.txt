@@ -1,0 +1,67 @@
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+int visited[100001] = { 0 };
+queue<int> q;
+int N, K;
+
+int bfs()
+{
+	int count = 0, q_size, i;
+	q.push(N);
+	visited[N] = 1;
+
+	while (1)
+	{
+		q_size = q.size();
+
+		for (i = 0; i < q_size; i++)
+		{
+			int cur = q.front();
+			q.pop();
+
+			if (cur == K)
+			{
+				return count;
+			}
+
+			if (cur > 0 )
+			{
+				if (!visited[cur - 1])
+				{
+					visited[cur - 1] = 1;
+					q.push(cur - 1);
+				}
+			}
+
+			if (cur < 100000)
+			{
+				if (!visited[cur + 1])
+				{
+					visited[cur + 1] = 1;
+					q.push(cur + 1);
+				}
+			}
+
+			if (cur * 2 <= 100000)
+			{
+				if (!visited[cur * 2])
+				{
+					visited[cur * 2] = 1;
+					q.push(cur * 2);
+				}
+			}
+		}
+
+		count++;
+	}
+}
+
+int main()
+{
+	cin >> N >> K;
+	
+	cout << bfs() << endl;
+}

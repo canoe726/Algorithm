@@ -1,0 +1,59 @@
+#include <iostream>
+
+using namespace std;
+
+int sheet[2187][2187] = { 0 };
+// -1, 0, 1
+int answer[3] = { 0 };
+
+void divide_sheet(int y, int x, int size)
+{
+	int i, j, exist = 1;
+	for (i = y; i < y + size; i++)
+	{
+		for (j = x; j < x + size; j++)
+		{
+			if (sheet[y][x] != sheet[i][j])
+			{
+				exist = 0;
+			}
+		}
+	}
+
+	if (exist)
+	{
+		answer[sheet[y][x] + 1]++;
+	}
+	else
+	{
+		for (i = 0; i < 3; i++)
+		{
+			for (j = 0; j < 3; j++)
+			{
+				divide_sheet(y + (i * size / 3), x + (j * size / 3), size / 3);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			cin >> sheet[i][j];
+		}
+	}
+
+	divide_sheet(0, 0, N);
+
+	for (i = 0; i < 3; i++)
+	{
+		cout << answer[i] << "\n";
+	}
+}

@@ -1,0 +1,93 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+int answer = 0;
+int N, M, K;
+string find_str;
+char alphabet_map[100][100] = { '\0' };
+int dp[100][100][80];
+// (y,x) : up down left right
+int dir[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+
+int find_all_string(int y, int x, int index)
+{
+	if (dp[y][x][index] != -1)
+	{
+		return dp[y][x][index];
+	}
+	// find string
+	if (index >= find_str.size() - 1)
+	{
+		return 1;
+	}
+
+	dp[y][x][index] = 0;
+	int i, j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 1; j <= K; j++)
+		{
+			int cur_y = y + dir[i][0] * j;
+			int cur_x = x + dir[i][1] * j;
+
+			if ((cur_y >= 0 && cur_y < N) &&
+				(cur_x >= 0 && cur_x < M) &&
+				alphabet_map[cur_y][cur_x] == find_str[index + 1])
+			{
+				dp[y][x][index] = dp[y][x][index] + find_all_string(cur_y, cur_x, index + 1);
+			}
+		}
+	}
+
+	return dp[y][x][index];
+}
+
+int main()
+{
+	cin >> N >> M >> K;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			cin >> alphabet_map[i][j];
+		}
+	}
+	getchar();
+	cin >> find_str;
+
+	// not visited = -1
+	memset(dp, -1, sizeof(dp));
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < M; j++)
+		{
+			if (alphabet_map[i][j] == find_str[0])
+			{
+				answer += find_all_string(i, j, 0);
+			}
+		}
+	}
+
+	cout << answer << "\n";
+}
+
+/*
+4 4 1
+KAKT
+XEAS
+YRWU
+ZBQP
+BREAK
+
+4 3 1
+NDE
+KCD
+ABA
+BAO
+ABCDE
+*/

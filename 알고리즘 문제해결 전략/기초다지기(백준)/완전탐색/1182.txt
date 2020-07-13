@@ -1,0 +1,101 @@
+#include<iostream>
+
+using namespace std;
+
+int N, S;
+int arr[20];
+int result = 0;
+
+void find_subsequence(int index, int sum)
+{
+	sum += arr[index];
+
+	if (index >= N)
+	{
+		return;
+	}
+	
+	if (sum == S)
+	{
+		result++;
+	}
+
+	find_subsequence(index + 1, sum - arr[index]);
+	find_subsequence(index + 1, sum);
+}
+
+int main()
+{
+	cin >> N >> S;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> arr[i];
+	}
+
+	find_subsequence(0, 0);
+
+	cout << result << endl;
+}
+
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int main()
+{
+	int answer = 0;
+	int N, S;
+	cin >> N >> S;
+
+	int i, j;
+	vector<int> arr;
+	for (i = 0; i < N; i++)
+	{
+		int num;
+		cin >> num;
+		arr.push_back(num);
+	}
+
+	vector<int> comb;
+	for (i = 1; i <= N; i++)
+	{
+		for (j = i; j < N; j++)
+		{
+			comb.push_back(0);
+		}
+
+		for (j = 0; j < i; j++)
+		{
+			comb.push_back(1);
+		}
+
+		do
+		{
+			int sum = 0;
+			for (j = 0; j < N; j++)
+			{
+				if (comb[j])
+				{
+					sum += arr[j];
+				}
+			}
+
+			if (sum == S)
+			{
+				answer++;
+			}
+
+		} while (next_permutation(comb.begin(), comb.end()));
+
+		while (!comb.empty())
+		{
+			comb.pop_back();
+		}
+	}
+
+	cout << answer << "\n";
+}

@@ -1,0 +1,62 @@
+#include<iostream>
+#include<cmath>
+
+using namespace std;
+
+// height : 3*2^10 = 3072
+// width : height * 2 - 1 = 6144
+char map[3072][6145] = { '\0' };
+
+char star[3][6] =
+{
+	{"  *  "},
+	{" * * "},
+	{"*****"}
+};
+
+void print_star(int height, int y, int x)
+{
+	if (height == 3)
+	{
+		int i, j;
+		for (i = 0; i < 3; i++)
+		{
+			for (j = 0; j < 5; j++)
+			{
+				map[y + i][x + j] = star[i][j];
+			}
+		}
+		return;
+	}
+
+	print_star(height / 2, y, x + height / 2);
+	print_star(height / 2, y + height / 2, x);
+	print_star(height / 2, y + height / 2, x + height);
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	print_star(N, 0, 0);
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N * 2 - 1; j++)
+		{
+			if (map[i][j] == '*')
+			{
+				cout << "*";
+			}
+			else
+			{
+				cout << " ";
+			}
+		}
+		cout << "\n";
+	}
+}
+
+

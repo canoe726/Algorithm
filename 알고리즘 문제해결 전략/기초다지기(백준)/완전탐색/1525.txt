@@ -1,0 +1,73 @@
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<map>
+
+using namespace std;
+
+// (y, x) : up, down, left, right
+int dir[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+
+int move_puzzle(string inputs)
+{
+	string answer_map = "123456780";
+
+	queue<string> q;
+	q.push(inputs);
+
+	map<string, int> visited;
+	visited[inputs] = 0;
+	
+	while (!q.empty())
+	{
+		string cur = q.front();
+		q.pop();
+
+		if (cur == answer_map)
+		{
+			return visited[cur];
+		}
+
+		int zero_index = cur.find('0');
+		int zero_y = zero_index / 3;
+		int zero_x = zero_index % 3;
+
+		int i;
+		for (i = 0; i < 4; i++)
+		{
+			int next_y = zero_y + dir[i][0];
+			int next_x = zero_x + dir[i][1];
+
+			if ((next_y >= 0 && next_y < 3) && (next_x >= 0 && next_x < 3))
+			{
+				string temp = cur;
+				swap(temp[zero_y * 3 + zero_x], temp[next_y * 3 + next_x]);
+
+				if (!visited[temp])
+				{
+					q.push(temp);
+					visited[temp] = visited[cur] + 1;
+				}
+			}
+		}
+	}
+
+	return -1;
+}
+
+int main()
+{
+	string inputs = "";
+
+	int i;
+	for (i = 0; i < 9; i++)
+	{
+		int su;
+		cin >> su;
+		inputs.push_back(su + '0');
+	}
+
+	cout << move_puzzle(inputs) << endl;
+}

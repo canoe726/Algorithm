@@ -1,0 +1,54 @@
+#include<iostream>
+#include<algorithm>
+#include<climits>
+
+using namespace std;
+
+int W[10][10] = { 0 };
+int visited[10] = { 0 };
+int N;
+int answer = INT_MAX;
+
+void Traveling_Salesman_problem(int cur, int start_city, int sum, int count)
+{
+	if (count == N && cur == start_city)
+	{
+		if (answer > sum)
+		{
+			answer = sum;
+		}
+		return;
+	}
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		if (!visited[cur] && W[cur][i] > 0)
+		{
+			visited[cur] = 1;
+			Traveling_Salesman_problem(i, start_city, sum + W[cur][i], count + 1);
+			visited[cur] = 0;
+		}
+	}
+}
+
+int main()
+{
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			cin >> W[i][j];
+		}
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		Traveling_Salesman_problem(i, i, 0, 0);
+	}
+
+	cout << answer << endl;
+}

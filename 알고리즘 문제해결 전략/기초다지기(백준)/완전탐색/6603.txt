@@ -1,0 +1,62 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int main()
+{
+	while (1)
+	{
+		int k, i;
+		cin >> k;
+
+		if (!k)
+		{
+			break;
+		}
+		else
+		{
+			vector<int> numbers;
+			vector<int> combination;
+
+			for (i = 0; i < k; i++)
+			{
+				int num;
+				cin >> num;
+				numbers.push_back(num);
+			}
+
+			for (i = 0; i < 6; i++)
+			{
+				combination.push_back(1);
+			}
+			for (i = 0; i < k - 6; i++)
+			{
+				combination.push_back(0);
+			}
+			
+			do
+			{
+				int count = 0;
+				for (i = 0; i < combination.size(); i++)
+				{
+					if (combination[i])
+					{
+						count++;
+						if (count == 6)
+						{
+							cout << numbers[i] << "\n";
+						}
+						else
+						{
+							cout << numbers[i] << " ";
+						}
+					}
+				}
+
+			} while (prev_permutation(combination.begin(), combination.end()));
+			cout << "\n";
+		}
+	}
+}

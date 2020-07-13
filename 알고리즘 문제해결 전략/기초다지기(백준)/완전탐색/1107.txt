@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+int broken_numbers[10] = { 0 };
+
+void move_channel(int number, int *length, int *ableButton)
+{
+	string str;
+	str = to_string(number);
+
+	int i;
+	for (i = 0; i < str.size(); i++)
+	{
+		if (broken_numbers[str[i] - '0'])
+		{
+			*ableButton = 0;
+			return;
+		}
+	}
+
+	*length = str.size();
+}
+
+int main()
+{
+	int answer;
+
+	int N;
+	cin >> N;
+
+	int M;
+	cin >> M;
+
+	int i;
+	for (i = 0; i < M; i++)
+	{
+		int num;
+		cin >> num;
+		broken_numbers[num] = 1;
+	}
+
+	// only use +, - buttons
+	answer = abs(N - 100);
+
+	// move from number to N by using +, - buttons
+	for (i = 0; i <= 1000000; i++)
+	{
+		int length, ableButton = 1;
+
+		move_channel(i, &length, &ableButton);
+		if (ableButton)
+		{
+			answer = min(answer, abs(N - i) + length);
+		}
+	}
+
+	cout << answer << "\n";
+}

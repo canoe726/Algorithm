@@ -1,0 +1,56 @@
+#include<iostream>
+
+using namespace std;
+
+//6561
+char star_map[6561][6561];
+
+void star_print(int y, int x, int size)
+{
+	if (size == 1)
+	{
+		star_map[y][x] = '*';
+		return;
+	}
+
+	int i, j;
+	int newsize = size / 3;
+	for (i = 0; i < 3; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			if (i == 1 && j == 1)
+			{
+				continue;
+			}
+			star_print(y + i * newsize, x + j * newsize, newsize);
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			star_map[i][j] = ' ';
+		}
+	}
+
+	star_print(0, 0, N);
+
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			cout << star_map[i][j];
+		}
+		cout << "\n";
+	}
+	cout << "\n";
+}

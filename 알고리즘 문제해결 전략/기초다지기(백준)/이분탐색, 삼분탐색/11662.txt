@@ -1,0 +1,84 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<climits>
+#include<cstring>
+#include<cfloat>
+
+using namespace std;
+
+double find_distance_between_two_pos(pair<double, double> pos1, pair<double, double> pos2)
+{
+	double result = 0.0;
+
+	result = sqrt(pow(pos2.first - pos1.first, 2.0) + pow(pos2.second - pos1.second, 2.0));
+
+	return result;
+}
+
+pair<double, double> percent_move(pair<double, double> pos1, pair<double, double> pos2, double percent)
+{
+	pair<double, double> result;
+
+	result.first = pos1.first + (pos2.first - pos1.first) * percent;
+	result.second = pos1.second + (pos2.second - pos1.second) * percent;
+
+	return result;
+}
+
+double find_shortest_distance(
+	pair<double, double> a,
+	pair<double, double> b,
+	pair<double, double> c,
+	pair<double, double> d)
+{
+	double answer = DBL_MAX;
+	double start = 0;
+	double end = 100;
+
+	while ((end - start) > 1e-10)
+	{
+		// 내분점의 공식으로 3등분
+		double percent1 = (start * 2 + end) / 3; // 2 : 1
+		double percent2 = (start + end * 2) / 3; // 1 : 2
+
+		pair<double, double> minho_p1 = percent_move(a, b, percent1 / 100);
+		pair<double, double> gangho_p1 = percent_move(c, d, percent1 / 100);
+
+		pair<double, double> minho_p2 = percent_move(a, b, percent2 / 100);
+		pair<double, double> gangho_p2 = percent_move(c, d, percent2 / 100);
+
+		double dist1 = find_distance_between_two_pos(minho_p1, gangho_p1);
+		double dist2 = find_distance_between_two_pos(minho_p2, gangho_p2);
+
+		answer = min(answer, min(dist1, dist2));
+
+		if (dist1 > dist2)
+		{
+			start = percent1;
+		}
+		else
+		{
+			end = percent2;
+		}
+	}
+
+	return answer;
+}
+
+int main()
+{
+	pair<double, double> A;
+	pair<double, double> B;
+	pair<double, double> C;
+	pair<double, double> D;
+
+	cin >> A.first >> A.second;
+	cin >> B.first >> B.second;
+	cin >> C.first >> C.second;
+	cin >> D.first >> D.second;
+
+	cout.setf(ios::fixed);
+	cout.precision(10);
+	cout << find_shortest_distance(A, B, C, D) << endl;
+}

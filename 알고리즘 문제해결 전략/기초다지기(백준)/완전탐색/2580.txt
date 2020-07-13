@@ -1,0 +1,112 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int sudoku[9][9];
+vector<pair<int, int>> pos;
+
+void print_sudoku()
+{
+	int i, j;
+	for (i = 0; i < 9; i++)
+	{
+		for (j = 0; j < 9; j++)
+		{
+			cout << sudoku[i][j] << " ";
+		}
+		cout << "\n";
+	}
+}
+
+int horizontal_check(int row, int num)
+{
+	int i;
+	for (i = 0; i < 9; i++)
+	{
+		if (sudoku[row][i] == num)
+		{
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
+int vertical_check(int col, int num)
+{
+	int i;
+	for (i = 0; i < 9; i++)
+	{
+		if (sudoku[i][col] == num)
+		{
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
+int box_check(int row, int col, int num)
+{
+	int y = 3 * (row / 3);
+	int x = 3 * (col / 3);
+
+	int i, j;
+	for (i = 0; i < 3; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			if (sudoku[y + i][x + j] == num)
+			{
+				return 0;
+			}
+		}
+	}
+
+	return 1;
+}
+
+void fill_sudoku(int index)
+{
+	if (index == pos.size())
+	{
+		print_sudoku();
+		exit(0);
+	}
+
+	int i;
+	for (i = 1; i <= 9; i++)
+	{
+		int cur_y = pos[index].first;
+		int cur_x = pos[index].second;
+
+		if (horizontal_check(cur_y, i) &&
+			vertical_check(cur_x, i) &&
+			box_check(cur_y, cur_x, i))
+		{
+			sudoku[cur_y][cur_x] = i;
+			fill_sudoku(index + 1);
+			sudoku[cur_y][cur_x] = 0;
+		}
+	}
+}
+
+int main()
+{
+	int i, j;
+	for (i = 0; i < 9; i++)
+	{
+		for (j = 0; j < 9; j++)
+		{
+			cin >> sudoku[i][j];
+
+			if (!sudoku[i][j])
+			{
+				pos.push_back(make_pair(i, j));
+			}
+		}
+	}
+
+	fill_sudoku(0);
+}

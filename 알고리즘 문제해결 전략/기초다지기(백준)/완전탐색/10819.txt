@@ -1,0 +1,42 @@
+#include<iostream>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int N;
+	cin >> N;
+	
+	vector<int> combination;
+
+	int answer = 0;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int num;
+		cin >> num;
+		combination.push_back(num);
+	}
+	sort(combination.begin(), combination.end());
+	
+	do {
+		int sum = 0;
+
+		for (i = 1; i < N; i++)
+		{
+			sum = sum + abs(combination[i-1] - combination[i]);
+		}
+
+		if (sum > answer)
+		{
+			answer = sum;
+		}
+
+	} while (next_permutation(combination.begin(), combination.end()));
+
+	cout << answer << "\n";
+}

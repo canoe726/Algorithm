@@ -1,0 +1,56 @@
+#include<iostream>
+#include<queue>
+#include<vector>
+
+using namespace std;
+
+int R, C;
+char alphabet[20][20] = { "\0" };
+// (y,x) : up down left right
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+int visited[26] = { 0 };
+int answer = 0;
+
+void find_max(int y, int x, int count)
+{
+	if (count > answer)
+	{
+		answer = count;
+	}
+
+	int i;
+	for (i = 0; i < 4; i++)
+	{
+		int cur_y = y + dir[i][0];
+		int cur_x = x + dir[i][1];
+
+		if ((cur_y >= 0 && cur_y < R) &&
+			(cur_x >= 0 && cur_x < C))
+		{
+			if (!visited[alphabet[cur_y][cur_x] - 'A'])
+			{
+				visited[alphabet[cur_y][cur_x] - 'A'] = 1;
+				find_max(cur_y, cur_x, count + 1);
+				visited[alphabet[cur_y][cur_x] - 'A'] = 0;
+			}
+		}
+	}
+}
+
+int main()
+{
+	cin >> R >> C;
+
+	int i, j;
+	for (i = 0; i < R; i++)
+	{
+		for (j = 0; j < C; j++)
+		{
+			cin >> alphabet[i][j];
+		}
+	}
+
+	visited[alphabet[0][0] - 'A'] = 1;
+	find_max(0, 0, 1);
+	cout << answer << endl;
+}

@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		int answer = 0;
+		int n;
+		cin >> n;
+
+		vector<int> words(n);
+		for (j = 0; j < n; j++)
+		{
+			cin >> words[j];
+		}
+
+		while (words.size() > 1)
+		{
+			sort(words.begin(), words.end(), cmp);
+
+			int w_size = words.size();
+			answer += words[w_size - 2] + words[w_size - 1];
+			words[w_size - 2] = words[w_size - 2] + words[w_size - 1];
+			words.pop_back();
+		}
+
+		cout << answer << "\n";
+	}
+}
+

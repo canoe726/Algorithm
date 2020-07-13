@@ -1,0 +1,201 @@
+// dp 심화
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int cache[101][101];
+string W;
+string S;
+
+bool isMatch(int w, int s) {
+
+	int &ret = cache[w][s];
+	if (ret != -1) { return ret; }
+	
+	while (w < W.size() && s < S.size() &&
+		(W[w] == '?' || W[w] == S[s])) {
+		
+		return ret = isMatch(w + 1, s + 1);
+	}
+
+	if (w == W.size() && s == S.size()) {
+		return ret = 1;
+	}
+
+	if (W[w] == '*') {
+		if (isMatch(w + 1, s) || 
+			(s < S.size() && isMatch(w, s + 1))) {
+			return ret = 1;
+		}
+	}
+
+	return ret = 0;
+}
+
+int main() {
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++) {
+		vector<string> answer;
+		cin >> W;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			cin >> S;
+
+			memset(cache, -1, sizeof(cache));
+			if (isMatch(0, 0)) {
+				answer.push_back(S);
+			}
+		}
+
+		sort(answer.begin(), answer.end());
+
+		for (j = 0; j < answer.size(); j++) {
+			cout << answer[j] << "\n";
+		}
+	}
+}
+
+// dp
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int cache[101][101];
+string W;
+string S;
+
+bool isMatch(int w, int s) {
+
+	int &ret = cache[w][s];
+	if (ret != -1) { return ret; }
+	
+	while (w < W.size() && s < S.size() &&
+		(W[w] == '?' || W[w] == S[s])) {
+		w++;
+		s++;
+	}
+
+	if (w == W.size()) {
+		return ret = (s == S.size());
+	}
+
+	if (W[w] == '*') {
+		int skip;
+		for (skip = 0; s + skip <= S.size(); skip++) {
+			if (isMatch(w + 1, s + skip)) {
+				return ret = 1;
+			}
+		}
+	}
+
+	return ret = 0;
+}
+
+int main() {
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++) {
+		vector<string> answer;
+		cin >> W;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			cin >> S;
+
+			memset(cache, -1, sizeof(cache));
+			if (isMatch(0, 0)) {
+				answer.push_back(S);
+			}
+		}
+
+		sort(answer.begin(), answer.end());
+
+		for (j = 0; j < answer.size(); j++) {
+			cout << answer[j] << "\n";
+		}
+	}
+}
+
+// 완전 탐색
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+bool isMatch(string w, string s) {
+
+	bool ret = true;
+
+	int pos = 0;
+	while (pos < w.size() && pos < s.size() &&
+		(w[pos] == '?' || w[pos] == s[pos])) {
+		pos++;
+	}
+
+	if (pos == w.size() && pos == s.size()) {
+		return true;
+	}
+
+	if (w[pos] == '*') {
+		int skip;
+		for (skip = 0; pos + skip <= s.size(); skip++) {
+			if (isMatch(w.substr(pos + 1), s.substr(pos + skip))) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+int main() {
+	int C;
+	cin >> C;
+
+	int i, j, k;
+	for (i = 0; i < C; i++) {
+		vector<string> answer;
+
+		string wildCard;
+		cin >> wildCard;
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			string fileName;
+			cin >> fileName;
+		
+			if (isMatch(wildCard, fileName)) {
+				answer.push_back(fileName);
+			}
+		}
+
+		sort(answer.begin(), answer.end());
+
+		for (j = 0; j < answer.size(); j++) {
+			cout << answer[j] << "\n";
+		}
+	}
+}

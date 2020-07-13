@@ -1,0 +1,39 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+string quad_tree_compress(string str, string::iterator &it)
+{
+	char cur = *it;
+	++it;
+	if (cur == 'b' || cur == 'w')
+	{
+		return string(1, cur);
+	}
+
+	// 1 2 -> 3 4
+	// 3 4    1 2
+	string topLeft = quad_tree_compress(str, it);
+	string topRight = quad_tree_compress(str, it);
+	string downLeft = quad_tree_compress(str, it);
+	string downRight = quad_tree_compress(str, it);
+
+	return "x" + downLeft + downRight + topLeft + topRight;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i;
+	for (i = 0; i < C; i++)
+	{
+		string str;
+		cin >> str;
+
+		string::iterator it = str.begin();
+		cout << quad_tree_compress(str, it) << "\n";
+	}
+}

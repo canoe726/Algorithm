@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int N;
+int lunch[10000];
+int eat[10000];
+
+bool cmp(pair<int, int> a, pair<int, int> b)
+{
+	if (a.second == b.second)
+	{
+		return a.first < b.first;
+	}
+	return a.second > b.second;
+}
+
+int find_min_time()
+{
+	int ret = 0;
+
+	int ready = 0;
+
+	// 음식 번호, 먹는 시간
+	vector<pair<int, int>> order;
+	int i;
+	for (i = 0; i < N; i++) { order.push_back(make_pair(i, eat[i])); }
+	sort(order.begin(), order.end(), cmp);
+
+	for (i = 0; i < N; i++)
+	{
+		// (시작시간 + 조리시간) + 먹는시간
+		ret = max(ret, (ready + lunch[order[i].first]) + order[i].second);
+		ready += lunch[order[i].first];
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		cin >> N;
+
+		memset(lunch, 0, sizeof(lunch));
+		memset(eat, 0, sizeof(eat));
+
+		for (j = 0; j < N; j++) { cin >> lunch[j]; }
+		for (j = 0; j < N; j++) { cin >> eat[j]; }
+
+		cout << find_min_time() << "\n";
+	}
+}

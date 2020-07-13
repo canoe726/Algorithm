@@ -1,0 +1,153 @@
+// dp 수정
+#include<iostream>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int N;
+int arr[501];
+int cache[501];
+
+int find_lis(int start) {
+
+	int &ret = cache[start + 1];
+	if (ret != -1) { return ret; }
+	ret = 1;
+
+	int i;
+	for (i = start + 1; i < N; i++) {
+		if (start == -1 || arr[start] < arr[i]) {
+			ret = max(ret, find_lis(i) + 1);
+		}
+	}
+
+	return ret;
+}
+
+int main() {
+
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++) {
+		cin >> N;
+		
+		memset(arr, 0, sizeof(arr));
+		memset(cache, -1, sizeof(cache));
+		for (j = 0; j < N; j++) {
+			cin >> arr[j];
+		}
+		
+		cout << find_lis(-1) - 1 << endl;
+
+	}
+}
+
+// dp
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int N;
+int arr[501];
+int cache[501];
+
+int find_lis(int idx) {
+
+	int &ret = cache[idx];
+	if (ret != -1) { return ret; }
+
+	ret = 1;
+
+	int i;
+	for (i = idx + 1; i < N; i++) {
+		if (arr[idx] < arr[i]) {
+			ret = max(ret, find_lis(i) + 1);
+		}
+	}
+	
+	return ret;
+}
+
+int main() {
+	
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++) {
+		cin >> N;
+
+		memset(arr, 0, sizeof(arr));
+		memset(cache, -1, sizeof(cache));
+		for (j = 0; j < N; j++) {
+			cin >> arr[j];
+		}
+
+		int max_val = -1;
+		int i;
+		for (i = 0; i < N; i++) {
+			max_val = max(max_val, find_lis(i));
+		}
+		cout << max_val << "\n";
+	}
+}
+
+// 완전탐색
+#include<iostream>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<algorithm>
+
+using namespace std;
+
+int N;
+int arr[501];
+
+int find_lis(vector<int> A) {
+
+	if (A.empty()) { return 0; }
+	int ret = 0;
+
+	int i, j;
+	for (i = 0; i < A.size(); i++) {
+		vector<int> B; 
+		for (j = i + 1; j < A.size(); j++) {
+			if (A[i] < A[j]) {
+				B.push_back(A[j]);
+			}
+		}
+		ret = max(ret, find_lis(B) + 1);
+	}
+
+	return ret;
+}
+
+int main() {
+
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++) {
+		cin >> N;
+
+		vector<int> A;
+		
+		memset(arr, 0, sizeof(arr));
+		for (j = 0; j < N; j++) {
+			cin >> arr[j];
+			A.push_back(arr[j]);
+		}
+		
+		cout << find_lis(A) << endl; 
+	}
+}

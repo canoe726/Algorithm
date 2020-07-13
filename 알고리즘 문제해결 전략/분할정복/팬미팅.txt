@@ -1,0 +1,47 @@
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+vector<bool> karatsuba(vector<bool> a, vector<bool> b)
+{
+	vector<bool> ret;
+
+
+
+
+	return ret;
+}
+
+int total_num_of_hug(string member, string fans)
+{
+	int ret = 0;
+	vector<bool> b_mem(member.size()), b_fan(fans.size());
+
+	int i;
+	// 남자면 1, 여자면 0
+	for (i = 0; i < b_mem.size(); i++) b_mem[i] = (member[i] == 'M');
+	for (i = 0; i < b_fan.size(); i++) b_fan[i] = (fans[i] == 'M');
+
+	vector<bool> res = karatsuba(b_mem, b_fan);
+	for (i = 0; i < res.size(); i++) { if (res[i] == 0) { ret++; } }
+	return ret;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		string member;
+		string fans;
+
+		cin >> member >> fans;
+
+		cout << total_num_of_hug(member, fans) << "\n";
+	}
+}

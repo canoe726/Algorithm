@@ -1,0 +1,123 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+char grid[5][5] = { '\0' };
+
+// y, x -> 동, 서, 남, 북, 남서, 남동, 북동, 북서
+int dir[8][2] = { {0,1},{0,-1},{1,0},{-1,0},
+				  {-1,-1},{-1,1},{1,1},{1,-1} };
+
+int visited[5][5][10];
+/* visited 의미
+ex) 
+input:
+AAA
+AAA
+AAA
+
+find : AAB
+
+(0,0) 위치에서 탐색을 마친 후 visited 배열의 상태
+
+[1,,][,1,][,,1]
+[,1,][,1,][,,1]
+[,,1][,,1][,,1]
+*/
+
+bool isWordInGrid(int y, int x, string input, int idx)
+{	
+	visited[y][x][idx] = 1;
+
+	if (grid[y][x] != input[idx])
+	{
+		return false;
+	}
+
+	if (idx == (input.size() - 1))
+	{
+		return true;
+	}
+
+	int i;
+	for (i = 0; i < 8; i++)
+	{
+		int _y = dir[i][0] + y;
+		int _x = dir[i][1] + x;
+
+		if ((_y >= 0 && _y < 5) && (_x >= 0 && _x < 5))
+		{
+			if (visited[_y][_x][idx + 1])
+			{
+				continue;
+			}
+
+			if (isWordInGrid(_y, _x, input, idx + 1))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+int main()
+{
+	int C, N;
+	cin >> C;
+
+	int i, j, k, l;
+
+	for (i = 0; i < C; i++)
+	{
+		for (j = 0; j < 5; j++)
+		{
+			for (k = 0; k < 5; k++)
+			{
+				cin >> grid[j][k];
+			}
+		}
+
+		string words[11];
+		cin >> N;
+		for (j = 0; j < N; j++)
+		{
+			string temp;
+			cin >> temp;
+			words[j] = temp;
+		}
+
+		for (j = 0; j < N; j++)
+		{
+			int isIn = 0;
+			memset(visited, 0, sizeof(visited));
+
+			cout << words[j];
+
+			for (k = 0; k < 5; k++)
+			{
+				for (l = 0; l < 5; l++)
+				{
+					if (isWordInGrid(k, l, words[j], 0))
+					{
+						isIn = 1;
+					}
+					if (isIn) { break; }
+				}
+				if (isIn) { break; }
+			}
+			
+			if (isIn)
+			{
+				cout << " YES" << "\n";
+			}
+			else
+			{
+				cout << " NO" << "\n";
+			}
+		}
+	}
+}
+

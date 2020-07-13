@@ -1,0 +1,58 @@
+#include <iostream>
+#include <stack>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+bool match_bracket(string str)
+{
+	if (str.size() == 0) { return true; }
+
+	stack<char> bracket;
+
+	int i;
+	for (i = 0; i < str.size(); i++)
+	{
+		if (str[i] == '(' || str[i] == '[' || str[i] == '{')
+		{
+			bracket.push(str[i]);
+		}
+		else
+		{
+			if (bracket.empty()) { return false; }
+			else
+			{
+				if ((bracket.top() == '(' && str[i] == ')') ||
+					(bracket.top() == '[' && str[i] == ']') ||
+					(bracket.top() == '{' && str[i] == '}'))
+				{
+					bracket.pop();
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	if (bracket.empty()) { return true; }
+	return false;
+}
+
+int main(void)
+{
+	int C;
+	cin >> C;
+
+	int i;
+	for (i = 0; i < C; i++)
+	{
+		string str;
+		cin >> str;
+
+		if (match_bracket(str)) { cout << "YES" << "\n"; }
+		else { cout << "NO" << "\n"; }
+	}
+}

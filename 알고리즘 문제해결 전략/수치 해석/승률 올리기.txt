@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int minimum_wining_times(long long N, long long M)
+{
+	double winning_rate = (M * 100 / (double)N);
+	winning_rate = floor(winning_rate);
+
+	long long ret = -1;
+	long long start = 0;
+	long long end = 2000000000;
+
+	while (start < end - 1)
+	{
+		long long mid = (start + end) / 2;
+
+		double temp_rate;
+		temp_rate = ((M + mid) * 100 / (double)(N + mid));
+		temp_rate = floor(temp_rate);
+
+		if (winning_rate < temp_rate)
+		{
+			end = mid;
+			ret = end;
+		}
+		else { start = mid; }
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i;
+	for (i = 0; i < C; i++)
+	{
+		long long N, M;
+		cin >> N >> M;
+
+		cout << minimum_wining_times(N, M) << "\n";
+	}
+}

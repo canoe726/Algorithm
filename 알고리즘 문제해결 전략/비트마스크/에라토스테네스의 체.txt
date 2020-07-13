@@ -1,0 +1,72 @@
+// bitmask 버전
+#include<iostream>
+
+using namespace std;
+
+/*
+소수인지 확인 : k/8 번째 원소의 k%8 번째 비트가 켜져있으면 소수
+a >> 3 : a를 8로 나눈것과 같다
+7 & b : 8로 나눈 나머지와 같다
+*/
+
+const int MAX_LEN = 2100000000;
+int n;
+unsigned char sieve[(MAX_LEN + 7) / 8];
+
+inline bool isPrime(int k) {
+	return sieve[k >> 3] & (1 << (k & 7));
+}
+
+inline void setComposite(int k) {		// 소수 -> 합성수 표시
+	sieve[k >> 3] &= ~(1 << (k & 7));
+}
+
+void findPrimeNumber() {
+	setComposite(0);
+	setComposite(1);
+
+	int i, j;
+	for (i = 2; i * i <= MAX_LEN; i++) {
+		if (isPrime(i)) {
+			for (j = i * i; j <= MAX_LEN; j += i) {
+				setComposite(j);
+			}
+		}
+	}
+}
+
+int main() {
+	memset(sieve, 255, sizeof(sieve));
+	findPrimeNumber();
+	cout << "finish" << endl;
+}
+
+// boolean 버전
+#include<iostream>
+
+using namespace std;
+
+const int len = 190000000;
+
+bool eratos[len];
+
+void findPrimeNumber() {
+	int i, j;
+	eratos[1] = false;
+	for (i = 2; i <= len; i++) {
+		eratos[i] = true;
+	}
+
+	for (i = 2; i * i <= len; i++) {
+		if (eratos[i]) {
+			for (j = i * i; j <= len; j += i) {
+				eratos[j] = false;
+			}
+		}
+	}
+}
+
+int main() {
+	findPrimeNumber();
+	cout << "finish" << endl;
+}

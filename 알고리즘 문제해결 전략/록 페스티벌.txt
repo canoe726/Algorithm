@@ -1,0 +1,51 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	int cost[1001] = { 0 };
+	double answer;
+	int i, j, k;
+
+	int C, N, L;
+	cin >> C;
+
+	for (i = 0; i < C; i++)
+	{
+		cin >> N >> L;
+
+		answer = 987654321;
+
+		memset(cost, 0, sizeof(cost));
+		for (j = 0; j < N; j++)
+		{
+			cin >> cost[j];
+		}
+
+		for (j = L; j <= N; j++)
+		{
+			int sum = 0;
+			double avg = 0.0;
+
+			for (k = 0; k < j; k++)
+			{
+				sum += cost[k];
+			}
+			avg = sum / (double) j;
+			if (answer > avg) { answer = avg; }
+
+			for (k = j; k < N; k++)
+			{
+				sum -= cost[k - j];
+				sum += cost[k];
+
+				avg = sum / (double)j;
+				if (answer > avg) { answer = avg; }
+			}
+		}
+
+		printf("%.11f\n", answer);
+	}
+}

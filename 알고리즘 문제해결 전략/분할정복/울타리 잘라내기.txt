@@ -1,0 +1,66 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+int N;
+int board[20000];
+
+int find_max_size(int left, int right)
+{
+	if (left == right) { return board[left]; }
+
+	int mid = (left + right) / 2;
+	// 범위 분할
+	int ret = max(find_max_size(left, mid), find_max_size(mid + 1, right));
+	// 분할한 범위 내에서 높이가 가장 작은 블록을 기준으로 확장하며 최대 직사각형의 넓이를 구함
+	int lo = mid;
+	int hi = mid + 1;
+	int height = min(board[lo], board[hi]);
+	// 확장하기 전 직사각형의 넓이를 구해 비교함
+	ret = max(ret, height * 2);
+
+	// left                   right
+	//     ----*-- | --*------
+	//      <-lo  mid  hi->
+	while (lo > left || hi < right)
+	{
+		// 다음 블록의 높이가 큰 쪽으로 이동
+		// case 1 : hi->
+		if (hi < right && (lo == left || board[lo - 1] < board[hi + 1]))
+		{
+			hi++;
+			height = min(height, board[hi]);
+		}
+		// case 2 : <-lo
+		else
+		{
+			lo--;
+			height = min(height, board[lo]);
+		}
+		ret = max(ret, (hi - lo + 1) * height);
+	}
+
+	return ret;
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		memset(board, 0, sizeof(board));
+
+		cin >> N;
+		for (j = 0; j < N; j++)
+		{
+			cin >> board[j];
+		}
+
+		cout << find_max_size(0, N - 1) << "\n";
+	}
+}

@@ -1,0 +1,93 @@
+// Àç±Í
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int n;
+int tri[100][100];
+int dp[100][100];
+
+int max_tri_value(int y, int x)
+{
+	if (y == (n - 1)) { return tri[y][x]; }
+
+	int &ret = dp[y][x];
+	if (ret != -1) { return ret; }
+
+	return ret = max(max_tri_value(y + 1, x), max_tri_value(y + 1, x + 1)) + tri[y][x];
+}
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j, k;
+	for (i = 0; i < C; i++)
+	{
+		memset(tri, 0, sizeof(tri));
+		memset(dp, -1, sizeof(dp));
+
+		cin >> n;
+
+		for (j = 0; j < n; j++)
+		{
+			for (k = 0; k <= j; k++)
+			{
+				cin >> tri[j][k];
+			}
+		}
+		cout << max_tri_value(0, 0) << "\n";
+	}
+}
+
+// for¹®
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int tri[100][100];
+int dp[100][100];
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int i, j, k;
+	for (i = 0; i < C; i++)
+	{
+		memset(tri, 0, sizeof(tri));
+		memset(dp, 0, sizeof(dp));
+		
+		int n;
+		cin >> n;
+
+		for (j = 1; j <= n; j++)
+		{
+			for (k = 1; k <= j; k++)
+			{
+				cin >> tri[j][k];
+				dp[j][k] = tri[j][k];
+			}
+		}
+
+		for (j = 1; j <= n; j++)
+		{
+			for (k = 1; k <= j; k++)
+			{
+				dp[j][k] = max(max(dp[j][k], dp[j - 1][k] + dp[j][k]), dp[j - 1][k - 1] + dp[j][k]);
+			}
+		}
+
+		int answer = -1;
+		for (j = 1; j <= n; j++)
+		{
+			if (dp[n][j] > answer) { answer = dp[n][j]; }
+		}
+		cout << answer << "\n";
+	}
+}
+

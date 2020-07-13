@@ -1,0 +1,44 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int len = 10;
+
+int rect[len][len];
+int pSum[len][len];
+
+void findPartialSum() {
+	int i, j;
+	for (i = 1; i <= len; i++) {
+		for (j = 1; j <= len; j++) {
+			pSum[i - 1][j - 1] = i * j;
+		}
+	}
+}
+
+int findRectRangeSum(int y1, int x1, int y2, int x2) {
+	int ret = pSum[y2][x2];
+
+	if (y1 > 0) { ret -= pSum[y1 - 1][x2]; }
+	if (x1 > 0) { ret -= pSum[y2][x1 - 1]; }
+	if (y1 > 0 && x1 > 0) { ret += pSum[y1 - 1][x1 - 1]; }
+
+	return ret;
+}
+
+int main() {
+
+	memset(rect, 1, sizeof(rect));
+
+	int y1, x1, y2, x2;
+	cin >> y1 >> x1 >> y2 >> x2;
+
+	findPartialSum();
+	cout << findRectRangeSum(y1, x1, y2, x2) << endl;
+}
+
+/*
+3 3 8 8
+
+*/

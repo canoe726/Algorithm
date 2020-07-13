@@ -1,0 +1,28 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++) {
+		int answer = 0;
+
+		int N;
+		cin >> N;
+
+		for (j = 1; j <= N; j++) {
+			int level;
+			cin >> level;
+
+			if (j == level) {
+				answer++;
+			}
+		}
+		cout << answer << "\n";
+	}
+
+}

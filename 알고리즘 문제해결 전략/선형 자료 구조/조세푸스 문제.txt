@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int dead[1000];
+
+int main(void)
+{
+	int C;
+	cin >> C;
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		int N, K;
+		cin >> N >> K;
+
+		memset(dead, 0, sizeof(dead));
+
+		int cnt = 1;
+		int idx = 0;
+		dead[0] = 1;
+
+		while (cnt < N - 2)
+		{
+			for (j = 0; j < K; j++)
+			{
+				idx++;
+				if (idx >= N) { idx = 0; }
+				if (dead[idx]) { j--; }
+			}
+			dead[idx] = 1;
+			cnt++;
+		}
+
+		for (j = 0; j < N; j++) { if (!dead[j]) { cout << j + 1 << " "; } }
+		cout << "\n";
+	}
+}

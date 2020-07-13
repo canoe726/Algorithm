@@ -1,0 +1,44 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+	int C;
+	cin >> C;
+
+	int N;
+	int russia[100];
+	int korea[100];
+
+	int i, j;
+	for (i = 0; i < C; i++)
+	{
+		int answer = 0;
+
+		cin >> N;
+		memset(russia, 0, sizeof(russia));
+		memset(korea, 0, sizeof(korea));
+
+		for (j = 0; j < N; j++) { cin >> russia[j]; }
+		for (j = 0; j < N; j++) { cin >> korea[j]; }
+
+		sort(russia, russia + N);
+		sort(korea, korea + N);
+
+		int idx = 0;
+		for (j = 0; j < N; j++)
+		{
+			if (russia[idx] <= korea[j])
+			{
+				idx++;
+				answer++;
+			}
+		}
+
+		cout << answer << "\n";
+	}
+}
+

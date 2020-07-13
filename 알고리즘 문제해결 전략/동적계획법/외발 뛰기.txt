@@ -1,0 +1,101 @@
+// 메모제이션
+#include<iostream>
+#include <string>
+
+using namespace std;
+
+int map[100][100];
+int cache[100][100];
+
+int isGoToDestination(int y, int x, int N) {
+
+	if (y >= N || x >= N) {		// 기저 사례
+		return 0;
+	}
+
+	if (y == (N - 1) && x == (N - 1)) {		// 목적지 도달 
+		return 1;
+	}
+
+	int &ret = cache[y][x];
+
+	if (ret != -1) { return ret; }
+	
+	return ret = isGoToDestination(y + map[y][x], x, N) || isGoToDestination(y, x + map[y][x], N);
+}
+
+int main() {
+	int C;
+	cin >> C;
+
+	int i, j, k;
+	for (i = 0; i < C; i++) {
+		memset(map, 0, sizeof(map));
+		memset(cache, -1, sizeof(cache));
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+
+		if (isGoToDestination(0, 0, N)) {
+			cout << "YES" << "\n";
+		}
+		else {
+			cout << "NO" << "\n";
+		}
+	}
+}
+
+// 재귀
+#include<iostream>
+#include <string>
+
+using namespace std;
+
+int map[100][100];
+int cache[100][100];
+
+bool isGoToDestination(int y, int x, int N) {
+
+	if (y >= N || x >= N) {		// 기저 사례
+		return false;
+	}
+
+	if (y == (N - 1) && x == (N - 1)) {		// 목적지 도달 
+		return true;
+	}
+
+	return isGoToDestination(y + map[y][x], x, N) || isGoToDestination(y, x + map[y][x], N);
+}
+
+int main() {
+	int C;
+	cin >> C;
+
+	int i, j, k;
+	for (i = 0; i < C; i++) {
+		memset(map, 0, sizeof(map));
+		memset(cache, -1, sizeof(cache));
+
+		int N;
+		cin >> N;
+
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				cin >> map[j][k];
+			}
+		}
+
+		if (isGoToDestination(0, 0, N)) {
+			cout << "YES" << "\n";
+		}
+		else {
+			cout << "NO" << "\n";
+		}
+	}
+}

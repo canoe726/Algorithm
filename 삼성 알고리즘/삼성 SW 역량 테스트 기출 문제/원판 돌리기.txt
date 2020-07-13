@@ -1,0 +1,173 @@
+/*
+- 풀어야할때 알아야 할점
+1. 원판에 적힌 수는 항상 1보다 크다. (0은 없는 원판이다.)
+2. 주어진 원판에서 미리 인접한 원판을 모두 표시해준다.
+3. M번 이상 회전과 (총 회전 횟수 % M 번) 회전한 결과는 같다.
+4. 임시 원반을 만들어서 인접할때 수가 변경되지 않도록 만들어 준다.
+5. 평균이랑 같은 값은 가만히 놔두고 평균은 실수로 계산한다.
+*/
+
+#include<iostream>
+#include<vector>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+bool connected[50][50][50][50];
+
+int N, M, T;
+
+vector<vector<int>> circle;			// 원판에 적힌수는 항상 1보다 크거나 같다 (0은 없는 원판)
+
+void circle_connect() {
+	int i, j;							// i : 원판, j : 원판에 적혀있는 수
+
+	for (i = 0; i < N; i++) {				
+		connected[i][0][i][1] = true;					// (i, 1)은 (i, 2), (i, M)과 인접하다.
+		connected[i][0][i][M - 1] = true;
+
+		connected[i][M - 1][i][M - 2] = true;			// (i, M)은 (i, M-1), (i, 1)과 인접하다.
+		connected[i][M - 1][i][0] = true;
+	}
+
+	for (j = 0; j < M; j++) {
+		connected[0][j][1][j] = true;				// (1, j)는 (2, j)와 인접하다.
+
+		connected[N - 1][j][N - 2][j] = true;		// (N, j)는 (N-1, j)와 인접하다.
+	}
+
+	for (i = 0; i < N; i++) {			// (i, j)는 (i, j-1), (i, j+1)과 인접하다. (2 ≤ j ≤ M-1)
+		for (j = 1; j <= M - 2; j++) {
+			connected[i][j][i][j - 1] = true;
+			connected[i][j][i][j + 1] = true;
+		}
+	}
+	
+	for (i = 1; i <= N - 2; i++) {			// (i, j)는 (i-1, j), (i+1, j)와 인접하다. (2 ≤ i ≤ N-1)
+		for (j = 0; j < M; j++) {
+			connected[i][j][i - 1][j] = true;
+			connected[i][j][i + 1][j] = true;
+		}
+	}
+}
+
+int main() {
+	memset(connected, false, sizeof(connected));
+
+	cin >> N >> M >> T;
+
+	circle = vector<vector<int>>(N);
+
+	int i, j, k, l, m;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			int num;
+			cin >> num;
+			circle[i].push_back(num);
+		}
+	}
+
+	circle_connect();		// 모든 인접할 수 있는 경우의 수를 표시한다.
+
+	for (i = 0; i < T; i++) {
+		int Xi, Di, Ki;
+		cin >> Xi >> Di >> Ki;							// d = 0 : 시계, 1 : 반시계
+
+		Ki %= M;										// M번 이상 회전하면 M으로 나눈 값과 같다.
+
+		for (j = Xi - 1; j < circle.size(); j+=Xi) {	// x의 배수의 원판 이동
+			vector<int> rotate(circle[j].size());		// Ki 번 회전
+			
+			if (Di == 0) {								// 시계
+				for (k = 0; k < rotate.size(); k++) {
+					int idx = (k + Ki) % M;
+					rotate[idx] = circle[j][k];
+				}
+			}
+			else {										// 반시계
+				for (k = 0; k < rotate.size(); k++) {
+					int idx = (k - Ki);
+					if (idx < 0) { idx += M; }
+					idx %= M;
+					rotate[idx] = circle[j][k];
+				}
+			}
+			circle[j] = rotate;
+		}
+
+		bool exist = false;
+		vector<vector<int>> temp_circle = circle;
+		for (j = 0; j < temp_circle.size(); j++) {			// 원판의 모든 점에 대해서
+			for (k = 0; k < temp_circle[j].size(); k++) {
+
+				if (temp_circle[j][k] == 0) { continue; }
+
+				int s = j - 1;
+				int e = j + 1;
+				if (s < 0) { s = 0; }
+				if (e >= N) { e = N - 1; }
+
+				bool deleted = false;				
+				for (l = s; l <= e; l++) {
+					for (m = 0; m < M; m++) {
+						if (connected[j][k][l][m] && circle[l][m] == circle[j][k]) {
+							temp_circle[l][m] = 0;			// 같은 수 삭제
+
+							exist = true;
+							deleted = true;
+						}
+					}
+				}
+
+				if (deleted) {
+					temp_circle[j][k] = 0;
+				}
+			}
+		}
+		circle = temp_circle;
+
+		if (!exist) {
+			int total_sum = 0;
+			int total_cnt = 0;
+
+			for (l = 0; l < N; l++) {
+				for (m = 0; m < M; m++) {
+					if (circle[l][m] > 0) {
+						total_sum += circle[l][m];
+						total_cnt += 1;
+					}
+				}
+			}
+
+			double avg = total_sum / (double) total_cnt;
+
+			for (l = 0; l < N; l++) {
+				for (m = 0; m < M; m++) {
+					if (circle[l][m] > 0) {
+						if (circle[l][m] > avg) {
+							total_sum -= 1;
+							circle[l][m] -= 1;
+						}
+						else if (circle[l][m] < avg) {
+							total_sum += 1;
+							circle[l][m] += 1;
+						}
+						else { continue; }
+					}
+				}
+			}
+		}
+	}
+
+	int answer = 0;
+	for (l = 0; l < N; l++) {
+		for (m = 0; m < M; m++) {
+			if (circle[l][m] > 0) {
+				answer += circle[l][m];
+			}
+		}
+	}
+
+	cout << answer << "\n";
+}

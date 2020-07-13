@@ -1,0 +1,134 @@
+/*
+- 풀어야할때 알아야 할점
+1. 현재 위치를 기준으로 bfs_search 를 진행하면서 모든 연합을 찾는다.
+2. 찾은 연합끼리만 평균을 구하고 값을 바꿔준다.
+3. 국경이 열려 있는 경우에만 인구이동을 한 번 더 할 수 있다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+#include<cmath>
+
+using namespace std;
+
+typedef struct POS {
+	int y;
+	int x;
+	int cnt;
+};
+
+int N, L, R;
+
+int A[100][100];
+int open[100][100];
+
+// (y,x), 상, 하, 좌, 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+vector<vector<POS>> border;
+
+vector<POS> check_border(int y, int x) {
+	vector<POS> ret;
+	ret.push_back({ y, x, A[y][x] });
+
+	vector<POS> q;
+	q.push_back({y, x, A[y][x]});
+	open[y][x] = 1;
+	
+	int i;
+	while (!q.empty()) {
+		POS cur = q.back();
+		q.pop_back();
+
+		for (i = 0; i < 4; i++) {
+			POS next = cur;
+			next.y = cur.y + dir[i][0];
+			next.x = cur.x + dir[i][1];
+			next.cnt = A[next.y][next.x];
+
+			if ((next.y >= 0) && (next.y < N) &&
+				(next.x >= 0) && (next.x < N)) {
+
+				if (!open[next.y][next.x]) {
+				
+					if (abs(A[cur.y][cur.x] - A[next.y][next.x]) >= L &&
+						abs(A[cur.y][cur.x] - A[next.y][next.x]) <= R) {
+
+						open[next.y][next.x] = 1;
+						q.push_back(next);
+						ret.push_back(next);
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+void people_move() {
+	int i, j;
+
+	for (i = 0; i < border.size(); i++) {
+		int cnt = border[i].size();
+		int sum = 0;
+
+		for (j = 0; j < border[i].size(); j++) {
+			sum += border[i][j].cnt;
+		}
+
+		int avg = sum / cnt;
+		while (!border[i].empty()) {
+			POS cur = border[i].back();
+			border[i].pop_back();
+
+			A[cur.y][cur.x] = avg;
+		}
+	}
+}
+
+int main() {
+	memset(A, 0, sizeof(A));
+
+	cin >> N >> L >> R;
+
+	int i, j, k;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> A[i][j];
+		}
+	}
+
+	for (i = 0; i < 2001; i++) {
+		memset(open, 0, sizeof(open));
+		for (j = 0; j < N; j++) {
+			for (k = 0; k < N; k++) {
+				if (!open[j][k]) {
+					vector<POS> res = check_border(j, k);
+					border.push_back(res);
+				}
+			}
+		}
+
+		bool can_move = false;
+
+		for (j = 0; j < border.size(); j++) {
+			if (border[j].size() > 1) {
+				can_move = true;
+				break;
+			}
+		}
+
+		if(can_move) {		// 국경이 열려 있다면 계산
+			people_move();
+		}
+		else {						// 인구 이동 불가
+			break;
+		}
+		border.clear();
+	}
+
+	cout << i << "\n";
+}

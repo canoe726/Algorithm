@@ -1,0 +1,49 @@
+/*
+- 풀어야할때 알아야 할점
+1. 입출력이 매우 오래걸리기 때문에 가속을 해준다. (또는 scanf로 대체)
+2. 총감독관은 무조건 있어야 하기 때문에 N명만큼 존재한다.
+3. 부감독관이 감시할 수 있는 사람만큼의 몫을 구하고 나머지가 있으면 1을 더한다.
+*/
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int N;
+int room[1000000];
+int B, C;
+
+unsigned long long answer = 0;
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	memset(room, 0, sizeof(room));
+
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> room[i];
+	}
+
+	cin >> B >> C;
+
+	for (i = 0; i < N; i++) {
+		room[i] -= B;
+		answer += 1;
+	}
+
+	for (i = 0; i < N; i++) {
+		if (room[i] > 0) {
+			answer += (room[i] / C);
+			if (room[i] % C > 0)
+				answer += 1;
+		}
+	}
+
+	cout << answer << "\n";
+}

@@ -1,0 +1,252 @@
+#include<iostream>
+#include<cstring>
+#include<string>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+// 큐브의 면에 따른 색상
+// B = 0, L = 1, U = 2, R = 3, D = 4, F = 5
+
+/*
+char cube = {											// 전개도
+	{{'o','o','o'},{'o','o','o'},{'o','o','o'}},		// 오렌지
+	{{'g','g','g'},{'g','g','g'},{'g','g','g'}},		// 초록색
+	{{'w','w','w'},{'w','w','w'},{'w','w','w'}},		// 흰색
+	{{'b','b','b'},{'b','b','b'},{'b','b','b'}},		// 파란색
+	{{'y','y','y'},{'y','y','y'},{'y','y','y'}},		// 노란색
+	{{'r','r','r'},{'r','r','r'},{'r','r','r'}},		// 빨간색
+};
+*/
+
+int n;
+
+char cube[6][3][3];
+char cube_colors[6] = { 'o','g','w','b','y','r' };
+
+void init_cube() {
+	int i, j, k;
+	for (i = 0; i < 6; i++) {
+		for (j = 0; j < 3; j++) {
+			for (k = 0; k < 3; k++) {
+				cube[i][j][k] = cube_colors[i];
+			}
+		}
+	}
+}
+
+int get_cube_side(char side) {
+	int cube_side;
+	switch (side) {
+	case 'B':
+		cube_side = 0;
+		break;
+	case 'L':
+		cube_side = 1;
+		break;
+	case 'U':
+		cube_side = 2;
+		break;
+	case 'R':
+		cube_side = 3;
+		break;
+	case 'D':
+		cube_side = 4;
+		break;
+	case 'F':
+		cube_side = 5;
+		break;
+	}
+	return cube_side;
+}
+
+vector<vector<char>> rorate_colors(vector<vector<char>> c, char dir) {
+	vector<vector<char>> colors = c;
+
+	int i;
+	vector<char> temp;			// 회전
+	if (dir == '+') {			// 시계 방향
+		temp = colors[0];
+		for (i = 0; i < 3; i++) {
+			colors[i] = colors[i + 1];
+		}
+		colors[3] = temp;
+
+		reverse(colors[0].begin(), colors[0].end());
+		reverse(colors[2].begin(), colors[2].end());
+	}
+	else {						// 반시계 방향
+		temp = colors[3];
+		for (i = 3; i > 0; i--) {
+			colors[i] = colors[i - 1];
+		}
+		colors[0] = temp;
+
+		reverse(colors[1].begin(), colors[1].end());
+		reverse(colors[3].begin(), colors[3].end());
+	}
+
+	return colors;
+}
+
+void rotate_cur_side(int side, char dir) {
+	char temp[3][3];
+	memcpy(temp, cube[side], sizeof(cube[side]));
+
+	int i, j;
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			if (dir == '+') {
+				cube[side][i][j] = temp[2 - j][i];
+			}
+			else {
+				cube[side][i][j] = temp[j][2 - i];
+			}
+		}
+	}
+}
+
+void rotate_cube(char side, char dir) {
+	vector<vector<char>> colors(4);
+
+	int i, j;
+	int cube_side = get_cube_side(side);
+
+	rotate_cur_side(cube_side, dir);
+	switch (cube_side) {
+	case 0:										// B = 0
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[2][0][i]);
+			colors[1].push_back(cube[3][0][i]);
+			colors[2].push_back(cube[4][0][i]);
+			colors[3].push_back(cube[1][0][i]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[2][0][i] = colors[0][i];
+			cube[3][0][i] = colors[1][i];
+			cube[4][0][i] = colors[2][i];
+			cube[1][0][i] = colors[3][i];
+		}
+		break;
+
+	case 1:										// L = 1
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[2][i][0]);
+			colors[1].push_back(cube[0][i][0]);
+			colors[2].push_back(cube[4][i][2]);
+			colors[3].push_back(cube[5][i][0]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[2][i][0] = colors[0][i];
+			cube[0][i][0] = colors[1][i];
+			cube[4][i][2] = colors[2][i];
+			cube[5][i][0] = colors[3][i];
+		}
+		break;
+
+	case 2:										// U = 2
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[0][2][i]);
+			colors[1].push_back(cube[1][i][2]);
+			colors[2].push_back(cube[5][0][i]);
+			colors[3].push_back(cube[3][i][0]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[0][2][i] = colors[0][i];
+			cube[1][i][2] = colors[1][i];
+			cube[5][0][i] = colors[2][i];
+			cube[3][i][0] = colors[3][i];
+		}
+		break;
+
+	case 3:										// R = 3
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[2][i][2]);
+			colors[1].push_back(cube[5][i][2]);
+			colors[2].push_back(cube[4][i][0]);
+			colors[3].push_back(cube[0][i][2]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[2][i][2] = colors[0][i];
+			cube[5][i][2] = colors[1][i];
+			cube[4][i][0] = colors[2][i];
+			cube[0][i][2] = colors[3][i];
+		}
+		break;
+
+	case 4:										// D = 4
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[5][2][i]);
+			colors[1].push_back(cube[1][i][0]);
+			colors[2].push_back(cube[0][0][i]);
+			colors[3].push_back(cube[3][i][2]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[5][2][i] = colors[0][i];
+			cube[1][i][0] = colors[1][i];
+			cube[0][0][i] = colors[2][i];
+			cube[3][i][2] = colors[3][i];
+		}
+		break;
+
+	case 5:										// F = 5
+		for (i = 0; i < 3; i++) {
+			colors[0].push_back(cube[2][2][i]);
+			colors[1].push_back(cube[1][2][i]);
+			colors[2].push_back(cube[4][2][i]);
+			colors[3].push_back(cube[3][2][i]);
+		}
+
+		colors = rorate_colors(colors, dir);
+
+		for (i = 0; i < 3; i++) {
+			cube[2][2][i] = colors[0][i];
+			cube[1][2][i] = colors[1][i];
+			cube[4][2][i] = colors[2][i];
+			cube[3][2][i] = colors[3][i];
+		}
+		break;
+	}
+}
+
+int main() {
+	int T;
+	cin >> T;
+
+	int i, j, k;
+	for (i = 0; i < T; i++) {
+		init_cube();
+		
+		cin >> n;
+
+		for (j = 0; j < n; j++) {		// n 번 큐브 돌리기
+			string input;
+			cin >> input;
+
+			rotate_cube(input[0], input[1]);
+		}
+
+		for (j = 0; j < 3; j++) {		// 윗 면 출력
+			for (k = 0; k < 3; k++) {
+				cout << cube[2][j][k];
+			}
+			cout << "\n";
+		}
+	}
+}

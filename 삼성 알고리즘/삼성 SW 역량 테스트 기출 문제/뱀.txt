@@ -1,0 +1,124 @@
+/*
+- 풀어야할때 알아야 할점
+1. 문제에서 설명한 뱀의 움직임을 그대로 묘사해서 움직인다.
+2. deque을 이용해서 front는 머리, back은 꼬리로 뱀의 위치를 표현한다.
+3. 방향 전환이 D일 경우 우, 하, 좌 상 / L일 경우 우, 상, 좌, 하 가 되도록 계산 해준다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+#include<deque>
+
+using namespace std;
+
+int N;
+
+// 0 : 빈 칸, 1 : 사과, 2 : 뱀
+int board[100][100];
+
+// 방향 전환 : C -> -1, D -> +1
+// (y,x), 우, 하, 좌, 상 
+int dir[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
+
+queue<pair<int, char>> dir_info;
+pair<int, int> head_pos;
+
+deque<pair<int, int>> snake_pos;
+
+int move_snake() {
+	int sec = 0;
+	int cur_dir = 0;
+
+	while (1) {
+		if (!dir_info.empty()) {
+			if (sec == dir_info.front().first) {
+				if (dir_info.front().second == 'D') {
+					cur_dir += 1;
+					if (cur_dir > 3) {
+						cur_dir = 0;
+					}
+				}
+				else {
+					cur_dir -= 1;
+					if (cur_dir < 0) {
+						cur_dir = 3;
+					}
+				}
+				dir_info.pop();
+			}
+		}
+
+		// 머리 움직이기
+		head_pos.first += dir[cur_dir][0];
+		head_pos.second += dir[cur_dir][1];
+
+		// 경계를 넘어서서 움직이면 무조건 부딫힘
+		if ((head_pos.first < 0) || (head_pos.first >= N) ||
+			(head_pos.second < 0) || (head_pos.second >= N)) {
+			sec += 1;
+			break;
+		}
+		// 자신과 부딫힌 경우
+		if (board[head_pos.first][head_pos.second] == 2) {
+			sec += 1;
+			break;
+		}
+
+		// 사과가 있을 경우
+		if (board[head_pos.first][head_pos.second]) {
+			board[head_pos.first][head_pos.second] = 2;		// 꼬리가 늘어남
+			snake_pos.push_back(head_pos);
+		}
+		// 사과가 없을 경우
+		else {
+			board[head_pos.first][head_pos.second] = 2;	// 머리를 움직임
+			snake_pos.push_back(head_pos);
+
+			pair<int, int> tail_pos = snake_pos.front();
+			snake_pos.pop_front();
+
+			board[tail_pos.first][tail_pos.second] = 0;	// 꼬리를 줄임
+		}
+
+		sec += 1;
+	}
+
+	return sec;
+}
+
+int main() {
+	memset(board, 0, sizeof(board));
+
+	cin >> N;
+
+	int K;
+	cin >> K;
+
+	int i, j;
+	for (i = 0; i < K; i++) {
+		int y, x;
+		cin >> y >> x;
+
+		board[y - 1][x - 1] = 1;
+	}
+
+	int L;
+	cin >> L;
+	for (i = 0; i < L; i++) {
+		int X;
+		cin >> X;
+		char C;
+		cin >> C;
+
+		dir_info.push(make_pair(X, C));
+	}
+
+	head_pos.first = 0;
+	head_pos.second = 0;
+	snake_pos.push_back(head_pos);
+
+	board[head_pos.first][head_pos.second] = 2;
+
+	cout << move_snake() << endl;
+}

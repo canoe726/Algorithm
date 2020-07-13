@@ -1,0 +1,152 @@
+/*
+- 풀어야할때 알아야 할점
+1. 같은 적이 여러 궁수에게 공격당할 수 있다. => 가장 가까우면서 왼쪽인 사격 위치가 같을 수 있다.
+2. 임의로 뽑은 궁수로 사격을 하기 전에 맵을 저장해야 한다.
+3. 현재 궁수로부터 사정거리 내 적은 거리, 열, 행 순으로 정렬하고 최상위 값만 사격위치로 정한다.
+4. (존재할 수 있는 궁수의 수 <= 15) C (3) = 455
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct POS {
+	int r;
+	int c;
+	int dist;
+} POS;
+
+int grid[15][15];		// (N+1) 행 -> 궁수, 0 : 빈 칸, 1 : 적, 2 : 궁수
+int temp_grid[15][15];
+
+int N, M, D;
+
+vector<POS> archar;
+
+int find_dist(int r1, int c1, int r2, int c2) {
+	return abs(r1 - r2) + abs(c1 - c2);
+}
+
+bool cmp(POS a, POS b) {
+	if (a.dist == b.dist) {
+		if (a.c == b.c) {
+			return a.r > b.r;
+		}
+		else {
+			return a.c < b.c;
+		}
+	}
+	else {
+		return a.dist < b.dist;
+	}
+}
+
+bool exist_enemy() {
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			if (temp_grid[i][j] == 1) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+int main() {
+	memset(grid, 0, sizeof(grid));
+	memset(temp_grid, 0, sizeof(temp_grid));
+
+	cin >> N >> M >> D;
+
+	int i, j, k, l;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			cin >> grid[i][j];
+		}
+	}
+
+	for (i = 0; i < M; i++) {
+		archar.push_back({ N, i });
+	}
+
+	vector<int> idx;
+	vector<int> choose;
+
+	for (i = 0; i < M; i++) {
+		idx.push_back(i);
+	}
+	for (i = 3; i < M; i++) {
+		choose.push_back(0);
+	}
+	for (i = 0; i < 3; i++) {
+		choose.push_back(1);
+	}
+
+	int answer = -1;
+
+	do {
+		int dead_enemy = 0;
+		memcpy(temp_grid, grid, sizeof(grid));
+
+		vector<POS> picked_archar;
+
+		for (i = 0; i < choose.size(); i++) {
+			if (choose[i]) {
+				picked_archar.push_back(archar[idx[i]]);
+			}
+		}
+
+		while(exist_enemy()) {										// 적이 남아 있다면 진행
+			vector<POS> shoot;
+			for (j = 0; j < picked_archar.size(); j++) {			// 궁수 공격
+				POS cur_a = picked_archar[j];
+
+				vector<POS> can_kill;
+				for (k = 0; k < N; k++) {
+					for (l = 0; l < M; l++) {
+						int dist = find_dist(cur_a.r, cur_a.c, k, l);
+						if (dist <= D && temp_grid[k][l]) {
+							can_kill.push_back({ k,l,dist });			// 사정 거리 내 적 모두 입력
+						}
+					}
+				}
+
+				if (!can_kill.empty()) {
+					sort(can_kill.begin(), can_kill.end(), cmp);
+					shoot.push_back(can_kill[0]);
+					can_kill.clear();
+				}
+			}
+
+			while (!shoot.empty()) {
+				POS cur = shoot.back();
+				shoot.pop_back();
+
+				if (temp_grid[cur.r][cur.c]) {
+					temp_grid[cur.r][cur.c] = 0;		// 적을 게임에서 제외시킨다.
+					dead_enemy += 1;
+				}
+			}
+
+			for (j = N - 1; j >= 0; j--) {			// 적 이동
+				for (k = 0; k < M; k++) {
+					temp_grid[j][k] = temp_grid[j - 1][k];
+				}
+			}
+			for (k = 0; k < M; k++) {
+				temp_grid[0][k] = 0;
+			}
+		}
+
+		picked_archar.clear();
+		answer = max(answer, dead_enemy);
+
+	} while (next_permutation(choose.begin(), choose.end()));
+
+	cout << answer << "\n";
+}

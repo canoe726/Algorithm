@@ -1,70 +1,105 @@
+/*
+- 풀어야할때 알아야 할점
+1. 모든 연산자를 조합하는 경우의 수는 next_permutation으로 구할 수 있다.
+2. 구한 연산자를 바탕으로 값을 계산할 때는 스택을 통해 값을 저장한 후 구해준다.
+*/
+
 #include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+#include<stack>
 #include<climits>
 
 using namespace std;
 
-int N;
-int max_value = INT_MIN;
-int min_value = INT_MAX;
+stack<int> s;
 
-int numbers[11] = { 0 };
-int operators[4] = { 0 };
+int A[11];
+int operators[4];
 
-void calculate(int index, int plus, int minus, int multi, int div, int total, int len)
-{
-	if (index == len)
-	{
-		if (total > max_value)
-		{
-			max_value = total;
-		}
-		if (total < min_value)
-		{
-			min_value = total;
-		}
-	}
+int main() {
+	memset(A, 0, sizeof(A));
+	memset(operators, 0, sizeof(operators));
 
-	index += 1;
-	if (plus < operators[0])
-	{
-		calculate(index, plus + 1, minus, multi, div, total + numbers[index], len);
-	}
-	if (minus < operators[1])
-	{
-		calculate(index, plus, minus + 1, multi, div, total - numbers[index], len);
-	}
-	if (multi < operators[2])
-	{
-		calculate(index, plus, minus, multi + 1, div, total * numbers[index], len);
-	}
-	if (div < operators[3])
-	{
-		calculate(index, plus, minus, multi, div + 1, total / numbers[index], len);
-	}
-}
-
-int main()
-{
+	int N;
 	cin >> N;
 
-	int i;
-	for (i = 0; i < N; i++)
-	{
-		int su;
-		cin >> su;
-		numbers[i] = su;
+	int i, j;
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
 	}
 
-	for (i = 0; i < 4; i++)
-	{
-		int su;
-		cin >> su;
-		operators[i] = su;
+	for (i = 0; i < 4; i++) {
+		cin >> operators[i];
 	}
 
-	int len = operators[0] + operators[1] + operators[2] + operators[3];
-	calculate(0, 0, 0, 0, 0, numbers[0], len);
+	vector<int> op;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < operators[i]; j++) {
+			op.push_back(i);
+		}
+	}
 
-	cout << max_value << '\n';
-	cout << min_value << '\n';
+	int min_value = INT_MAX;
+	int max_value = INT_MIN;
+
+	do {
+		int result;
+
+		switch (op[0]) {
+		case 0:			// +
+			s.push(A[0] + A[1]);
+			break;
+		case 1:			// -
+			s.push(A[0] - A[1]);
+			break;
+		case 2:			// *
+			s.push(A[0] * A[1]);
+			break;
+		case 3:			// /
+			s.push(A[0] / A[1]);
+			break;
+		}
+
+		for (i = 1; i < op.size(); i++) {
+			int temp;
+			switch (op[i]) {
+			case 0:			// +
+				temp = s.top() + A[i + 1];
+				s.pop();
+				s.push(temp);
+				break;
+			case 1:			// -
+				temp = s.top() - A[i + 1];
+				s.pop();
+				s.push(temp);
+				break;
+			case 2:			// *
+				temp = s.top() * A[i + 1];
+				s.pop();
+				s.push(temp);
+				break;
+			case 3:			// /
+				temp = s.top() / A[i + 1];
+				s.pop();
+				s.push(temp);
+				break;
+			}
+		}
+
+		result = s.top();
+		s.pop();
+
+		if (result > max_value) {
+			max_value = result;
+		}
+		if (result < min_value) {
+			min_value = result;
+		}
+
+	} while (next_permutation(op.begin(), op.end()));
+
+	cout << max_value << "\n";
+	cout << min_value << "\n";
 }

@@ -1,0 +1,115 @@
+/*
+- 풀어야할때 알아야 할점
+1. 4방향으로 돌린다는 것은 회전이 아니라 그 방향으로 빨간, 파란 구슬을 이동시키는 것이다.
+2. 빨간, 파란 구슬의 위치가 어떨때 회전을 시켰는지에 대해서 검사하는 4차원 배열이 필요하다.
+3. bfs search 를 통해서 n번 돌렸을 때 board의 상태가 어떠한 지를 검사한다.
+4. 파란 구슬이 빠지면 그 방향으로는 더 이상 돌리지 않는다.
+5. 빨간, 파란 구슬이 1*1 박스를 차지하지 않는다는 가정하에 dir 방향으로 돌린 뒤 위치가 겹친다면,
+더 많이 이동한 쪽을 dir의 반대 방향으로 1칸 이동시켜 구슬의 정확한 위치를 만들어 준다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<queue>
+
+using namespace std;
+
+struct POS {
+	int depth;
+	int ry;
+	int rx;
+	int by;
+	int bx;
+};
+
+char board[10][10];
+bool visited[10][10][10][10];
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+pair<int, int> r_pos;
+pair<int, int> b_pos;
+queue<POS> q;
+
+void move(int &y, int &x, int d, int &cnt) {
+	while (board[y + dir[d][0]][x + dir[d][1]] != '#' && board[y][x] != 'O') {
+		y += dir[d][0];
+		x += dir[d][1];
+		cnt += 1;
+	}
+}
+
+int bfs_search() {
+	while (!q.empty()) {
+		POS cur = q.front();
+		q.pop();
+
+		int i;
+		for (i = 0; i < 4; i++) {
+			POS next = cur;
+			next.depth += 1;
+
+			if (next.depth > 10) {
+				return -1;
+			}
+
+			int rc = 0;
+			int bc = 0;
+			
+			move(next.ry, next.rx, i, rc);
+			move(next.by, next.bx, i, bc);
+
+			if (board[next.by][next.bx] == 'O') {
+				continue;
+			}
+			if (board[next.ry][next.rx] == 'O') {
+				return next.depth;
+			}
+
+			if (next.ry == next.by && next.rx == next.bx) {
+				if (rc > bc) {
+					next.ry += (-dir[i][0]);
+					next.rx += (-dir[i][1]);
+				}
+				else {
+					next.by += (-dir[i][0]);
+					next.bx += (-dir[i][1]);
+				}
+			}
+
+			if (!visited[next.ry][next.rx][next.by][next.bx]) {
+				visited[next.ry][next.rx][next.by][next.bx] = true;
+				q.push(next);
+			}
+		}
+	}
+
+	return -1;
+}
+
+int main() {
+	memset(board, '\0', sizeof(board));
+	memset(visited, false, sizeof(visited));
+
+	int N, M;
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			cin >> board[i][j];
+			if (board[i][j] == 'R') {
+				r_pos = make_pair(i, j);
+			}
+			if (board[i][j] == 'B') {
+				b_pos = make_pair(i, j);
+			}
+		}
+	}
+
+	q.push({0, r_pos.first, r_pos.second, b_pos.first, b_pos.second});
+	visited[r_pos.first][r_pos.second][b_pos.first][b_pos.second] = true;
+	cout << bfs_search() << endl;
+}

@@ -1,0 +1,139 @@
+/*
+- 풀어야할때 알아야 할점
+1. 감염되지 않은 구역의 개수를 연구실을 전부 순회하면서 찾을 필요가 없고 0 의 개수만 세어주면 된다.
+2. 바이러스가 활성이던 비활성이던 연구실에 빈 칸의 개수가 0 이면 더이상 순회하지 않는다. (바이러스를 퍼트리지 않는다.)
+3. (연구실에 존재하는 총 바이러스 수) C (M) 의 값이 활성화시킬 바이러스 위치의 경우의 수 이다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+typedef struct VIRUS {
+	int y;
+	int x;
+} VIRUS;
+
+const int INF = 987654321;
+
+int N, M;
+
+int blank_cnt = 0;			// 감염되지 않은 구역의 개수
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int lab[50][50];			// 0 : 빈 칸, 1 : 벽, 2 : 바이러스
+int temp_lab[50][50];		// 바이러스 퍼지기 전 연구실 상태
+
+vector<VIRUS> v_pos;
+vector<VIRUS> v_spread;
+
+int spread_virus() {
+	int ret = 0;		// virus가 퍼지는 시간
+
+	bool visited[50][50];
+	memset(visited, false, sizeof(visited));
+
+	int cnt = blank_cnt;
+
+	int i, j;
+	for (i = 0; i < v_spread.size(); i++) {
+		visited[v_spread[i].y][v_spread[i].x] = true;
+	}
+
+	while (!v_spread.empty()) {
+		if (!cnt) {		// 바이러스가 전부 퍼진 경우
+			return ret;
+		}
+
+		vector<VIRUS> temp;
+
+		while (!v_spread.empty()) {
+			VIRUS cur = v_spread.back();
+			v_spread.pop_back();
+
+			for (j = 0; j < 4; j++) {
+				int next_y = cur.y + dir[j][0];
+				int next_x = cur.x + dir[j][1];
+
+				if ((next_y >= 0) && (next_y < N) && (next_x >= 0) && (next_x < N)) {
+					if (temp_lab[next_y][next_x] != 1 && !visited[next_y][next_x]) {			// 벽이 아니면 바이러스를 퍼트림
+						visited[next_y][next_x] = true;
+
+						if (temp_lab[next_y][next_x] == 0) { cnt -= 1; }
+						temp_lab[next_y][next_x] = 2;
+						temp.push_back({ next_y, next_x });
+					}
+				}
+			}
+		}
+
+		if (temp.empty()) {
+			return INF;
+		}
+		ret += 1;
+		v_spread = temp;
+	}
+
+	return INF;						// 바이러스가 전부 퍼지지 못 한 경우
+}
+
+int main() {
+	memset(lab, 0, sizeof(lab));
+
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> lab[i][j];
+			if (lab[i][j] == 2) { v_pos.push_back({ i,j }); }
+			if (lab[i][j] == 0) { blank_cnt += 1; }
+		}
+	}
+
+	vector<int> index;
+	vector<int> choose;
+
+	for (i = 0; i < v_pos.size(); i++) {
+		index.push_back(i);
+	}
+	for (i = M; i < v_pos.size(); i++) {
+		choose.push_back(0);
+	}
+	for (i = 0; i < M; i++) {
+		choose.push_back(1);
+	}
+
+	int sec = INF;
+
+	do {									// 연구실에 존재하는 바이러스 중에서 M 개를 뽑는 경우의 수
+		memcpy(temp_lab, lab, sizeof(lab));
+		v_spread.clear();
+
+		for (i = 0; i < choose.size(); i++) {
+			if (choose[i]) {
+				v_spread.push_back(v_pos[index[i]]);
+			}
+		}
+
+		sec = min(sec, spread_virus());
+
+	} while (next_permutation(choose.begin(), choose.end()));
+
+	if (sec == INF) {
+		cout << -1 << "\n";
+	}
+	else {
+		cout << sec << "\n";
+	}
+
+	index.clear();
+	choose.clear();
+	v_pos.clear();
+}

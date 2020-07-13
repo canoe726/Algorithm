@@ -1,0 +1,140 @@
+/*
+- 풀어야할때 알아야 할점
+1. 0 초과의 숫자의 위치를 queue에 넣어서 원하는 방향으로 회전시키고,
+queue에 넣은 위치는 0으로 만들어 준다.
+2. dfs search 를 통해서 모든 방향, 모든 횟수에 대해서 완전탐색한다.
+3. 4방향의 dir에 대해서 다른 케이스로 숫자를 옮겨야 한다.
+4. 0 초과의 숫자를 옮길 때 방향의 최대 바깥쪽의 피벗을 설정해서 숫자를 합칠지 그냥 둘지를 결정한다.
+5. 재귀함수의 특징을 이용해서 temp라는 함수에 이전 배열의 상태를 저장시키고 반복한다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+int N;
+int map[20][20];
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+queue<int> q;
+
+void q_push_val(int y, int x) {
+	if (map[y][x] > 0) {
+		q.push(map[y][x]);
+		map[y][x] = 0;
+	}
+}
+
+int find_max_value() {
+	int ret = -1;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (map[i][j] > ret) {
+				ret = map[i][j];
+			}
+		}
+	}
+
+	return ret;
+}
+
+// y, x 는 방향 기준 제일 바깥쪽 좌표 피벗
+void move_pos(int y, int x, int d) {
+	while (!q.empty()) {
+		int val = q.front();
+		q.pop();
+
+		if (map[y][x] == 0) {
+			map[y][x] = val;
+		}
+		else if (map[y][x] == val) {
+			map[y][x] = val * 2;
+			y += (-dir[d][0]);
+			x += (-dir[d][1]);
+		}
+		else {
+			y += (-dir[d][0]);
+			x += (-dir[d][1]);
+			map[y][x] = val;
+		}
+	}
+}
+
+void move(int dir) {
+	int i, j;
+	switch (dir) {
+	case 0:		// 상
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < N; i++) {
+				q_push_val(i, j);
+			}
+			move_pos(0, j, dir);
+		}
+		break;
+	case 1:		// 하
+		for (j = 0; j < N; j++) {
+			for (i = N - 1; i >= 0; i--) {
+				q_push_val(i, j);
+			}
+			move_pos(N - 1, j, dir);
+		}
+		break;
+	case 2:		// 좌
+		for (i = 0; i < N; i++) {
+			for (j = 0; j < N; j++) {
+				q_push_val(i, j);
+			}
+			move_pos(i, 0, dir);
+		}
+		break;
+	case 3:		// 우
+		for (i = 0; i < N; i++) {
+			for (j = N - 1; j >= 0; j--) {
+				q_push_val(i, j);
+			}
+			move_pos(i, N - 1, dir);
+		}
+		break;
+	}
+}
+
+int dfs_search(int depth) {
+	if (depth >= 5) {
+		return find_max_value();
+	}
+
+	int ret = -1;
+
+	int temp[20][20];
+	memcpy(temp, map, sizeof(map));
+
+	int i;
+	for (i = 0; i < 4; i++) {
+		move(i);
+		ret = max(ret, dfs_search(depth + 1));
+		memcpy(map, temp, sizeof(temp));
+	}
+
+	return ret;
+}
+
+int main() {
+	memset(map, 0, sizeof(map));
+
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	cout << dfs_search(0) << endl;
+}

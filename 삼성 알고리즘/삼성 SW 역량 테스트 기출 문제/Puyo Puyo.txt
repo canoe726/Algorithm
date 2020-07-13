@@ -1,0 +1,126 @@
+/*
+- 풀어야할때 알아야 할점
+1. 연쇄터짐이 몇 번이 있던 상관없이 정답은 1 증가해야 한다.
+2. 색깔이 다르더라도 모두 동시에 터져야 한다.
+3. 연쇄 터짐이 없다면 내려갈 수 있는 뿌요가 없다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct POS {
+	int y;
+	int x;
+	char color;
+} POS;
+
+char map[12][6];		// R : 빨강, G : 초록, B : 파랑, P : 보라, Y : 노랑
+int color_map[12][6];
+bool visited[12][6];
+
+// (y,x), 상, 하, 좌, 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int bfs_search(int y, int x) {
+	bool ret = false;
+
+	queue<POS> q;
+	q.push({ y,x,map[y][x] });
+	visited[y][x] = true;
+
+	queue<POS> bomb;
+	bomb.push({ y,x,map[y][x] });
+
+	int i, cnt = 1;
+	while (!q.empty()) {
+		POS cur = q.front();
+		q.pop();
+
+		for (i = 0; i < 4; i++) {
+			POS next = { cur.y + dir[i][0], cur.x + dir[i][1], '\0' };
+
+			if ((next.y >= 0) && (next.y < 12) && (next.x >= 0) && (next.x < 6)) {
+				next.color = map[next.y][next.x];
+				if (!visited[next.y][next.x] && cur.color == next.color) {
+					visited[next.y][next.x] = true;
+					q.push(next);
+					bomb.push(next);
+					cnt += 1;
+				}
+			}
+		}
+	}
+
+	if (cnt >= 4) {
+		ret = true;
+		while (!bomb.empty()) {
+			POS cur = bomb.front();
+			bomb.pop();
+			map[cur.y][cur.x] = '.';
+		}
+	}
+
+	while (!bomb.empty()) { bomb.pop(); }
+
+	if (ret) { return 1; }
+	return 0;
+}
+
+int is_chain() {
+	int is_bomb = 0;
+
+	int i, j;
+	for (i = 0; i < 12; i++) {
+		for (j = 0; j < 6; j++) {
+			if (map[i][j] != '.' && !visited[i][j]) {		// 연쇄로 터트린다.
+				is_bomb += bfs_search(i, j);
+			}
+		}
+	}
+
+	if (is_bomb > 0) {
+		for (i = 10; i >= 0; i--) {								// 내려갈 수 있는 뿌요를 떨어트린다.
+			for (j = 0; j < 6; j++) {
+				if (map[i][j] != '.') {
+					int cur_y = i;
+					int next_y = i + 1;
+					while ((next_y < 12) && (map[next_y][j] == '.')) {
+						map[next_y][j] = map[cur_y][j];
+						map[cur_y][j] = '.';
+
+						cur_y += 1;
+						next_y += 1;
+					}
+				}
+
+			}
+		}
+	}
+
+	return is_bomb;
+}
+
+int main() {
+	memset(map, '\0', sizeof(map));
+	memset(visited, false, sizeof(visited));
+
+	int i, j;
+	for (i = 0; i < 12; i++) {
+		for (j = 0; j < 6; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	int answer = 0;		// 같은색이 4개 이상 : 연쇄 터짐, 여러 그룹이 한번에 터짐 : 1 연쇄
+
+	while (is_chain() > 0) {
+		memset(visited, false, sizeof(visited));
+		answer += 1;
+	}
+
+	cout << answer << "\n";
+}

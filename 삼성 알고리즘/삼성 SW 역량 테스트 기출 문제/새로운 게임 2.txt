@@ -1,0 +1,127 @@
+/*
+- 풀어야할때 알아야 할점
+1. 0 초에는 한 칸에 말이 4개 이상 있을 수 없다.
+2. 범위를 벗어나거나 이동할 칸이 파란색인 경우 미리 방향을 바꾸고 이동한 위치에 대해서 다음칸을 검사한다.
+3. 칸이 흰색, 빨간색인 경우는 입력되는 값만 반대이다.
+4. 턴을 수행하는 도중에 언제든 말이 4개 이상이면 턴을 진행하지 않는다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct HORSE {
+	int r;
+	int c;
+	int dir;
+	int num;
+} HORSE;
+
+int N, K;
+
+int map[12][12];		// 0 : 흰색, 1 : 빨간색, 2 : 파란색
+
+// (r,c), 우, 좌, 상, 하
+int dir[4][2] = { {0,1},{0,-1},{-1,0},{1,0} };
+
+vector<HORSE> horse_map[12][12];
+vector<HORSE> horse;
+
+int change_dir(int dir) {
+	int ret = -1;
+	switch (dir) {
+	case 0:			// 우 -> 좌
+		ret = 1;
+		break;
+	case 1:			// 좌 -> 우
+		ret = 0;
+		break;
+	case 2:			// 상 -> 하
+		ret = 3;
+		break;
+	case 3:			// 하 -> 상
+		ret = 2;
+		break;
+	}
+	return ret;
+}
+
+
+int main() {
+	memset(map, 0, sizeof(map));
+
+	cin >> N >> K;
+
+	int i, j, k;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	for (i = 0; i < K; i++) {
+		int r, c, dir;
+		cin >> r >> c >> dir;
+		horse.push_back({ r - 1,c - 1,dir - 1,i });
+		horse_map[r - 1][c - 1].push_back({ r - 1,c - 1,dir - 1,i });
+	}
+
+	bool exist = false;
+
+	for (i = 1; i < 1001; i++) {
+		for (j = 0; j < horse.size(); j++) {		// 말을 순서대로 이동
+			HORSE *cur = &horse[j];
+			
+			HORSE next;
+			next.r = cur->r + dir[cur->dir][0];
+			next.c = cur->c + dir[cur->dir][1];
+
+			if ((next.r < 0) || (next.r >= N) || (next.c < 0) || (next.c >= N) ||
+				(map[next.r][next.c] == 2)) {		// 범위를 벗어나거나 칸이 파란색이면 방향을 반대로
+				cur->dir = change_dir(cur->dir);
+
+				next.r = cur->r + dir[cur->dir][0];
+				next.c = cur->c + dir[cur->dir][1];
+			}
+			
+			if ((next.r >= 0) && (next.r < N) &&
+				(next.c >= 0) && (next.c < N)) {
+
+				if (map[next.r][next.c] == 2) { continue; }		// 칸이 파란색
+
+				vector<HORSE> temp;
+				for (k = horse_map[cur->r][cur->c].size() - 1; k >= 0; k--) {
+					temp.push_back(horse_map[cur->r][cur->c][k]);
+					if (j == horse_map[cur->r][cur->c][k].num) {
+						horse_map[cur->r][cur->c].pop_back();
+						break;
+					}
+					horse_map[cur->r][cur->c].pop_back();
+				}
+
+				if (map[next.r][next.c] == 0) { reverse(temp.begin(), temp.end()); }			// 칸이 흰색
+
+				for (k = 0; k < temp.size(); k++) {
+					horse[temp[k].num].r = next.r;
+					horse[temp[k].num].c = next.c;
+
+					horse_map[next.r][next.c].push_back(horse[temp[k].num]);
+				}
+
+				temp.clear();
+				if (horse_map[next.r][next.c].size() >= 4) { exist = true; break; }
+			}
+		}
+		if (exist) { break; }
+	}
+
+	if (!exist) {
+		cout << -1 << "\n";
+	}
+	else {
+		cout << i << "\n";
+	}
+}

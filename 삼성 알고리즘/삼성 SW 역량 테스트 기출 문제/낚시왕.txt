@@ -1,0 +1,130 @@
+/*
+- 풀어야할때 알아야 할점
+1. 모든 상어들이 이동을 끝마친 후 서로를 잡아먹어야 한다.
+2. s의 범위가 1000까지로 크기 때문에 일일이 이동하면 오래걸린다.
+상어는 2 * (N - 1) 만큼 이동하면 위치, 방향이 모두 같게 이동한다.
+그러므로 상어를 2 * (N - 1)로 나눈 나머지 만큼만 일일이 이동시켜준다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct SHARK {
+	int r;
+	int c;
+	int speed;
+	int dir;
+	int size;
+} SHARK;
+
+int R, C, M;
+
+// (r,c), 위, 아래, 오른쪽, 왼쪽
+int dir[5][2] = { {-1,-1},{-1,0},{1,0},{0,1},{0,-1} };
+
+bool cmp(SHARK a, SHARK b) {		// r, c 오름차순 정렬
+	if (a.r == b.r) {
+		return a.c < b.c;
+	}
+	else {
+		return a.r < b.r;
+	}
+}
+
+vector<SHARK> shark;
+
+int change_dir(int dir) {
+	switch (dir) {
+	case 1:			// 위 -> 아래
+		dir = 2;
+		break;
+	case 2:			// 아래 -> 위
+		dir = 1;
+		break;
+	case 3:			// 오른쪽 -> 왼쪽
+		dir = 4;
+		break;
+	case 4:			// 왼쪽 -> 오른쪽
+		dir = 3;
+		break;
+	}
+	return dir;
+}
+
+int main() {
+
+	cin >> R >> C >> M;
+
+	int i, j;
+	for (i = 0; i < M; i++) {
+		int r, c, s, d, z;
+		cin >> r >> c >> s >> d >> z;
+		SHARK input = { r - 1, c - 1, s, d, z };
+		shark.push_back(input);
+	}
+
+	int shark_size = 0;
+	for (int king_pos = 0; king_pos < C; king_pos++) {		// 1. 낚시왕이 이동한다.
+		sort(shark.begin(), shark.end(), cmp);				// 2. 낚시왕이 있는 위치에서 땅과 제일 가까운 상어를 잡는다.
+		for (i = 0; i < shark.size(); i++) {
+			if (shark[i].c == king_pos) {
+				shark_size += shark[i].size;
+				shark.erase(shark.begin() + i);
+				break;
+			}
+		}
+
+		if (shark.size() <= 0) { break; }
+
+		for (i = 0; i < shark.size(); i++) {		// 3. 모든 상어들을 움직인다.
+			int cur_d = shark[i].dir;
+			int cur_r = shark[i].r;
+			int cur_c = shark[i].c;
+
+			int move;
+			if (cur_d == 1 || cur_d == 2) {		// 위, 아래
+				move = shark[i].speed % (2 * (R - 1));
+			}
+			else {								// 오른쪽, 왼쪽
+				move = shark[i].speed % (2 * (C - 1));
+			}
+
+			for (j = 0; j < move; j++) {
+				if (cur_r >= 0 && cur_r < R && cur_c >= 0 && cur_c < C) {
+					cur_r += dir[cur_d][0];
+					cur_c += dir[cur_d][1];
+				}
+
+				if (cur_r < 0 || cur_r >= R || cur_c < 0 || cur_c >= C) {
+					cur_d = change_dir(cur_d);		// 벽에 부딫히면 방향 이동
+					shark[i].dir = cur_d;
+					cur_r += dir[cur_d][0] * 2;
+					cur_c += dir[cur_d][1] * 2;
+				}
+			}
+			shark[i].r = cur_r;
+			shark[i].c = cur_c;
+		}
+
+		sort(shark.begin(), shark.end(), cmp);
+		for (i = 0; i < shark.size() - 1; i++) {				// 4. 이동을 끝마친 후 상어가 서로를 잡아먹는다.
+			if (shark[i].r == shark[i + 1].r && shark[i].c == shark[i + 1].c) {
+				if (shark[i].size >= shark[i + 1].size) {		// 같은 크기를 같는 경우는 없다.
+					shark.erase(shark.begin() + i + 1);
+				}
+				else {
+					shark.erase(shark.begin() + i);
+				}
+				i--;
+			}
+		}
+
+		if (shark.size() <= 0) { break; }
+	}
+
+	cout << shark_size << "\n";
+}

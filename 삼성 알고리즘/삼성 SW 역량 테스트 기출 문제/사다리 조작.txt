@@ -1,0 +1,165 @@
+/*
+- 풀어야할때 알아야 할점
+1. 3차원 배열을 선언해서 b -> b+1 로 이동 가능한 다리를 표시한다.
+2. (전체 가로선을 선택할 수 있는 경우의 수 = (N-1)×H = 270) C 1,2,3 = 3280725 (시간내에 가능)
+3. 임의로 뽑은 가로선을 사다리에 연결하기 전에 입력받은 사다리를 저장해야한다.
+4. 사다리를 연결하기 전에 왼쪽, 오른쪽 중 하나라도 연결 되어 있으면 연결하지 않고 넘어간다.
+5. 3개 이하를 뽑을 수 있으면 이하만큼 뽑고 그 이상 뽑을 수 있으면 3개만 뽑는다.
+6. i 개를 뽑았을 때 결과가 나오면 더 이상 순회하지 않는다, 말을 움직여서 i번 결과가 i번이 아니면 더 이상 순회하지 않는다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+typedef struct INFO {
+	int a;
+	int b;
+} INFO;
+
+const int INF = 987654321;
+
+int N, M, H;
+
+// 행, 시작 열 ~ 끝 열 
+bool ladder[30][10][10];
+bool temp_ladder[30][10][10];
+bool connected[30][10][10];       // 입력시 연결한 사다리 표시
+
+vector<INFO> all_connect;         // 가로선을 연결할 수 있는 모든 경우의 수 - 현재 연결한 가로선의 수
+
+vector<int> idx;				  // 선택할 가로선의 index
+vector<int> choose;               // 선택한 가로선의 index
+
+bool move_horse() {               // 말을 움직여서 i번 결과가 i번이 나오는지 여부
+	int i, cnt = 0;
+	INFO horse;
+	for (i = 0; i < N; i++) {         // 모든 세로선에서 사다리 출발
+		horse = { 0,i };			  // 사다리 말
+
+		while (horse.a != (H + 1)) {
+			if ((horse.b - 1 >= 0) &&
+				(temp_ladder[horse.a][horse.b][horse.b - 1])) {			// 같은 행 왼쪽 열로 이동
+
+				horse.b = horse.b - 1;
+				horse.a += 1;										
+				continue;
+			}
+			if ((horse.b + 1 < N) &&
+				(temp_ladder[horse.a][horse.b][horse.b + 1])) {			// 같은 행 오른쪽 열로 이동
+
+				horse.b = horse.b + 1;
+				horse.a += 1;
+				continue;
+			}
+			horse.a += 1;
+		}
+
+		if (horse.b == i) { cnt += 1; }
+		else { break; }
+	}
+
+	if (cnt == N) { return true; }
+	
+	return false;
+}
+
+int main() {
+	memset(ladder, false, sizeof(ladder));
+	memset(connected, false, sizeof(connected));
+
+	cin >> N >> M >> H;
+
+	int i, j;
+
+	for (i = 0; i < M; i++) {
+		int a, b;
+		cin >> a >> b;
+
+		INFO cnt = { a - 1, b - 1 };
+
+		connected[cnt.a][cnt.b][cnt.b + 1] = true;          // 사용한 사다리 표시
+
+		ladder[cnt.a][cnt.b][cnt.b + 1] = true;				// 서로 이동 가능
+		ladder[cnt.a][cnt.b + 1][cnt.b] = true;
+	}
+
+	for (i = 0; i < H; i++) {
+		for (j = 0; j < N - 1; j++) {
+			if (!connected[i][j][j + 1]) {
+				all_connect.push_back({ i,j });
+			}
+		}
+	}
+
+	int answer = INF;
+	memcpy(temp_ladder, ladder, sizeof(ladder));		// 선택한 사다리를 연결하기 전 맵 저장
+	if (!move_horse()) {								// 0 번 추가했을 때 i번 결과가 i인지 검사
+		int all_connect_size = all_connect.size();
+		int pick = all_connect_size;
+		if (pick > 3) { pick = 3; }
+
+		for (j = 0; j < all_connect_size; j++) {
+			idx.push_back(j);
+		}
+
+		for (i = 1; i <= pick; i++) {						// 총 가로선 중 i 개 뽑는 경우의 수 (최대 3개)
+			for (j = i; j < all_connect_size; j++) {
+				choose.push_back(0);
+			}
+			for (j = 0; j < i; j++) {
+				choose.push_back(1);
+			}
+
+			do {
+				memcpy(temp_ladder, ladder, sizeof(ladder));
+
+				for (j = 0; j < all_connect_size; j++) {             // 임의로 선택한 사다리 연결
+					if (choose[j]) {
+						INFO cur = all_connect[idx[j]];
+
+						bool can_connect = true;
+						if ((cur.b - 1 >= 0)) {
+							if (connected[cur.a][cur.b - 1][cur.b]) {
+								can_connect = false;
+							}
+						}
+
+						if ((cur.b + 2 < N)) {
+							if (connected[cur.a][cur.b + 1][cur.b + 2]) {
+								can_connect = false;
+							}
+						}
+
+						if (can_connect) {
+							temp_ladder[cur.a][cur.b][cur.b + 1] = true;		// 연속해서 사다리를 연결할 수 없다.
+							temp_ladder[cur.a][cur.b + 1][cur.b] = true;
+						}
+					}
+				}
+
+				if (move_horse()) { answer = min(answer, i); }
+
+				if (answer != INF) { break; }
+
+			} while (next_permutation(choose.begin(), choose.end()));
+
+			choose.clear();
+			if (answer != INF) { break; }
+		}
+		idx.clear();
+	}
+	else {					// 사다리를 연결하기 전 이미 i번째 결과는 i인 경우
+		answer = 0;
+	}
+
+	if (answer == INF) {
+		cout << -1 << "\n";
+	}
+	else {
+		cout << answer << "\n";
+	}
+}

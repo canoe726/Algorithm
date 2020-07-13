@@ -1,0 +1,70 @@
+/*
+- 풀어야할때 알아야 할점
+1. 방법의 수는 항상 1,000,000보다 작거나 같다.
+2. 현재 방향에 따라 다음 이동할 수 있는 방향이 다르다.
+3. 대각선은 3칸 모두 빈공간이여야 한다.
+*/
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int house[16][16];		// 0 : 빈칸, 벽 : 1 / (1,1), (1,2) : 빈 칸
+int used[16][16];
+
+int N;
+
+// (r,c), 우, 우하, 하
+int dir[3][2] = { {0,1},{1,1},{1,0} };
+
+// cur_d -> 0 : 가로, 1 : 세로, 2 : 대각선
+int move_pipe(int p_y, int p_x, int cur_d) {
+	if (p_y == (N - 1) && p_x == (N - 1)) {
+		return 1;
+	}
+
+	if ((p_y < 0) || (p_y >= N) || (p_x < 0) || (p_x >= N)) {		// 벽 만남
+		return 0;
+	}
+
+	int ret = 0;
+
+	switch (cur_d) {
+	case 0:		// 가로
+		if (!house[p_y][p_x + 1]) { ret += move_pipe(p_y, p_x + 1, 0); }			// 가로
+		if (!house[p_y][p_x + 1] && !house[p_y + 1][p_x + 1] && !house[p_y + 1][p_x]) { ret += move_pipe(p_y + 1, p_x + 1, 2); }		// 대각선
+		break;
+
+	case 1:		// 세로
+		if (!house[p_y + 1][p_x]) { ret += move_pipe(p_y + 1, p_x, 1); }			// 세로
+		if (!house[p_y][p_x + 1] && !house[p_y + 1][p_x + 1] && !house[p_y + 1][p_x]) { ret += move_pipe(p_y + 1, p_x + 1, 2); }		// 대각선
+		break;
+
+	case 2:		// 대각선
+		if (!house[p_y][p_x + 1]) { ret += move_pipe(p_y, p_x + 1, 0); }			// 가로
+		if (!house[p_y + 1][p_x]) { ret += move_pipe(p_y + 1, p_x, 1); }			// 세로
+		if (!house[p_y][p_x + 1] && !house[p_y + 1][p_x + 1] && !house[p_y + 1][p_x]) { ret += move_pipe(p_y + 1, p_x + 1, 2); }		// 대각선
+		break;
+	}
+
+	return ret;
+}
+
+int main() {
+	memset(house, 0, sizeof(house));
+	memset(used, 0, sizeof(used));
+
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> house[i][j];
+		}
+	}
+
+	used[0][0] = used[0][1] = 1;		// 시작 파이프
+
+	cout << move_pipe(0, 1, 0) << "\n";
+}

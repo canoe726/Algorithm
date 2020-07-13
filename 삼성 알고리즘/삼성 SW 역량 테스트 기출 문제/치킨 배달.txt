@@ -1,0 +1,98 @@
+/*
+- 풀어야할때 알아야 할점
+1. (존재하는 총 치킨집의 개수) C (M) 을 통해서 모든 치킨집을 고르는 경우의 수를 구할 수 있다.
+2. 고른 M 개의 치킨집의 경우의 수를 기반으로 집 마다의 최소 치킨 거리를 구한다.
+3. 구한 최소 치킨 거리의 값을 갱신 시키면서 답을 구한다.
+*/
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<cmath>
+
+using namespace std;
+
+typedef struct POS {
+	int r;
+	int c;
+} POS;
+
+const int INF = 987654321;
+
+int N, M;
+
+int city[50][50];			// 0 : 빈 칸, 1 : 집, 2 : 치킨집
+
+vector<POS> home;
+vector<POS> chicken;
+vector<int> index;
+vector<int> choose;
+
+queue<POS> picked_chicken;
+
+int get_chicken_dist(int r1, int c1, int r2, int c2) {
+	return abs(r1 - r2) + abs(c1 - c2);
+}
+
+int main() {
+
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> city[i][j];
+			if (city[i][j] == 2) { chicken.push_back({ i,j }); }
+			if (city[i][j] == 1) { home.push_back({ i,j }); }
+		}
+	}
+
+	int answer = INF;
+	for (i = 0; i < M; i++) {
+		index.clear();
+		choose.clear();
+
+		for (j = i + 1; j < chicken.size(); j++) {
+			choose.push_back(0);
+		}
+		for (j = 0; j <= i; j++) {
+			choose.push_back(1);
+		}
+		for (j = 0; j < chicken.size(); j++) {
+			index.push_back(j);
+		}
+
+		do {
+			vector<int> chicken_dist(home.size());				// 각 집마다의 치킨 거리
+			for (j = 0; j < chicken_dist.size(); j++) {
+				chicken_dist[j] = INF;
+			}
+
+			for (j = 0; j < choose.size(); j++) {				// (i + 1)개 만큼의 치킨집 선택
+				if (choose[j]) {
+					picked_chicken.push(chicken[index[j]]);
+				}
+			}
+
+			while (!picked_chicken.empty()) {
+				POS cur_chicken = picked_chicken.front();
+				picked_chicken.pop();
+
+				for (j = 0; j < home.size(); j++) {
+					chicken_dist[j] = min(chicken_dist[j], get_chicken_dist(cur_chicken.r, cur_chicken.c, home[j].r, home[j].c));
+				}
+			}
+
+			int sum_of_dist = 0;								// 고른 치킨집 중 치킨 거리
+			for (j = 0; j < chicken_dist.size(); j++) {
+				sum_of_dist += chicken_dist[j];
+			}
+
+			answer = min(answer, sum_of_dist);
+
+		} while (next_permutation(choose.begin(), choose.end()));
+	}
+
+	cout << answer << "\n";
+}

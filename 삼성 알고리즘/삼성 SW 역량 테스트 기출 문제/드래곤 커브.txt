@@ -1,116 +1,125 @@
-#include<iostream>
-#include<vector>
-#include<cmath>
+/*
+- 풀어야할때 알아야 할점
+1. 사각형의 개수는 임의의 map을 만들어서 4개의 점이 모두 1이면 센다.
+2. 커브의 세대를 거듭해도 좌표는 (0,0) ~ (100,100) 까지가 유효하다.
+3. 이전 세대의 가장 끝 점을 기준으로 모든 좌표를 반시계 방향으로 회전 시킨 후,
+회전시킨 끝 좌표가 이전 세대의 끝 점과 같게 되도록 모든 좌표를 이동시켜준다.
+그 후 첫 번째 값을 제외하고 역순으로 pos 좌표뒤에 붙이면 커브가 완성된다.
+4. 0 세대는 직접 만들어 줘야한다.
+5. 반시계 회전 변환 행렬은
+(x`) = (cos(90) -sin(90)) (x)
+(y`) = (sin(90)  cos(90)) (y) 이다.
+*/
 
-#define PI 3.141592
-#define FIELD_SIZE 101
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<queue>
 
 using namespace std;
 
+struct INFO {
+	int x;
+	int y;
+	int d;
+	int g;
+};
+
+struct POS {
+	int x;
+	int y;
+};
+
 int N;
-int field[FIELD_SIZE][FIELD_SIZE] = { 0 };
-int generation[20];
-int answer = 0;
 
-vector<pair<int, int>> pos[20];
+// (y,x), 우, 상, 좌, 하
+int dir[4][2] = { {0,1},{-1,0},{0,-1},{1,0} };
 
-void mark_dot()
-{
-	int i, j;
-	
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < pos[i].size(); j++)
-		{
-			field[pos[i][j].first][pos[i][j].second] = 1;
-		}
-	}
-}
+const int map_len = 101;
+int map[map_len][map_len];
 
-void count_rectangle()
-{
-	int i, j;
-	// y axis
-	for (i = 0; i < FIELD_SIZE - 1; i++)
-	{
-		// x axis
-		for (j = 0; j < FIELD_SIZE - 1; j++)
-		{			
-			if (field[i][j] == 1 &&
-				field[i][j + 1] == 1 &&
-				field[i + 1][j] == 1 &&
-				field[i + 1][j + 1] == 1)
-			{
-				answer++;
+vector<INFO> gene;
+
+int find_rect() {
+	int ret = 0;
+
+	int i, j, k, l;
+	for (i = 0; i < map_len - 1; i++) {
+		for (j = 0; j < map_len - 1; j++) {
+			int cnt = 0;
+			for (k = 0; k < 2; k++) {
+				for (l = 0; l < 2; l++) {
+					if (map[i + k][j + l] == 1) {
+						cnt += 1;
+					}
+				}
+			}
+
+			if (cnt == 4) {
+				ret += 1;
 			}
 		}
 	}
+
+	return ret;
 }
 
-void make_dragon_curve()
-{
-	int i, j, k;
-	double degree = (90.0 * (PI / 180.0));
+vector<POS> pos;
 
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < generation[i]; j++)
-		{
-			// ������
-			int basis_x = pos[i].back().first;
-			int basis_y = pos[i].back().second;
+void make_curve(int idx) {
+	// 시작 선분 만들기, 0 세대
+	int start_y = gene[idx].y;
+	int start_x = gene[idx].x;
 
-			int len = pos[i].size();
+	pos.push_back({ start_x, start_y });
+	pos.push_back({ start_x + dir[gene[idx].d][1], start_y + dir[gene[idx].d][0] });
 
-			for (k = len - 2; k >=0; k--)
-			{
-				double x_prime = -sin(degree)*(pos[i][k].second - basis_y) + basis_x;
-				double y_prime = sin(degree)*(pos[i][k].first - basis_x) + basis_y;
+	int i, j;
+	for (i = 0; i < gene[idx].g; i++) {
 
-				pos[i].push_back(pair<int, int>((int)(x_prime + 0.5), (int)(y_prime + 0.5)));
-			}			
+		vector<POS> rotate(pos.size());
+
+		for (j = 0; j < rotate.size(); j++) {
+			rotate[j].y = 1 * pos[j].x;
+			rotate[j].x = -1 * pos[j].y;
 		}
+		j -= 1;
+
+		int y_cnt = pos[pos.size() - 1].y - rotate[j].y;
+		int x_cnt = pos[pos.size() - 1].x - rotate[j].x;
+
+		for (j = 0; j < rotate.size(); j++) {
+			rotate[j].y += y_cnt;
+			rotate[j].x += x_cnt;
+		}
+
+		for (j = rotate.size() - 2; j >= 0; j--) {
+			pos.push_back(rotate[j]);
+		}
+		rotate.clear();
 	}
+
+	for (j = 0; j < pos.size(); j++) {
+		map[pos[j].y][pos[j].x] = 1;
+	}
+	pos.clear();
 }
 
-int main()
-{
+int main() {
+	memset(map, 0, sizeof(map));
+
 	cin >> N;
 
 	int i;
-	for (i = 0; i < N; i++)
-	{
+	for (i = 0; i < N; i++) {
 		int x, y, d, g;
 		cin >> x >> y >> d >> g;
-		generation[i] = g;
-
-		pos[i].push_back(pair<int, int>(x, y));
-		
-		// right
-		if (d == 0)
-		{
-			pos[i].push_back(pair<int, int>(x + 1, y));
-		}
-		// up
-		else if (d == 1)
-		{
-			pos[i].push_back(pair<int, int>(x, y - 1));
-		}
-		// left
-		else if (d == 2)
-		{
-			pos[i].push_back(pair<int, int>(x - 1, y));
-		}
-		// down
-		else if (d == 3)
-		{
-			pos[i].push_back(pair<int, int>(x, y + 1));
-		}
+		gene.push_back({ x, y, d, g });
 	}
-	
-	make_dragon_curve();
-	mark_dot();
-	count_rectangle();
 
-	cout << answer << '\n';
+	for (i = 0; i < N; i++) {
+		make_curve(i);
+	}
+
+	cout << find_rect() << "\n";
 }

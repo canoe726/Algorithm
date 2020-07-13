@@ -1,60 +1,62 @@
+/*
+- 풀어야할때 알아야 할점
+1. N일 까지 일할 수 있는 최댓값을 구해준다.
+2. 재귀적으로 (현재일 + Ti일) ~ N일 까지 이동하면서 모든 경우의 수를 찾는다. 
+*/
+
 #include<iostream>
+#include<cstring>
 #include<algorithm>
 
 using namespace std;
 
+struct INFO {
+	int day;
+	int cost;
+};
+
+INFO jobs[16];
+
 int N;
-int T[16] = { 0 };
-int P[16] = { 0 };
-int dp[16] = { 0 };
-int answer = 0;
 
-void find_max(int before, int cur, int start)
-{
-	if (start > N)
-	{
-		if ((start-1) == N)
-		{
-			dp[cur] = max(P[cur] + dp[before], dp[cur]);
-			if (dp[cur] > answer) { answer = dp[cur]; }
+int dfs_search(int cur_day, int cost) {
+	if (cur_day > N) {
+		return cost;
+	}
+
+	int ret = 0;
+
+	int i;
+	for (i = cur_day; i <= N; i++) {
+		if (i + jobs[cur_day].day > N + 1) {
+			ret = max(ret, dfs_search(i + jobs[cur_day].day, cost));
 		}
-		return;
+		else {
+			ret = max(ret, dfs_search(i + jobs[cur_day].day, cost + jobs[cur_day].cost));
+		}
 	}
-	
-	int i;
-	for (i = start; i <= N; i++)
-	{
-		dp[cur] = max(P[cur] + dp[before], dp[cur]);
 
-		if (dp[cur] > answer) { answer = dp[cur]; }
-
-		find_max(cur, i, i + T[i]);
-	}
+	return ret;
 }
 
-void dynamic()
-{
-	int i;
-	for (i = 1; i <= N; i++)
-	{
-		find_max(0, i, i + T[i]);
-	}
-}
+int main() {
+	memset(jobs, {}, sizeof(jobs));
 
-int main()
-{
 	cin >> N;
 
 	int i;
-	for (i = 1; i <= N; i++)
-	{
-		int t, p;
-		cin >> t >> p;
-		T[i] = t;
-		P[i] = p;
+	for (i = 1; i <= N; i++) {
+		INFO info;
+		cin >> info.day;
+		cin >> info.cost;
+
+		jobs[i] = info;
 	}
 
-	dynamic();
+	int answer = -1;
+	for (i = 1; i <= N; i++) {
+		answer = max(answer, dfs_search(i, 0));
+	}
 
-	cout << answer << '\n';
+	cout << answer << "\n";
 }

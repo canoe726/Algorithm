@@ -1,39 +1,128 @@
+/*
+- 풀어야할때 알아야 할점
+1. 주사위를 세로, 가로로 나누어서 회전시키는 방법을 알아낸다.
+2. 주사위를 돌린 후 출력하고, 맵의 값을 갱신한다.
+*/
+
 #include<iostream>
+#include<cstring>
 
 using namespace std;
 
-// �� �� �� ��
-// 1  2  3  4
+int N, M;
+int x, y, K;
 
-// �ֻ���
-//   2
-// 4 1 3
-//   5
-//   6
+int map[20][20];
+int command[1000];
 
-int map[20][20] = { 0 };
-int orders[1000] = { 0 };
+// (y,x), 0은 생략, 1 : 동, 2 : 서, 3 : 북, 4 : 남
+int dir[5][2] = { {0,0},{0,1},{0,-1},{-1,0},{1,0} };
 
-int main()
-{
-	int N, M, x, y, K;
-	cin >> N >> M >> x >> y >> K;
+// 0 : 위, 3 : 아래
+int cube_h[4];		// 주사위 세로 : 위를 기준으로 아래로 순서
+int cube_w[4];		// 주사위 가로 : 위를 기준으로 오른쪽 순서
 
+void rotate_cube(int d) {
+
+	int temp, i;
+
+	switch (d) {
+	case 1:				// 동
+		temp = cube_w[3];
+		for (i = 3; i > 0; i--) {
+			cube_w[i] = cube_w[i - 1];
+		}
+		cube_w[i] = temp;
+
+		cube_h[0] = cube_w[0];
+		cube_h[2] = cube_w[2];
+		break;
+	
+	case 2:				// 서
+		temp = cube_w[0];
+		for (i = 0; i < 3; i++) {
+			cube_w[i] = cube_w[i + 1];
+		}
+		cube_w[i] = temp;
+
+		cube_h[0] = cube_w[0];
+		cube_h[2] = cube_w[2];
+		break;
+	
+	case 3:				// 북
+		temp = cube_h[0];
+		for (i = 0; i < 3; i++) {
+			cube_h[i] = cube_h[i + 1];
+		}
+		cube_h[i] = temp;
+
+		cube_w[0] = cube_h[0];
+		cube_w[2] = cube_h[2];
+		break;
+		
+	case 4:				// 남
+		temp = cube_h[3];
+		for (i = 3; i > 0; i--) {
+			cube_h[i] = cube_h[i - 1];
+		}
+		cube_h[i] = temp;
+
+		cube_w[0] = cube_h[0];
+		cube_w[2] = cube_h[2];
+		break;
+	}
+}
+
+void move_cube() {
+	int i;
+	for (i = 0; i < K; i++) {
+		int cur_d = command[i];
+
+		int cur_y = y + dir[cur_d][0];
+		int cur_x = x + dir[cur_d][1];
+
+		if ((cur_y >= 0) && (cur_y < N) &&
+			(cur_x >= 0) && (cur_x < M)) {
+
+			y = cur_y;
+			x = cur_x;
+
+			rotate_cube(cur_d);
+			cout << cube_h[0] << "\n";		// 주사위의 윗 면 출력
+
+			if (map[y][x] == 0) {
+				map[y][x] = cube_h[2];
+			}
+			else {
+				cube_h[2] = map[y][x];
+				cube_w[2] = map[y][x];
+
+				map[y][x] = 0;
+			}
+		}
+	}
+}
+
+int main() {
+	memset(map, 0, sizeof(map));
+	memset(command, 0, sizeof(command));
+	memset(cube_h, 0, sizeof(cube_h));
+	memset(cube_w, 0, sizeof(cube_w));
+
+	cin >> N >> M;
+
+	cin >> y >> x >> K;
+	
 	int i, j;
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < M; j++)
-		{
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
 			cin >> map[i][j];
 		}
 	}
 
-	for (i = 0; i < K; i++)
-	{
-		cin >> orders[i];
+	for (i = 0; i < K; i++) {
+		cin >> command[i];
 	}
 
-
-
-
+	move_cube();
 }

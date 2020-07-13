@@ -1,0 +1,173 @@
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct POS {
+	int y;
+	int x;
+	int k;
+	int dir;
+} POS;
+
+int N, K;
+
+int board[12][12];			// 0 : 흰색, 1 : 빨간색, 2 : 파란색
+
+// (y,x), 0은 빈칸, 우, 좌, 상, 하
+int dir[5][2] = { {0,0},{0,1},{0,-1},{-1,0},{1,0} };
+
+vector<POS> pos_info;		// 움직일 체스 기물
+vector<POS> map[12][12];
+
+bool cmp(POS a, POS b) {
+	return a.k < b.k;
+}
+
+bool is_over_four() {
+	bool ret = false;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (map[i][j].size() >= 4) {
+				return true;
+			}
+		}
+	}
+
+	return ret;
+}
+
+void push_queue() {
+	int i, j, k;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (map[i][j].size() > 0) {
+				for (k = 0; k < map[i][j].size(); k++) {
+					pos_info.push_back(map[i][j][k]);
+				}
+			}
+		}
+	}
+	sort(pos_info.begin(), pos_info.end(), cmp);
+}
+
+void move_pieces() {
+	push_queue();
+
+	int i, j;
+	for (i = 0; i < pos_info.size(); i++) {			// 1번 말부터 K번 말까지 순서대로 이동
+		int y = pos_info[i].y;
+		int x = pos_info[i].x;
+		int d = pos_info[i].dir;
+
+		int next_y = y + dir[d][0];
+		int next_x = x + dir[d][1];
+
+		int board_color = -1;					// 이동하려는 칸의 색상 검출
+		if ((next_y >= 0) && (next_y < N) && (next_x >= 0) && (next_x < N)) {
+			board_color = board[next_y][next_x];
+		}
+		else {
+			board_color = 2;
+		}
+
+		bool canMove = true;
+		if (board_color == 2) {							// 파란색
+			switch (d) {								// 방향을 반대 방향으로 바꾼다.
+			case 1:
+				d = 2;
+				break;
+			case 2:
+				d = 1;
+				break;
+			case 3:
+				d = 4;
+				break;
+			case 4:
+				d = 3;
+				break;
+			}
+			next_y = y + dir[d][0];
+			next_x = x + dir[d][1];
+
+			for (j = 0; j < map[y][x].size(); j++) {
+				if (map[y][x][j].k == pos_info[i].k) {
+					map[y][x][j].dir = d;
+					break;
+				}
+			}
+
+			if ((next_y >= 0) && (next_y < N) && (next_x >= 0) && (next_x < N)) {			// 범위 내 인 경우 검사
+				if (board[next_y][next_x] != 2) { canMove = true; }							// 파란색이 아닌 경우 이동
+				else { canMove = false; }													// 파란색인 경우 아무것도 하지 않음
+			}
+			else { canMove = false; }														// 범위를 벗어나는 경우 아무것도 하지 않음
+		}
+
+		vector<POS> cur_info;
+		if (canMove) {
+			for (j = 0; j < map[y][x].size(); j++) {
+				map[y][x][j].y = next_y;
+				map[y][x][j].x = next_x;
+
+				cur_info.push_back(map[y][x][j]);
+				if (map[y][x][j].k == pos_info[i].k) {
+					break;
+				}
+			}
+
+			map[y][x].erase(map[y][x].begin(), map[y][x].begin() + cur_info.size());						// 현재 말 상위를 말을 모두 뺀다.
+
+			if (board_color == 1) {							// 빨간색
+				reverse(cur_info.begin(), cur_info.end());
+			}
+
+			map[next_y][next_x].insert(map[next_y][next_x].begin(), cur_info.begin(), cur_info.end());		// 뺀 말들을 존재하는 말 위에 올린다.
+			if (map[next_y][next_x].size() >= 4) {
+				return;
+			}
+		}
+		cur_info.clear();
+	}
+}
+
+int main() {
+	memset(board, 0, sizeof(board));
+
+	cin >> N >> K;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> board[i][j];
+		}
+	}
+
+	for (i = 0; i < K; i++) {
+		int y, x, dir;
+		cin >> y >> x >> dir;
+
+		map[y - 1][x - 1].push_back({ y - 1, x - 1, i + 1, dir }); 
+	}
+
+	bool answer = false;
+	for (i = 1; i < 1001; i++) {
+		move_pieces();	
+		if (is_over_four()) {
+			answer = true;
+			break;
+		}
+		pos_info.clear();
+	}
+
+	if (answer) {
+		cout << i << "\n";
+	}
+	else {
+		cout << -1 << "\n";
+	}
+}

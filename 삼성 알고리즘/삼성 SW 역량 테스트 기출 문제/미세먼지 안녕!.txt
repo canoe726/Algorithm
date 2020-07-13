@@ -1,0 +1,181 @@
+/*
+- 풀어야할때 알아야 할점
+1. 미세먼지 확산 후 공기청정기 가동 순으로 진행되어야 한다.
+2. 미세먼지 확산은 동시에 일어나며 새로운 배열을 생성해서 퍼진 후의 맵을 저장해야한다.
+3. 공기청정기를 돌린다는 것은 미세먼지 좌표를 이동 시켜주는 것과 같다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct POS {
+	int y;
+	int x;
+} POS;
+
+int R, C, T;
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int room[50][50];
+
+queue<POS> dust_pos;			// 모든 미세먼지 위치
+POS up_cleaner;					// 공기청정기 위쪽 부분
+POS down_cleaner;				// 공기청정기 아래쪽 부분
+
+int find_answer() {
+	int ret = 0;
+
+	int i, j;
+	for (i = 0; i < R; i++) {
+		for (j = 0; j < C; j++) {
+			if (room[i][j] > 0) {
+				ret += room[i][j];
+			}
+		}
+	}
+
+	return ret;
+}
+
+void spread_fine_dust() {
+
+	int dust_map[50][50];
+	memset(dust_map, 0, sizeof(dust_map));
+	dust_map[up_cleaner.y][up_cleaner.x] = -1;
+	dust_map[down_cleaner.y][down_cleaner.x] = -1;
+
+	while (!dust_pos.empty()) {
+
+		POS cur = dust_pos.front();
+		dust_pos.pop();
+
+		int i, cnt = 0;
+		int s_amount = room[cur.y][cur.x] / 5;		// 미세먼지가 퍼지는 양
+		for (i = 0; i < 4; i++) {
+			POS next = { cur.y + dir[i][0], cur.x + dir[i][1] };
+
+			if ((next.y >= 0) && (next.y < R) &&
+				(next.x >= 0) && (next.x < C)) {
+
+				if (dust_map[next.y][next.x] >= 0) {
+					dust_map[next.y][next.x] += s_amount;
+					cnt += 1;
+				}
+			}
+		}
+
+		dust_map[cur.y][cur.x] += room[cur.y][cur.x] - (s_amount * cnt);
+	}
+
+	memcpy(room, dust_map, sizeof(dust_map));
+}
+
+void activate_cleaner() {
+	// 공기청정기 위쪽 부분
+	int up_y = up_cleaner.y;
+	int up_x = up_cleaner.x;
+
+	while (up_y > 0) {		// 상
+		up_y -= 1;
+		if (room[up_y + 1][up_x] == -1) {
+			continue;
+		}
+		room[up_y + 1][up_x] = room[up_y][up_x];
+		room[up_y][up_x] = 0;
+	}
+	while (up_x < C - 1) {		// 우
+		up_x += 1;
+		room[up_y][up_x - 1] = room[up_y][up_x];
+		room[up_y][up_x] = 0;
+	}
+	while (up_y < up_cleaner.y) {		// 하
+		up_y += 1;
+		room[up_y - 1][up_x] = room[up_y][up_x];
+		room[up_y][up_x] = 0;
+	}
+	while (up_x > 1) {		// 좌
+		up_x -= 1;
+		room[up_y][up_x + 1] = room[up_y][up_x];
+		room[up_y][up_x] = 0;
+	}
+
+	// 공기청정기 아래쪽 부분
+	int down_y = down_cleaner.y;
+	int down_x = down_cleaner.x;
+
+	while (down_y < R - 1) {		// 하
+		down_y += 1;
+		if (room[down_y - 1][down_x] == -1) {
+			continue;
+		}
+		room[down_y - 1][down_x] = room[down_y][down_x];
+		room[down_y][down_x] = 0;
+	}
+	while (down_x < C - 1) {		// 우
+		down_x += 1;
+		room[down_y][down_x - 1] = room[down_y][down_x];
+		room[down_y][down_x] = 0;
+	}
+	while (down_y > down_cleaner.y) {		// 상
+		down_y -= 1;
+		room[down_y + 1][down_x] = room[down_y][down_x];
+		room[down_y][down_x] = 0;
+	}
+	while (down_x > 1) {		// 좌
+		down_x -= 1;
+		room[down_y][down_x + 1] = room[down_y][down_x];
+		room[down_y][down_x] = 0;
+	}
+}
+
+void room_status() {
+	int i, j;
+	for (i = 0; i < R; i++) {			// 퍼질 수 있는 모든 미세먼지를 큐에 넣는다.
+		for (j = 0; j < C; j++) {
+			if (room[i][j] > 0) {
+				dust_pos.push({ i,j });
+			}
+		}
+	}
+	spread_fine_dust();
+	
+	activate_cleaner();
+}
+
+int main() {
+	memset(room, 0, sizeof(room));
+
+	up_cleaner = { -1,-1 };
+	down_cleaner = { -1,-1 };
+
+	cin >> R >> C >> T;
+
+	int i, j;
+	for (i = 0; i < R; i++) {
+		for (j = 0; j < C; j++) {
+			cin >> room[i][j];
+			if (room[i][j] == -1) {
+				if (up_cleaner.y == -1) {
+					up_cleaner.y = i;
+					up_cleaner.x = j;
+				}
+				else {
+					down_cleaner.y = i;
+					down_cleaner.x = j;
+				}
+			}
+		}
+	}
+
+	for (i = 0; i < T; i++) {
+		room_status();
+	}
+
+	cout << find_answer() << "\n";
+}

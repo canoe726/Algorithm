@@ -1,126 +1,98 @@
+/*
+- 풀어야할때 알아야 할점
+1. N/2 개 만큼의 팀을 2개 만들어야 한다.
+2. N/2 개 만큼의 팀원들의 능력치를 2중 for 문으로 모두 더해주어야 한다.
+3. 재귀적으로 탐색해서 모든 경우의 수를 검사한다. (조합 X)
+*/
+
 #include<iostream>
+#include<cstring>
+#include<vector>
+#include<algorithm>
 #include<cmath>
 #include<climits>
-#include<vector>
 
 using namespace std;
 
-int table[20][20] = { 0 };
-int start_team_value = 0;
-int link_team_value = 0;
-int answer = INT_MAX;
+int level[20][20];
+int choose[20];
 
-void calculate_team_score(vector<int> a, vector<int> b, int start, int count, int N, int mode)
-{
+int N;
+
+int find_min_value() {
+	int s_total = 0;
+	int l_total = 0;
+
+	vector<int> start_team;
+	vector<int> link_team;
+
 	int i, j;
-
-	if (count >= N)
-	{
-		if (mode == 0)
-		{
-			start_team_value += table[a[0]][a[1]];
-			start_team_value += table[a[1]][a[0]];
+	for (i = 0; i < N; i++) {
+		if (choose[i]) {
+			start_team.push_back(i);
 		}
-		else
-		{
-			link_team_value += table[a[0]][a[1]];
-			link_team_value += table[a[1]][a[0]];
-		}
-
-		return;
-	}
-
-	for (i = start; i < b.size(); i++)
-	{
-		a.push_back(b[i]);
-		calculate_team_score(a, b, i + 1, count + 1, N, mode);
-
-		if (start >= b.size())
-		{
-			a.clear();
-		}
-		else
-		{
-			a.pop_back();
+		else {
+			link_team.push_back(i);
 		}
 	}
+
+	for (i = 0; i < start_team.size() - 1; i++) {
+		for (j = i + 1; j < start_team.size(); j++) {
+			s_total += level[start_team[i]][start_team[j]];
+			s_total += level[start_team[j]][start_team[i]];
+
+			l_total += level[link_team[i]][link_team[j]];
+			l_total += level[link_team[j]][link_team[i]];
+		}
+	}
+
+	return abs(s_total - l_total);
 }
 
-void team_combination(vector<int> team, int start, int count, int N)
-{
-	int i, j;
-
-	if (count >= N / 2)
-	{
-		vector<int> start_team;
-		start_team_value = 0;
-		calculate_team_score(start_team, team, 0, 0, 2, 0);
-
-		// find link_team
-		vector<int> remain_team;
-		for (i = 0; i < N; i++)
-		{
-			int exist = 0;
-			for (j = 0; j < team.size(); j++)
-			{
-				if (i == team[j])
-				{
-					exist = 1;
-				}
-			}
-			if (exist == 0)
-			{
-				remain_team.push_back(i);
-			}
-		}
-
-		vector<int> link_team;
-		link_team_value = 0;
-		calculate_team_score(link_team, remain_team, 0, 0, 2, 1);
-		
-		int res = abs(start_team_value - link_team_value);
-		if (answer > res)
-		{
-			answer = res;
-		}
-
-		return;
+int dfs_search(int idx, int cnt) {
+	if (cnt >= (N / 2)) {
+		return find_min_value();
 	}
 
-	for (i = start; i < N; i++)
-	{
-		team.push_back(i);
-		team_combination(team, i + 1, count + 1, N);
+	int ret = INT_MAX;
 
-		if (start >= N)
-		{
-			team.clear();
-		}
-		else
-		{
-			team.pop_back();
-		}
+	int i;
+	for (i = idx; i < N; i++) {
+		choose[i] = 1;
+		ret = min(ret, dfs_search(i + 1, cnt + 1));
+		choose[i] = 0;
 	}
+
+	return ret;
 }
 
-int main()
-{
-	int N;
+int main() {
+	memset(level, 0, sizeof(level));
+	memset(choose, 0, sizeof(choose));
+
 	cin >> N;
 
 	int i, j;
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < N; j++)
-		{
-			int su;
-			cin >> su;
-			table[i][j] = su;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> level[i][j];
 		}
 	}
 
-	vector<int> team;
-	team_combination(team, 0, 0, N);
-
-	cout << answer << '\n';
+	cout << dfs_search(0, 0) << "\n";
 }
+
+/*
+6
+   1 2 3 4 5 6
+1 0 1 2 3 4 5
+2 6 0 7 8 9 1
+3 2 3 0 4 5 6
+4 7 8 9 0 1 2
+5 3 4 5 6 0 7
+6 8 9 1 2 3 0
+
+1,2,3,4
+
+1,2 / 2,1 / 1,3 / 3,1 / 2,3 / 3,2
+*/

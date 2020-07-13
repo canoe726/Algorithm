@@ -1,169 +1,124 @@
+/*
+- 풀어야할때 알아야 할점
+1. 가로 기준 : i > (i+1) 인 경우, i < (i+1) 인 경우를 다르게 계산해준다.
+2. 경사로를 추가했을 때 범위를 벗어나거나, 높이차이가 2이상, 경사로 놓은 곳이 겹칠 경우 셀 수 없다.
+*/
+
 #include<iostream>
+#include<cstring>
+#include<vector>
+#include<cmath>
 
 using namespace std;
 
-int field[100][100];
-int answer = 0;
+int map[100][100];
+vector<int> path;
 
-void width_forward(int r, int N, int L)
-{
+int N, L;
+
+bool can_go_way() {
+	bool ret = true;
+
 	int i, j;
-	int cur = field[r][0];
-	int len = 1;
-	int check = 1;
 
-	for (i = 1; i < N; i++)
-	{
-		if (cur == field[r][i])
-		{
-			cur = field[r][i];
-			len++;
+	vector<int> visited = vector<int>(path.size());
+	for (i = 0; i < path.size(); i++) {
+		visited[i] = 0;
+	}
+
+	for (i = 0; i < path.size() - 1; i++) {
+		if (abs(path[i] - path[i + 1]) > 1) {
+			ret = false;
+			break;
 		}
-		else
-		{
-			if ( abs(cur - field[r][i]) < 2)
-			{
-				if (cur > field[r][i])
-				{
-					int size = 0;
-					for (j = i; j < N; j++)
-					{
-						if (field[r][i] == field[r][j])
-						{
-							size++;
-						}
-						else
-						{
-							break;
-						}
-					}
-					if (size >= L)
-					{
-						cur = field[r][i];
-						i += (L - 1);
-						len = 0;
-					}
-					else
-					{
-						check = 0;
+
+		if (path[i] > path[i + 1]) {
+			for (j = 1; j <= L; j++) {
+				if (i + j >= N) {
+					ret = false;
+					break;
+				}
+				else if (visited[i + j]) {
+					ret = false;
+					break;
+				}
+				else {
+					if (path[i + 1] != path[i + j]) {
+						ret = false;
 						break;
 					}
 				}
-				else
-				{
-					if (len >= L)
-					{
-						cur = field[r][i];
-						len = 1;
-					}
-					else
-					{
-						check = 0;
-						break;
-					}
-				}
+				visited[i + j] = 1;
 			}
-			else
-			{
-				check = 0;
-				break;
-			}			
+		}
+		else if (path[i] < path[i + 1]) {
+			for (j = 0; j < L; j++) {
+				if (i - j < 0) {
+					ret = false;
+					break;
+				}
+				else if (visited[i - j]) {
+					ret = false;
+					break;
+				}
+				else {
+					if (path[i] != path[i - j]) {
+						ret = false;
+						break;
+					}
+				}
+				visited[i - j] = 1;
+			}
+		}
+		else {
+			continue;
+		}
+
+		if (!ret) {
+			break;
 		}
 	}
 
-	if (check == 1) { answer++; }
+	return ret;
 }
 
-void height_forward(int r, int N, int L)
-{
-	int i, j;
-	int cur = field[0][r];
-	int len = 1;
-	int check = 1;
+int main() {
+	memset(map, 0, sizeof(map));
 
-	for (i = 1; i < N; i++)
-	{
-		if (cur == field[i][r])
-		{
-			cur = field[i][r];
-			len++;
-		}
-		else
-		{
-			if (abs(cur - field[i][r]) < 2)
-			{
-				if (cur > field[i][r])
-				{
-					int size = 0;
-					for (j = i; j < N; j++)
-					{
-						if (field[i][r] == field[j][r])
-						{
-							size++;
-						}
-						else
-						{
-							break;
-						}
-					}
-					if (size >= L)
-					{
-						cur = field[i][r];
-						i += (L - 1);
-						len = 0;
-					}
-					else
-					{
-						check = 0;
-						break;
-					}
-				}
-				else
-				{
-					if (len >= L)
-					{
-						cur = field[i][r];
-						len = 1;
-					}
-					else
-					{
-						check = 0;
-						break;
-					}
-				}
-			}
-			else
-			{
-				check = 0;
-				break;
-			}
-		}
-	}
-
-	if (check == 1) { answer++; }
-}
-
-int main()
-{
-	int N, L;
 	cin >> N >> L;
 
 	int i, j;
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < N; j++)
-		{
-			int su;
-			cin >> su;
-			field[i][j] = su;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> map[i][j];
 		}
 	}
 
-	for (i = 0; i < N; i++)
-	{
-		width_forward(i, N, L);
-		height_forward(i, N, L);
+	int answer = 0;
+
+	// 가로 길 검사
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			path.push_back(map[i][j]);
+		}
+		if (can_go_way()) {
+			answer += 1;
+		}
+
+		path.clear();
 	}
 
-	cout << answer << endl;
+	// 세로 길 검사
+	for (j = 0; j < N; j++) {
+		for (i = 0; i < N; i++) {
+			path.push_back(map[i][j]);
+		}
+		if (can_go_way()) {
+			answer += 1;
+		}
+
+		path.clear();
+	}
+
+	cout << answer << "\n";
 }

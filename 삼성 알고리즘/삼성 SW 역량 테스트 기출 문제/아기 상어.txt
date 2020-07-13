@@ -1,0 +1,182 @@
+/*
+- 풀어야할때 알아야 할점
+1. 움직이기 전 먹을 수 있는 물고기를 찾을 때 space[i][j] 값이 1~6 사이 값만 queue에 넣어야한다.
+2. 움직이기 전 상어가 이동할 수 없는 공간을 표시한다.
+3. 물고기의 정보를 이동거리, y, x 순으로 정렬하고, 만약 step이 0 이면 이동할 수 없는 곳이므로 빼준다.
+이동할 수 없는 곳을 전부 제거한 후 queue의 크기가 0이라면 더이상 이동할 수 없으므로 종료한다.
+*/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct POS {
+	int y;
+	int x;
+	int size;
+	int step;			// 아기 상어는 해당 X
+} POS;
+
+int N;
+int sec = 0;			// 물고기를 잡아먹을 수 있는 시간
+
+int space[20][20];			// 0 : 빈 칸, 1~6 : 물고기의 크기, 9 : 아기 상어의 위치
+int visited[20][20];		// 상어가 이동할 수 있는 공간
+
+int step_cnt[20][20];		// 상어가 지나야하는 칸의 개수
+int step_visited[20][20];	// 이동하면서 방문여부 체크
+
+// (y,x), 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int eat_fish_cnt = 0;
+POS baby_shark;
+
+vector<POS> fish;
+
+bool cmp(POS a, POS b) {
+	if (a.step == b.step) {
+		if (a.y == b.y) {
+			return a.x < b.x;
+		}
+		else {
+			return a.y < b.y;
+		}
+	}
+	else {
+		return a.step < b.step;
+	}
+}
+
+void can_eat() {
+	int i, j;
+	for (i = 0; i < N; i++) {					// 전 공간을 돌면서 먹을 수 있는 물고기들을 queue에 넣는다.
+		for (j = 0; j < N; j++) {
+			if (baby_shark.size > space[i][j] &&
+				(space[i][j] >= 1 && space[i][j] <= 6)) {
+				fish.push_back({ i, j, space[i][j], 0 });
+			}
+		}
+	}
+}
+
+void check_move() {									// 상어가 이동할 수 없는 공간을 표시한다.
+	memset(visited, 0, sizeof(visited));			// visited[i][j] = 1 이면 이미 이동했거나 갈 수 없는 곳
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (baby_shark.size < space[i][j]) {
+				visited[i][j] = 1;
+			}
+		}
+	}
+}
+
+void update_fish_info() {							// 현재 아기 상어 위치에서 물고기까지의 거리 정보를 입력한다.
+	int i;
+	for (i = 0; i < fish.size(); i++) {
+		fish[i].step = step_cnt[fish[i].y][fish[i].x];
+	}
+
+	sort(fish.begin(), fish.end(), cmp);			// 물고기의 정보를 정렬한다. (거리, y, x 순)
+}
+
+void move_step() {
+	memset(step_cnt, 0, sizeof(step_cnt));
+	memset(step_visited, 0, sizeof(step_visited));
+
+	queue<POS> q;
+	q.push(baby_shark);
+	step_visited[baby_shark.y][baby_shark.x] = true;
+
+	while (!q.empty()) {
+		int cur_y = q.front().y;
+		int cur_x = q.front().x;
+		q.pop();
+
+		int i;
+		for (i = 0; i < 4; i++) {
+			int next_y = cur_y + dir[i][0];
+			int next_x = cur_x + dir[i][1];
+
+			if ((next_y >= 0) && (next_y < N) &&
+				(next_x >= 0) && (next_x < N)) {
+
+				if (!step_visited[next_y][next_x] && !visited[next_y][next_x]) {
+					step_cnt[next_y][next_x] = step_cnt[cur_y][cur_x] + 1;
+					step_visited[next_y][next_x] = true;
+					q.push({ next_y, next_x, 2, 0 });
+				}
+			}
+		}
+	}
+}
+
+void eat_fish() {
+	check_move();
+	move_step();
+	update_fish_info();
+
+	int i;
+	for (i = 0; i < fish.size(); i++) {
+		if (fish[i].step == 0) {					// step이 0이면 이동할 수 없는 곳
+			fish.erase(fish.begin() + i);
+			i -= 1;
+		}
+	}
+
+	if (fish.size() > 0) {							//  물고기들을 지나서 이동할 수 있다면 물고기를 잡아먹는다.
+		space[baby_shark.y][baby_shark.x] = 0;		// 이동할 곳 = fish 가 0 인자리
+
+		baby_shark.y = fish[0].y;
+		baby_shark.x = fish[0].x;
+
+		space[baby_shark.y][baby_shark.x] = 9;		// 상어 위치 이동
+		sec += fish[0].step;
+
+		eat_fish_cnt += 1;
+		if (eat_fish_cnt == baby_shark.size) {		// 아기상어 크기 증가 조건
+			baby_shark.size += 1;
+			eat_fish_cnt = 0;
+		}
+	}
+}
+
+int main() {
+	memset(space, 0, sizeof(space));
+
+	cin >> N;
+
+	baby_shark = { -1,-1,2,0 };
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> space[i][j];
+			if (space[i][j] == 9) {
+				baby_shark.y = i;
+				baby_shark.x = j;
+			}
+		}
+	}
+
+	while (true) {
+		can_eat();
+		if (fish.size() > 0) {
+			eat_fish();
+		}
+		else {					// 더이상 물고기를 잡아먹을 수 없다면 시간 출력
+			break;
+		}
+		if (fish.size() == 0) {
+			break;
+		}
+		fish.clear();
+	}
+	cout << sec << "\n";
+}

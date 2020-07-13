@@ -1,205 +1,80 @@
+/*
+- 풀어야할때 알아야 할점
+1. 가장자리가 모두 벽으로 되어있으므로 범위 검사가 필요없다.
+2. 방향전환이 상으로 시작하면 좌, 하, 우, 상으로 돌아와야 한다.
+3. 후진이 가능하다면 현재방향의 - 방향만큼 위치를 이동시켜준다.
+*/
+
 #include<iostream>
+#include<cstring>
 
 using namespace std;
 
 int N, M;
+
 int r, c, d;
 
-int field[50][50];
-int answer = 0;
+int map[50][50];		// 0 : 청소해야할 곳, 1 : 벽, 2 : 청소한 곳
 
-int search_four_side()
-{
-	// �� �� �� ��
-	// 0  1  2  3
-	// ���� ���� ���� : -1
+// (y,x), 상, 우, 하, 좌
+int dir[4][2] = { {-1,0},{0,1},{1,0},{0,-1} };
 
-	int count = 0;
+int move() {
+	int ret = 1;
 
-	// ���� ȸ��
-	d -= 1;
-	if (d < 0) { d = 3; }
+	while (true) {
+		bool isSweep = false;
 
-	// ��
-	if (d == 0)
-	{
-		if ((r - 1) >= 0 && (r - 1) < N)
-		{
-			if (field[r - 1][c] == 0)
-			{
-				r -= 1;
-				return 1;
+		int i;
+		for (i = 0; i < 4; i++) {
+			int cur_d = (d + 3) % 4;
+			int cur_y = r + dir[cur_d][0];
+			int cur_x = c + dir[cur_d][1];
+
+			d = cur_d;
+
+			if (map[cur_y][cur_x] == 0) {
+				isSweep = true;
+				r = cur_y;
+				c = cur_x;
+
+				map[r][c] = 2;
+				ret += 1;
+				break;
 			}
 		}
-	}
-	// ��
-	else if (d == 1)
-	{
-		if ((c + 1) >= 0 && (c + 1) < M)
-		{
-			if (field[r][c + 1] == 0)
-			{
-				c += 1;
-				return 1;
+
+		if (!isSweep) {
+			int back_y = r - dir[d][0];
+			int back_x = c - dir[d][1];
+
+			if (map[back_y][back_x] != 1) {		// 후진 가능
+				r = back_y;
+				c = back_x;
 			}
-		}
-	}
-	// ��
-	else if (d == 2)
-	{
-		if ((r + 1) >= 0 && (r + 1) < N)
-		{
-			if (field[r + 1][c] == 0)
-			{
-				r += 1;
-				return 1;
-			}
-		}
-	}
-	// ��
-	else if (d == 3)
-	{
-		if ((c - 1) >= 0 && (c - 1) < M)
-		{
-			if (field[r][c - 1] == 0)
-			{
-				c -= 1;
-				return 1;
+			else {								// 후진 불가능
+				break;
 			}
 		}
 	}
 
-	// û�� ���Ѱ��
-	return 0;
+	return ret;
 }
 
-void sweep_field()
-{
-	field[r][c] = 2;
-	answer++;
-	
-	int exist = 0;
-	int i;
-	for (i = 0; i < 4; i++)
-	{
-		exist = search_four_side();
-		if (exist == 1)
-		{
-			break;
-		}
-	}
-	
-	if (exist == 0)
-	{
-		// ����
-		// ��
-		if (d == 0)
-		{
-			if ((r + 1) >= 0 && (r + 1) < N)
-			{
-				if (field[r + 1][c] == 1)
-				{
-					return;
-				}
-				else
-				{
-					r += 1;
-					answer -= 1;
-					sweep_field();
-				}
-			}
-			else
-			{
-				return;
-			}
-		}
-		// ��
-		else if (d == 1)
-		{
-			if ((c - 1) >= 0 && (c - 1) < M)
-			{
-				if (field[r][c - 1] == 1)
-				{
-					return;
-				}
-				else
-				{
-					c -= 1;
-					answer -= 1;
-					sweep_field();
-				}
-			}
-			else
-			{
-				return;
-			}
-		}
-		// ��
-		else if (d == 2)
-		{
-			if ((r - 1) >= 0 && (r - 1) < N)
-			{
-				if (field[r - 1][c] == 1)
-				{
-					return;
-				}
-				else
-				{
-					r -= 1;
-					answer -= 1;
-					sweep_field();
-				}
-			}
-			else
-			{
-				return;
-			}
-		}
-		// ��
-		else if (d == 3)
-		{
-			if ((c + 1) >= 0 && (c + 1) < M)
-			{
-				if (field[r][c + 1] == 1)
-				{
-					return;
-				}
-				else
-				{
-					c += 1;
-					answer -= 1;
-					sweep_field();
-				}
-			}
-			else
-			{
-				return;
-			}
-		}
-	}
-	else
-	{
-		sweep_field();
-	}
-}
+int main() {
+	memset(map, 0, sizeof(map));
 
-int main()
-{
 	cin >> N >> M;
 
 	cin >> r >> c >> d;
 
 	int i, j;
-	for (i = 0; i < N; i++)
-	{
-		for (j = 0; j < M; j++)
-		{
-			int su;
-			cin >> su;
-			field[i][j] = su;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			cin >> map[i][j];
 		}
 	}
 
-	sweep_field();
-	cout << answer << '\n';
+	map[r][c] = 2;
+	cout << move() << "\n";
 }

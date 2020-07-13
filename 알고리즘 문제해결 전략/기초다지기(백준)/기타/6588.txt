@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cmath>
+#pragma warning(disable:4996)
+
+using namespace std;
+
+int primeNumbers[1000001];
+int range = 1000001;
+
+int main()
+{	
+	int i, j;
+	primeNumbers[0] = 0;
+	primeNumbers[1] = 0;
+	for (i = 2; i < range; i++)
+	{
+		primeNumbers[i] = 1;
+	}
+
+	for (i = 2; i * i < range; i++)
+	{
+		if (primeNumbers[i])
+		{
+			for (j = i * i; j < range; j += i)
+			{
+				primeNumbers[j] = 0;
+			}
+		}
+	}
+
+	while (1)
+	{
+		int N;
+		scanf("%d", &N);
+		if (N == 0)
+		{
+			break;
+		}
+
+		int flag = 1;
+		int i;
+		for (i = 0; i < N; i++)
+		{
+			if (primeNumbers[i] && primeNumbers[N - i])
+			{
+				printf("%d = %d + %d\n", N, i, N - i);
+				flag = 0;
+				break;
+			}
+		}
+
+		if (flag)
+		{
+			printf("Goldbach's conjecture is wrong.\n");
+		}
+	}
+
+	return 0;
+}

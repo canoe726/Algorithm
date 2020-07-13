@@ -1,0 +1,92 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{		
+	string eight;
+	cin >> eight;
+
+	if (eight == "0")
+	{
+		cout << 0 << '\n';
+	}
+	else
+	{
+		string answer = "";
+
+		int i, j;
+		int num;
+		char binary[3] = { 0 };
+
+		for (i = eight.size() - 1; i > 0; i--)
+		{
+			num = eight[i] - '0';
+
+			binary[2] = num / 4 + '0';
+			if (num / 4 == 1)
+			{
+				num -= 4;
+			}
+
+			binary[1] = num / 2 + '0';
+			if (num / 2 == 1)
+			{
+				num -= 2;
+			}
+
+			binary[0] = num / 1 + '0';
+			if (num / 1 == 1)
+			{
+				num -= 1;
+			}
+
+			for (j = 0; j < 3; j++)
+			{
+				answer.push_back(binary[j]);
+			}
+		}
+		
+		string end = "";
+		num = eight[i] - '0';
+		binary[2] = num / 4 + '0';
+		if (num / 4 == 1)
+		{
+			num -= 4;
+		}
+
+		binary[1] = num / 2 + '0';
+		if (num / 2 == 1)
+		{
+			num -= 2;
+		}
+
+		binary[0] = num / 1 + '0';
+		if (num / 1 == 1)
+		{
+			num -= 1;
+		}
+
+		int one = 0;
+		for (j = 2; j >= 0; j--)
+		{
+			if (binary[j] == '1')
+			{
+				one = 1;
+			}
+			if (one == 1)
+			{
+				end.push_back(binary[j]);
+			}
+		}
+		reverse(end.begin(), end.end());
+		answer += end;
+		reverse(answer.begin(), answer.end());
+		cout << answer << '\n';
+	}
+
+	return 0;
+}
+

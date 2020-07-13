@@ -1,0 +1,50 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+long long cards[1000001] = { 0 };
+
+int main()
+{		
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> cards[i];
+	}
+
+	sort(cards, cards + N);
+
+	long long answer = cards[0];
+	int max_count = 0;
+	int count = 1;
+
+	for (i = 1; i < N; i++)
+	{
+		if (cards[i - 1] != cards[i])
+		{
+			if (max_count < count)
+			{
+				max_count = count;
+				answer = cards[i - 1];
+			}
+			count = 1;
+		}
+		else
+		{
+			count++;
+		}
+	}
+	if (max_count < count)
+	{
+		answer = cards[i - 1];
+	}
+
+	cout << answer << endl;
+
+	return 0;
+}
+

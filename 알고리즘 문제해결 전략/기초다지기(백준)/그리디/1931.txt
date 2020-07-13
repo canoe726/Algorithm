@@ -1,0 +1,72 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+vector<pair<int, int>> rooms;
+
+bool cmp(pair<int, int> a, pair<int, int> b)
+{
+	if (a.second == b.second)
+	{
+		return a.first < b.first;
+	}
+	else
+	{
+		return a.second < b.second;
+	}
+}
+
+int main()
+{
+	int answer = 1;
+
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		int start, end;
+		cin >> start >> end;
+
+		rooms.push_back(make_pair(start, end));
+	}
+
+	sort(rooms.begin(), rooms.end(), cmp);
+
+	int start_time = rooms[0].second;
+	for (i = 1; i < N; i++)
+	{
+		if (start_time <= rooms[i].first)
+		{
+			answer++;
+			start_time = rooms[i].second;
+		}
+	}
+
+	cout << answer << endl;
+}
+
+/*
+11
+1 2
+4 5
+3 5
+3 5
+0 6
+5 7
+3 8
+5 9
+6 10
+8 11
+8 12
+2 13
+12 14
+
+3
+3 3
+2 3
+3 3
+*/

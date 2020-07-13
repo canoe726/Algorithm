@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+#include <deque>
+
+using namespace std;
+
+deque<int> d;
+
+int main()
+{		
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		string str;
+		cin >> str;
+
+		if (str == "push_front")
+		{
+			int number;
+			cin >> number;
+			getchar();
+
+			d.push_front(number);
+		}
+		else if (str == "push_back")
+		{
+			int number;
+			cin >> number;
+			getchar();
+
+			d.push_back(number);
+		}
+		else if (str == "pop_front")
+		{
+			if (d.empty())
+			{
+				cout << -1 << '\n';
+			}
+			else
+			{
+				cout << d.front() << '\n';
+				d.pop_front();
+			}
+		}
+		else if (str == "pop_back")
+		{
+			if (d.empty())
+			{
+				cout << -1 << '\n';
+			}
+			else
+			{
+				cout << d.back() << '\n';
+				d.pop_back();
+			}
+		}
+		else if (str == "size")
+		{
+			cout << d.size() << '\n';
+		}
+		else if (str == "empty")
+		{
+			if (d.empty())
+			{
+				cout << 1 << '\n';
+			}
+			else
+			{
+				cout << 0 << '\n';
+			}
+		}
+		else if (str == "front")
+		{
+			if (d.empty())
+			{
+				cout << -1 << '\n';
+			}
+			else
+			{
+				cout << d.front() << '\n';
+			}
+		}
+		else
+		{
+			if (d.empty())
+			{
+				cout << -1 << '\n';
+			}
+			else
+			{
+				cout << d.back() << '\n';
+			}
+		}
+	}	
+
+	return 0;
+}
+

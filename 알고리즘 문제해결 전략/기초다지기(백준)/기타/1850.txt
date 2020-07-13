@@ -1,0 +1,37 @@
+#include <iostream>
+
+using namespace std;
+
+long long gcd(long long A, long long B)
+{
+	long long a = A, b = B, c;
+	while (b)
+	{
+		c = a % b;
+		a = b;
+		b = c;
+	}
+	return a;
+}
+
+int main()
+{
+	long long x, y;
+	cin >> x >> y;
+
+	if (x < y)
+	{
+		long long temp = x;
+		x = y;
+		y = temp;
+	}
+
+	long long loop = gcd(x, y);
+
+	long long i;
+	for (i = 0; i < loop; i++)
+	{
+		cout << 1;
+	}
+	cout << endl;
+}

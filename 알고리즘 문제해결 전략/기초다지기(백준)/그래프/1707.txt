@@ -1,0 +1,99 @@
+#include <iostream>
+#include <vector>
+
+#define SIZE 20001
+
+using namespace std;
+
+int K, V, E;
+vector<int> graph[SIZE];
+// 0 : empty, 1 : red, 2 : blue
+int graph_color[SIZE] = { 0 };
+
+bool isBipartite_graph();
+void dfs_search(int, int);
+
+int main()
+{
+	cin >> K;
+
+	int i, j;
+	for (i = 0; i < K; i++)
+	{
+		cin >> V >> E;
+
+		for (j = 0; j <= V; j++)
+		{
+			graph[j].clear();
+			graph_color[j] = 0;
+		}
+
+		for (j = 0; j < E; j++)
+		{
+			int s, e;
+			cin >> s >> e;
+
+			graph[s].push_back(e);
+			graph[e].push_back(s);
+		}
+
+		for (j = 1; j <= V; j++)
+		{
+			if (!graph_color[j])
+			{
+				dfs_search(j, 1);
+			}
+		}
+
+		if (isBipartite_graph(V))
+		{
+			cout << "YES" << '\n';
+		}
+		else
+		{
+			cout << "NO" << '\n';
+		}
+	}
+
+	return 0;
+}
+
+bool isBipartite_graph()
+{
+	int i, j;
+	for (i = 1; i <= V; i++)
+	{
+		for (j = 0; j < graph[i].size(); j++)
+		{
+			if (graph_color[i] == graph_color[graph[i][j]])
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+void dfs_search(int start, int color)
+{
+	graph_color[start] = color;
+
+	int i;
+	for (i = 0; i < graph[start].size(); i++)
+	{
+		int cur = graph[start][i];
+		if (!graph_color[cur])
+		{
+			if (color == 1)
+			{
+				dfs_search(cur, 2);
+			}
+			else
+			{
+				dfs_search(cur, 1);
+			}
+		}
+	}
+
+}

@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+
+	vector<int> numbers;
+
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		int num;
+		cin >> num;
+		numbers.push_back(num);
+	}
+	
+	sort(numbers.begin(), numbers.end());
+
+	for (i = 0; i < N; i++)
+	{
+		printf("%d\n", numbers[i]);
+	}
+
+	return 0;
+}
+

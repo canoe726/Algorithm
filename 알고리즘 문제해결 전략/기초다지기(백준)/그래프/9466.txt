@@ -1,0 +1,65 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int pick[100001] = { 0 };
+int visited[100001] = { 0 };
+int finish[100001] = { 0 };
+int answer;
+
+void dfs_search(int node, int size)
+{
+	visited[node] = 1;
+
+	int next_pick = pick[node];
+	if (!visited[next_pick])
+	{
+		dfs_search(next_pick, size);
+	}
+	else
+	{
+		if (!finish[next_pick])
+		{
+			int i;
+			for (i = next_pick; i != node; i = pick[i])
+			{
+				answer++;
+			}
+			answer++;
+		}
+	}
+	
+	finish[node] = 1;
+}
+
+int main(void)
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		memset(visited, 0, sizeof(visited));
+		memset(finish, 0, sizeof(finish));
+		answer = 0;
+
+		int n;
+		cin >> n;
+		for (j = 1; j <= n; j++)
+		{
+			cin >> pick[j];
+		}
+
+		for (j = 1; j <= n; j++)
+		{
+			if(!visited[j])
+			{
+				dfs_search(j, n);
+			}
+		}
+
+		cout << n - answer << "\n";
+	}
+}

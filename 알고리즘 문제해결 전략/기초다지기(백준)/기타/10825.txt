@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+typedef struct GRADE
+{
+	int korean;
+	int english;
+	int math;
+	string name;
+};
+
+vector<GRADE> students;
+
+bool cmp(GRADE a, GRADE b)
+{
+	if (a.korean == b.korean)
+	{
+		if (a.english == b.english)
+		{
+			if (a.math == b.math)
+			{
+				return a.name < b.name;
+			}
+			else
+			{
+				return a.math > b.math;
+			}
+		}
+		else
+		{
+			return a.english < b.english;
+		}
+	}
+	else
+	{
+		return a.korean > b.korean;
+	}
+}
+
+int main()
+{	
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		GRADE g;
+		cin >> g.name;
+		cin >> g.korean;
+		cin >> g.english;
+		cin >> g.math;
+
+		students.push_back(g);
+	}
+
+	sort(students.begin(), students.end(), cmp);
+
+	for (i = 0; i < N; i++)
+	{
+		cout << students[i].name << '\n';
+	}
+
+	return 0;
+}
+

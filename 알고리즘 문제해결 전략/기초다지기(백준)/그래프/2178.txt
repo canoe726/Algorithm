@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <queue>
+
+using namespace std;
+
+const int SIZE = 100;
+
+int map[SIZE][SIZE] = { 0 };
+int visited[SIZE][SIZE] = { 0 };
+
+// up, down, left, right
+int dir[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+
+void bfs_search(int y, int x)
+{
+	queue<pair<int, int>> q;
+	visited[y][x] = 1;
+	q.push(make_pair(y, x));
+	
+	while (!q.empty())
+	{
+		int cur_y = q.front().first;
+		int cur_x = q.front().second;
+		q.pop();
+
+
+		int i;
+		for (i = 0; i < 4; i++)
+		{
+			int temp_x = cur_x + dir[i][1];
+			int temp_y = cur_y + dir[i][0];
+
+			if ((temp_y >= 0 && temp_y < SIZE) &&
+				(temp_x >= 0 && temp_x < SIZE))
+			{
+				if (!visited[temp_y][temp_x] && map[temp_y][temp_x])
+				{
+					visited[temp_y][temp_x] = visited[cur_y][cur_x] + 1;
+					q.push(make_pair(temp_y, temp_x));
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	int N, M;
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		string str;
+		cin >> str;
+
+		for (j = 0; j < str.size(); j++)
+		{
+			map[i][j] = str[j] - '0';
+		}
+	}
+
+	bfs_search(0, 0);	
+
+	cout << visited[N - 1][M - 1] << '\n';
+
+	return 0;
+}
+

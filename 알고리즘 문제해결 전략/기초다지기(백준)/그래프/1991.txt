@@ -1,0 +1,125 @@
+#include<iostream>
+
+using namespace std;
+
+typedef struct Node
+{
+	char data;
+	Node *left;
+	Node *right;
+};
+
+Node *createNode(char data)
+{
+	Node *newNode = new Node;
+	newNode->data = data;
+	newNode->left = NULL;
+	newNode->right = NULL;
+
+	return newNode;
+}
+
+void find_Node(Node *n, Node **cur, char data)
+{
+	if (n != NULL)
+	{
+		if (n->data == data)
+		{
+			(*cur) = n;
+		}
+		
+		find_Node(n->left, cur, data);
+		find_Node(n->right, cur, data);
+	}
+}
+
+void insert_Node(Node **root, char parent, char left, char right)
+{
+	Node *parent_node = NULL, *left_node = NULL, *right_node = NULL;
+
+	if (*root == NULL)
+	{
+		parent_node = createNode(parent);
+		left_node = createNode(left);
+		right_node = createNode(right);
+
+		parent_node->left = left_node;
+		parent_node->right = right_node;
+
+		(*root) = parent_node;
+	}
+	else
+	{
+		Node *cur = NULL;
+		find_Node(*root, &cur, parent);
+		
+		left_node = createNode(left);
+		right_node = createNode(right);
+
+		cur->left = left_node;
+		cur->right = right_node;
+	}
+}
+
+void pre_order(Node *root)
+{
+	if (root != NULL)
+	{
+		if (root->data != '.')
+		{
+			cout << root->data;
+		}
+		pre_order(root->left);
+		pre_order(root->right);
+	}
+}
+
+void in_order(Node *root)
+{
+	if (root != NULL)
+	{
+		in_order(root->left);
+		if (root->data != '.')
+		{
+			cout << root->data;
+		}
+		in_order(root->right);
+	}
+}
+
+void post_order(Node *root)
+{
+	if (root != NULL)
+	{
+		post_order(root->left);
+		post_order(root->right);
+		if (root->data != '.')
+		{
+			cout << root->data;
+		}
+	}
+}
+
+int main()
+{
+	Node *root = NULL;
+
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		char parent, left, right;
+		cin >> parent >> left >> right;
+
+		insert_Node(&root, parent, left, right);
+	}
+
+	pre_order(root);
+	cout << "\n";
+	in_order(root);
+	cout << "\n";
+	post_order(root);
+	cout << "\n";
+}

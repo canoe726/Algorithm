@@ -1,0 +1,57 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> graph(1001);
+int answer = 0;
+
+int dfs_visited[1001] = { 0 };
+void dfs_search(int V);
+
+int main()
+{
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < M; i++)
+	{
+		int s, e;
+		cin >> s >> e;
+
+		graph[s].push_back(e);
+		graph[e].push_back(s);
+	}
+
+	for (i = 1; i <= N; i++)
+	{
+		sort(graph[i].begin(), graph[i].end());
+	}
+
+	for (i = 1; i <= N; i++)
+	{
+		if (!dfs_visited[i])
+		{
+			dfs_visited[i] = 1;
+			dfs_search(i);
+			answer++;
+		}
+	}
+
+	cout << answer << '\n';
+}
+
+void dfs_search(int V)
+{
+	int i;
+	for (i = 0; i < graph[V].size(); i++)
+	{
+		if (!dfs_visited[graph[V][i]])
+		{
+			dfs_visited[graph[V][i]] = 1;
+			dfs_search(graph[V][i]);
+		}
+	}
+}

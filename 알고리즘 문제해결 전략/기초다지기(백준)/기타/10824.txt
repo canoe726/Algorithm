@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int a, b, c, d;
+	cin >> a >> b >> c >> d;
+
+	string AB;
+	AB += to_string(a);
+	AB += to_string(b);
+
+	string CD;
+	CD += to_string(c);
+	CD += to_string(d);
+
+	long long answer = atoll(AB.c_str()) + atoll (CD.c_str());
+
+	cout << answer << '\n';
+
+}

@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int N, K;
+	cin >> N >> K;
+
+	vector<int> comb;
+
+	int i;
+	for (i = 1; i <= N; i++)
+	{
+		comb.push_back(i);
+	}
+
+	i = 0;
+	cout << "<";
+	while (!comb.empty())
+	{
+		i = (i + (K - 1)) % comb.size();
+
+		if (comb.size() > 1)
+		{
+			cout << comb[i] << ", ";
+		}
+		else
+		{
+			cout << comb[i];
+		}
+
+		comb.erase(comb.begin() + i);
+	}
+	cout << ">\n";
+}

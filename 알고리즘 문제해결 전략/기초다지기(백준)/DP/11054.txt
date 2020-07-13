@@ -1,0 +1,60 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int numbers[1001] = { 0 };
+int left_increase[1001] = { 0 };
+int right_increase[1001] = { 0 };
+
+int main()
+{
+	int answer = 0;
+
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		cin >> numbers[i];
+
+		left_increase[i] = 1;
+		right_increase[i] = 1;
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		// left_increase
+		for (j = 0; j < i; j++)
+		{
+			if (numbers[i] > numbers[j])
+			{
+				left_increase[i] = max(left_increase[i], left_increase[j] + 1);
+			}
+		}		
+	}
+
+	for (i = N - 1; i >= 0; i--)
+	{
+		// right_increase
+		for (j = i; j < N; j++)
+		{
+			if (numbers[i] > numbers[j])
+			{
+				right_increase[i] = max(right_increase[i], right_increase[j] + 1);
+			}
+		}
+	}
+
+	answer = left_increase[0] + right_increase[0] - 1;
+	for (i = 1; i < N; i++)
+	{
+		if (answer < left_increase[i] + right_increase[i] - 1)
+		{
+			answer = left_increase[i] + right_increase[i] - 1;
+		}
+	}
+
+	cout << answer << endl;
+}

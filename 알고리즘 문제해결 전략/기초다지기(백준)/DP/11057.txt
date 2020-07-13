@@ -1,0 +1,37 @@
+#include<iostream>
+
+#define MOD 10007
+
+using namespace std;
+
+int dp[1001][11] = { 0 };
+
+int main()
+{
+	int N;
+	cin >> N;
+	
+	int answer = 0;
+	int i, j, k;
+	for (i = 0; i < 10; i++)
+	{
+		dp[0][i] = 1;
+	}
+
+	for (i = 1; i < 1001; i++)
+	{
+		for (j = 0; j < 10; j++)
+		{
+			for (k = j; k < 10; k++)
+			{
+				dp[i][j] += (dp[i - 1][k]) % MOD;
+			}
+		}
+	}
+
+	for (i = 0; i < 10; i++)
+	{
+		answer += (dp[N - 1][i]);
+	}
+	cout << answer % MOD << endl;
+}

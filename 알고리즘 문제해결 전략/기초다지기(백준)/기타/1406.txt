@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+#include <stack>
+#include <algorithm>
+
+using namespace std;
+
+stack<char> Left, Right;
+
+int main()
+{
+	string str;
+	cin >> str;
+
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < str.size(); i++)
+	{
+		Left.push(str[i]);
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		char commend;
+		cin >> commend;
+
+		if (commend == 'L')
+		{
+			if (!Left.empty())
+			{
+				char temp = Left.top();
+				Left.pop();
+				Right.push(temp);
+			}
+		}
+		else if (commend == 'D')
+		{
+			if (!Right.empty())
+			{
+				char temp = Right.top();
+				Right.pop();
+				Left.push(temp);
+			}
+		}
+		else if (commend == 'P')
+		{
+			char input;
+			cin >> input;
+
+			Left.push(input);
+		}
+		else
+		{
+			if (!Left.empty())
+			{
+				Left.pop();
+			}
+		}
+	}
+
+	while (!Right.empty())
+	{
+		char temp = Right.top();
+		Right.pop();
+		Left.push(temp);
+	}
+
+	string answer = "";
+
+	while (!Left.empty())
+	{
+		char temp = Left.top();
+		Left.pop();
+		answer.push_back(temp);
+	}
+	reverse(answer.begin(), answer.end());
+
+	cout << answer << '\n';
+}

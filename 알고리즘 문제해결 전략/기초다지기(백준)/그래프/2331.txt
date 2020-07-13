@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int numbers[1000001] = { 0 };
+
+int A_to_pow_P(int A, int P)
+{
+	int answer = 0;
+	while (A)
+	{
+		answer += pow(A % 10, P);
+		A /= 10;
+	}
+
+	return answer;
+}
+
+int main()
+{
+	int A, P;
+	cin >> A >> P;
+
+	int count = 1;
+	int before = A, result;
+	numbers[A] = count++;
+
+	while (1)
+	{
+		result = A_to_pow_P(before, P);
+		if (!numbers[result])
+		{
+			numbers[result] = count++;
+		}
+		else
+		{
+			cout << numbers[result] - 1 << endl;
+			break;
+		}
+		before = result;
+	}
+
+	return 0;
+}
+

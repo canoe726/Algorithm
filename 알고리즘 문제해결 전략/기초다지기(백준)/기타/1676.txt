@@ -1,0 +1,48 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{	
+	int N;
+	cin >> N;
+
+	int two = 0, five = 0;
+	int i;
+	for (i = 2; i <= N; i++)
+	{
+		// 소인수 분해
+		int temp = i;
+		int div = 2;
+		while (temp > 1)
+		{
+			if (temp % div == 0)
+			{
+				if (div == 2)
+				{
+					two++;
+				}
+				if (div == 5)
+				{
+					five++;
+				}
+				temp /= div;
+			}
+			else
+			{
+				div++;
+			}
+		}
+	}
+
+	if (two > five)
+	{
+		cout << five << '\n';
+	}
+	else
+	{
+		cout << two << '\n';
+	}
+
+	return 0;
+}

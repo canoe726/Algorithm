@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+	string binary;
+	cin >> binary;
+
+	string answer = "";
+
+	int i, j;
+	for (i = binary.size() - 1; i >= 0; i-=3)
+	{
+		int numbers;
+		numbers = binary[i] - '0';
+		if (i - 1 >= 0)
+		{
+			numbers += (binary[i - 1] - '0') * 2;
+		}
+		if (i - 2 >= 0)
+		{
+			numbers += (binary[i - 2] - '0') * 4;
+		}
+
+		answer.push_back(numbers + '0');
+	}
+	reverse(answer.begin(), answer.end());
+	cout << answer << endl;
+}

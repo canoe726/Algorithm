@@ -1,0 +1,36 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+
+int main()
+{
+	string N;
+	cin >> N;
+
+	int i, sum = 0, zero = 0;
+	for (i = 0; i < N.size(); i++)
+	{
+		if (N[i] == '0')
+		{
+			zero = 1;
+		}
+		sum += N[i] - '0';
+	}
+	sort(N.begin(), N.end(), cmp);
+
+	if (sum % 3 == 0 && zero)
+	{
+		cout << N << "\n";
+	}
+	else
+	{
+		cout << -1 << "\n";
+	}
+}

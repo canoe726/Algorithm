@@ -1,0 +1,30 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+	int N, answer = 0;
+	cin >> N;
+
+	int times[1001] = { 0 };
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		cin >> times[i];
+	}
+	sort(times, times + N);
+
+	for (i = 1; i < N; i++)
+	{
+		times[i] = times[i] + times[i - 1];
+	}
+
+	for (i = 0; i < N; i++)
+	{
+		answer += times[i];
+	}
+	cout << answer << "\n";
+}

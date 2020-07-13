@@ -1,0 +1,43 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+stack<int> s;
+
+int main()
+{		
+	int answer = 0;
+
+	string str;
+	cin >> str;
+
+	int i;
+	for (i = 0; i < str.size(); i++)
+	{
+		if (str[i] == '(')
+		{
+			s.push('(');
+		}
+		else
+		{
+			s.pop();
+
+			// 레이저가 아니면
+			if (str[i - 1] == ')')
+			{
+				answer++;
+			}
+			else
+			{
+				answer += s.size();
+			}
+		}
+	}
+	
+	cout << answer << '\n';
+
+	return 0;
+}
+

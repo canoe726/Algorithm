@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct NODE {
+   int data;
+   struct NODE *left;
+   struct NODE *right;
+}NODE;
+typedef struct queue {
+   int data;
+   struct queue *next;
+}queue;
+void getnode(NODE **p)
+{
+   (*p) = (NODE *)malloc(sizeof(NODE));
+}
+void getQ(queue **p)
+{
+   (*p) = (queue *)malloc(sizeof(queue));
+}
+void find(NODE *root, NODE **current, int n)
+{
+   if (root != NULL)
+   {
+      if (root->data == n)
+      {
+         *current = root;
+      }
+      find(root->left, current, n);
+      find(root->right, current, n);
+   }
+}
+void add(NODE **root, int x, int y, int z)
+{
+   NODE *current = NULL, *L = NULL, *R = NULL;
+   getnode(&current); getnode(&L); getnode(&R);
+   find(*root, &current, x);
+   current->data = x;
+   current->left = L;
+   current->right = R;
+   L->data = y; L->left = NULL; L->right = NULL;
+   R->data = z; R->left = NULL; R->right = NULL;
+   if (y == 0) current->left = NULL;
+   if (z == 0)current->right = NULL;
+   if ((*root) == NULL) (*root) = current;
+
+}
+void preorder(NODE *root){
+   
+   if (root==NULL)
+   {
+      return;
+   }
+   else
+   {
+      printf("%d ", root->data);
+      preorder(root->left);
+      preorder(root->right);
+   }
+}
+void postorder(NODE *root) {
+   if (root == NULL)
+   {
+      return;
+   }
+   else
+   {
+      postorder(root->left);
+      postorder(root->right);
+      printf("%d ", root->data);
+   }
+}
+void inorder(NODE *root) {
+   if (root == NULL)
+   {
+      return;
+   }
+   else
+   {
+      inorder(root->left);
+      printf("%d ", root->data);
+      inorder(root->right);
+      
+   }
+}
+void enqueue(queue **front, queue **rear, int e)
+{
+   queue *tmp = NULL;
+   getQ(&tmp);
+   tmp->data = e;
+   tmp->next = NULL;
+   if ((*front) == NULL)
+   {
+      (*front) = tmp;
+   }   
+   else {
+      (*rear)->next = tmp;
+   }
+   (*rear)= tmp;
+}
+int dequeue(queue **front, queue **rear)
+{
+   int data;
+   data = (*front)->data;
+   (*front) = (*front)->next;
+   return data;
+}
+
+void levelorder(NODE *root)
+{
+   queue *f = NULL, *r= NULL;
+   NODE *tmp = NULL; getnode(&tmp);
+   int e;
+   enqueue(&f, &r, root->data);
+   while (f!=NULL)
+   {
+      e = dequeue(&f, &r);
+      printf("%d ", e);
+      find(root, &tmp, e); //find 함수를 쓰지 않고 재귀함수로 하라고 했음 
+      if(tmp->left!=NULL) enqueue(&f, &r, tmp->left->data);
+      if (tmp->right != NULL) enqueue(&f, &r, tmp->right->data);
+   }
+}
+
+void main()
+{
+   NODE *root = NULL;
+   int x,y,z;
+   char str[10];
+   while (1)
+   {
+      scanf("%d ", &x);
+      if (x == -1) break;
+      scanf("%d %d", &y, &z);
+      add(&root, x, y, z);
+   }
+   while (1)
+   {
+      scanf("%s", str); getchar();
+      if (strcmp(str, "preorder") == 0) {
+         preorder(root); puts("");
+      }
+      else if (strcmp(str, "postorder") == 0){ 
+         postorder(root); puts("");
+      }
+      else if (strcmp(str, "inorder") == 0) {
+         inorder(root); puts("");
+      }
+      else if (strcmp(str, "levelorder") == 0) {
+         levelorder(root); puts("");
+      }
+   }
+}

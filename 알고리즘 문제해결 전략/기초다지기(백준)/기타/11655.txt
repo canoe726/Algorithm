@@ -1,0 +1,41 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+char small_alphabet[26];
+char large_alphabet[26];
+
+int main()
+{
+	string str;
+	getline(cin, str);
+
+	string result = "";
+
+	int i;
+	for (i = 0; i < 26; i++)
+	{
+		small_alphabet[i] = 'a' + i;
+		large_alphabet[i] = 'A' + i;
+	}
+
+	for (i = 0; i < str.size(); i++)
+	{
+		if (str[i] >= 'a' && str[i] <= 'z')
+		{
+			result.push_back(small_alphabet[(str[i] - 'a' + 13) % 26]);
+		}
+		else if (str[i] >= 'A' && str[i] <= 'Z')
+		{
+			result.push_back(large_alphabet[(str[i] - 'A' + 13) % 26]);
+		}
+		else
+		{
+			result.push_back(str[i]);
+		}
+	}
+
+	cout << result << '\n';
+}

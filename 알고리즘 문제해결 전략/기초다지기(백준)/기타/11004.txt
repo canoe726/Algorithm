@@ -1,0 +1,25 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int cards[5000001] = { 0 };
+
+int main()
+{		
+	int N, K;
+	cin >> N >> K;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		scanf("%d", &cards[i]);
+	}
+
+	sort(cards, cards + N);
+
+	cout << cards[K - 1] << '\n';
+
+	return 0;
+}
+

@@ -1,0 +1,123 @@
+#include <iostream>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+int island[100][100] = { 0 };
+int visited[100][100] = { 0 };
+
+// up, down, left, right (y,x)
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+int N;
+
+void mark_island(int y, int x, int island_num)
+{
+	visited[y][x] = 1;
+	island[y][x] = island_num;
+
+	int i;
+	for (i = 0; i < 4; i++)
+	{
+		int cur_y = y + dir[i][0];
+		int cur_x = x + dir[i][1];
+
+		if ((cur_y >= 0 && cur_y < N) && (cur_x >= 0 && cur_x < N))
+		{
+			if (!visited[cur_y][cur_x] && island[cur_y][cur_x])
+			{
+				mark_island(cur_y, cur_x, island_num);
+			}
+		}
+	}
+}
+
+int expand_island(int island_num)
+{
+	queue<pair<int, int>> pos;
+	
+	int i, j, distance = 0;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			if (island[i][j] == island_num)
+			{
+				pos.push(make_pair(i, j));
+				visited[i][j] = 1;
+			}
+		}
+	}
+	
+
+	while (!pos.empty())
+	{
+		int len = pos.size();
+
+		for (i = 0; i < len; i++)
+		{
+			int cur_y = pos.front().first;
+			int cur_x = pos.front().second;
+			pos.pop();
+
+			for (j = 0; j < 4; j++)
+			{
+				int y = cur_y + dir[j][0];
+				int x = cur_x + dir[j][1];
+
+				if ((y >= 0 && y < N) && (x >= 0 && x < N))
+				{
+					if (!visited[y][x] && !island[y][x])
+					{
+						visited[y][x] = 1;
+						pos.push(make_pair(y, x));
+					}
+					else if(island[y][x] != 0 && island[y][x] != island_num)
+					{
+						return distance;
+					}
+				}
+			}
+		}
+
+		distance++;
+	}
+}
+
+int main()
+{
+	cin >> N;
+
+	int i, j, k;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			cin >> island[i][j];
+		}
+	}
+
+	// mark island number by using DFS search
+	int island_num = 1;
+	for (i = 0; i < N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			if (!visited[i][j] && island[i][j])
+			{
+				mark_island(i, j, island_num);
+				island_num++;
+			}
+		}
+	}
+	
+	// expand island by using BFS search
+	int answer = 2100000000;
+	for (i = 1; i < island_num; i++)
+	{
+		memset(visited, 0, sizeof(visited));
+		answer = min(answer, expand_island(i));
+	}
+
+	cout << answer << endl;
+}

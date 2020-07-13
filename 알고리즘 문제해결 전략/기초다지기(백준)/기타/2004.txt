@@ -1,0 +1,33 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int two[3] = { 0 };
+int five[3] = { 0 };
+long long n, m;
+
+void find_two_five(long long num, int index)
+{
+	long long i;
+	for (i = 2; i <= num; i *= 2)
+	{
+		two[index] += num / i;
+	}
+
+	for (i = 5; i <= num; i *= 5)
+	{
+		five[index] += num / i;
+	}
+}
+
+int main()
+{
+	cin >> n >> m;
+
+	find_two_five(n, 0);
+	find_two_five(m, 1);
+	find_two_five(n - m, 2);
+
+	cout << min((two[0] - two[2]) - two[1], (five[0] - five[2]) - five[1]) << "\n";
+}

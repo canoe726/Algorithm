@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{	
+	string answer = "";
+
+	int N;
+	cin >> N;
+
+	if (N == 0)
+	{
+		cout << 0 << '\n';
+	}
+	else
+	{
+		while (N)
+		{
+			int num;
+			if (N < 0)
+			{
+				if (N == -1)
+				{
+					num = 1;
+					N = 1;
+				}
+				else if (N % 2 == 0)
+				{
+					num = (N % 2);
+					N = (N / 2) * (-1);
+				}
+				else
+				{
+					num = (N % 2) * (-1);
+					N /= 2;
+					N = (N - 1) * (-1);
+				}
+			}
+			else
+			{
+				num = N % 2;
+				N = (N / 2) * (-1);
+			}
+
+			answer.push_back(num + '0');
+		}
+
+		reverse(answer.begin(), answer.end());
+		cout << answer << '\n';
+	}
+
+	return 0;
+}

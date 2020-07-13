@@ -1,0 +1,33 @@
+#include<iostream>
+
+using namespace std;
+
+// dp[K개 선택][합 N]
+int dp[201][201] = { 0 };
+const int mod = 1000000000;
+
+int main()
+{
+	int N, K;
+	cin >> N >> K;
+
+	int i, j, k;
+	for (i = 0; i <= N; i++)
+	{
+		dp[1][i] = 1;
+	}
+
+	for (i = 2; i <= K; i++)
+	{
+		for (j = 0; j <= N; j++)
+		{
+			for (k = 0; k <= j; k++)
+			{
+				dp[i][j] += + dp[i - 1][k];
+				dp[i][j] %= mod;
+			}
+		}
+	}
+
+	cout << dp[K][N] << endl;
+}

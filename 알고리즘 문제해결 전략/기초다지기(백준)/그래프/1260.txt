@@ -1,0 +1,91 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+void bfs_search(vector<vector<int>> graph, int V)
+{
+	queue<int> bfs;
+	int *graph_visited = new int[graph.size() + 1];
+	
+	int i;
+	for (i = 0; i < graph.size(); i++)
+	{
+		graph_visited[i] = 0;
+	}
+
+	cout << V << " ";
+	graph_visited[V] = 1;
+	for (i = 0; i < graph[V].size(); i++)
+	{
+		bfs.push(graph[V][i]);
+		graph_visited[graph[V][i]] = 1;
+	}
+
+	while (!bfs.empty())
+	{
+		int cur = bfs.front();
+		cout << cur << " ";
+		bfs.pop();
+
+		for (i = 0; i < graph[cur].size(); i++)
+		{
+			if (!graph_visited[graph[cur][i]])
+			{
+				bfs.push(graph[cur][i]);
+				graph_visited[graph[cur][i]] = 1;
+			}
+		}
+	}
+
+	delete[] graph_visited;
+}
+
+int dfs_visited[1001] = { 0 };
+
+void dfs_search(vector<vector<int>> graph, int V)
+{
+	int i;
+	for (i = 0; i < graph[V].size(); i++)
+	{
+		if (!dfs_visited[graph[V][i]])
+		{
+			cout << graph[V][i] << " ";
+			dfs_visited[graph[V][i]] = 1;
+			dfs_search(graph, graph[V][i]);
+		}
+	}
+}
+
+int main()
+{
+	int N, M, V;
+	cin >> N >> M >> V;
+
+	vector<vector<int>> graph(N + 1);
+
+	int i;
+	for (i = 0; i < M; i++)
+	{
+		int s, e;
+		cin >> s >> e;
+
+		graph[s].push_back(e);
+		graph[e].push_back(s);
+	}
+
+	for (i = 1; i <= N; i++)
+	{
+		sort(graph[i].begin(), graph[i].end());
+	}
+
+	cout << V << " ";
+	dfs_visited[V] = 1;
+	dfs_search(graph, V);
+	cout << "\n";
+
+	bfs_search(graph, V);
+	cout << "\n";
+}

@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+	int N, B;
+	cin >> N >> B;
+
+	string answer = "";
+
+	int a = N, b = B, c;
+	while (a)
+	{
+		c = a % b;
+		a = (a / b);
+
+		if (c < 10)
+		{
+			answer.push_back(c + '0');
+		}
+		else
+		{
+			answer.push_back(c - 10 + 'A');
+		}
+	}
+
+	reverse(answer.begin(), answer.end());
+	cout << answer << '\n';
+}

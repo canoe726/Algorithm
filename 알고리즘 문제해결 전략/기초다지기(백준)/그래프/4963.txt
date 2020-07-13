@@ -1,0 +1,95 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+const int SIZE = 50;
+
+int map[SIZE][SIZE] = { 0 };
+int visited[SIZE][SIZE] = { 0 };
+int color = 1;
+
+// up, down, left, right, up_left, up_right, down_left, down_right
+int dir[8][2] = { {-1,0}, {1,0}, {0,-1}, {0,1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
+vector<pair<int, int>> answer;
+
+void bfs_search(int y, int x, int color)
+{
+	int count = 0;
+
+	queue<pair<int, int>> q;
+	visited[y][x] = color;
+	q.push(make_pair(y, x));
+	
+	while (!q.empty())
+	{
+		int cur_y = q.front().first;
+		int cur_x = q.front().second;
+		q.pop();
+		count++;
+
+		int i;
+		for (i = 0; i < 8; i++)
+		{
+			int temp_x = cur_x + dir[i][1];
+			int temp_y = cur_y + dir[i][0];
+
+			if ((temp_y >= 0 && temp_y < SIZE) &&
+				(temp_x >= 0 && temp_x < SIZE))
+			{
+				if (!visited[temp_y][temp_x] && map[temp_y][temp_x])
+				{
+					visited[temp_y][temp_x] = color;
+					q.push(make_pair(temp_y, temp_x));
+				}
+			}
+		}
+	}
+
+	answer.push_back(make_pair(color, count));
+}
+
+int main()
+{
+	int w, h;
+	cin >> w >> h;
+
+	while (w && h)
+	{
+		int i, j;
+		for (i = 0; i < h; i++)
+		{
+			for (j = 0; j < w; j++)
+			{
+				cin >> map[i][j];
+			}
+		}
+
+		for (i = 0; i < h; i++)
+		{
+			for (j = 0; j < w; j++)
+			{
+				if (!visited[i][j] && map[i][j])
+				{
+					bfs_search(i, j, color);
+					color++;
+				}
+			}
+		}
+
+		sort(answer.begin(), answer.end());
+		cout << answer.size() << '\n';
+
+		cin >> w >> h;
+
+		color = 1;
+		answer.clear();
+		memset(map, 0, sizeof(map));
+		memset(visited, 0, sizeof(visited));
+	}
+
+	return 0;
+}
+

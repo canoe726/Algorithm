@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+
+#define SIZE 1001
+
+using namespace std;
+
+vector<vector<int>> graph(SIZE);
+int visited[SIZE] = { 0 };
+
+void dfs_search(int node)
+{
+	visited[node] = 1;
+
+	int i;
+	for (i = 0; i < graph[node].size(); i++)
+	{
+		if (!visited[graph[node][i]])
+		{
+			dfs_search(graph[node][i]);
+		}
+	}
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+
+	int i, j;
+	for (i = 0; i < T; i++)
+	{
+		int answer = 0;
+		int N;
+		cin >> N;
+
+		for (j = 1; j <= N; j++)
+		{
+			graph[j].clear();
+		}
+
+		for (j = 1; j <= N; j++)
+		{
+			int num;
+			cin >> num;
+
+			visited[j] = 0;
+			graph[j].push_back(num);
+		}
+
+		for (j = 1; j <= N; j++)
+		{
+			if (!visited[j])
+			{
+				dfs_search(j);
+				answer++;
+			}
+		}
+		cout << answer << endl;
+	}
+
+	return 0;
+}
+

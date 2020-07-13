@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{	
+	int A, B;
+	cin >> A >> B;
+
+	int m;
+	cin >> m;
+
+	string numbers[26] = { "" };
+	int i;
+	for (i = 0; i < m; i++)
+	{
+		cin >> numbers[i];
+	}
+
+	int A_ten = 0;
+	int B_ten = 0;
+
+	// A to 10
+	for (i = 0; i < m; i++)
+	{
+		A_ten = A_ten + (atoi(numbers[i].c_str()) * pow(A, m - i - 1));
+	}
+
+	// 10 to B
+	int p = 0;
+	while (A_ten > pow(B, p))
+	{
+		p++;
+	}
+
+	int div;
+	for (i = p - 1; i > 0; i--)
+	{
+		div = A_ten / pow(B, i);
+		cout << div << " ";
+		A_ten = A_ten - (div * pow(B, i));
+	}
+	cout << A_ten / pow(B, i) << "\n";
+
+	return 0;
+}

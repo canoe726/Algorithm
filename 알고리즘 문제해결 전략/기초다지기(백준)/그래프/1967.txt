@@ -1,0 +1,73 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+// vertex, dist
+vector<pair<int, int>> tree[10001];
+int dist[10001] = { 0 };
+int visited[10001] = { 0 };
+int far_vertex;
+
+void dfs_search(int cur)
+{
+	int i;
+	for (i = 0; i < tree[cur].size(); i++)
+	{
+		if (!visited[tree[cur][i].first])
+		{
+			dist[tree[cur][i].first] = dist[cur] + tree[cur][i].second;
+			visited[tree[cur][i].first] = 1;
+			dfs_search(tree[cur][i].first);
+		}
+	}
+}
+
+int main()
+{
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N - 1; i++)
+	{
+		int v1, v2, d;
+		cin >> v1 >> v2 >> d;
+
+		tree[v1].push_back(make_pair(v2, d));
+		tree[v2].push_back(make_pair(v1, d));
+	}
+
+	visited[1] = 1;
+	dfs_search(1);
+	far_vertex = 1;
+	for (i = 2; i <= N; i++)
+	{
+		if (dist[far_vertex] < dist[i])
+		{
+			far_vertex = i;
+		}
+	}
+
+	for (i = 1; i <= N; i++)
+	{
+		visited[i] = 0;
+		dist[i] = 0;
+	}
+	visited[far_vertex] = 1;
+	dfs_search(far_vertex);
+
+	int diameter = -1;
+	for (i = 0; i <= N; i++)
+	{
+		if (diameter < dist[i])
+		{
+			diameter = dist[i];
+		}
+	}
+
+	cout << diameter << "\n";
+}
+
+

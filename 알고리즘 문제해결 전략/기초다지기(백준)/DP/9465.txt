@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int sticker[2][100001] = { 0 };
+int dp[2][100001] = { 0 };
+
+int main()
+{
+	int T, n, i, j, k;
+	cin >> T;
+	for (i = 0; i < T; i++)
+	{
+		cin >> n;
+
+		for (j = 0; j < 2; j++)
+		{
+			for (k = 0; k < n; k++)
+			{
+				cin >> sticker[j][k];
+				dp[j][k] = 0;
+			}
+		}
+
+		dp[0][0] = sticker[0][0];
+		dp[1][0] = sticker[1][0];
+
+		dp[0][1] = sticker[1][0] + sticker[0][1];
+		dp[1][1] = sticker[0][0] + sticker[1][1];
+
+		for (j = 2; j < n; j++)
+		{
+			int temp = sticker[0][j] + max(dp[0][j - 2], dp[1][j - 2]);
+			dp[0][j] += max(sticker[0][j] + dp[1][j - 1], temp);
+
+			temp = sticker[1][j] + max(dp[0][j - 2], dp[1][j - 2]);
+			dp[1][j] += max(sticker[1][j] + dp[0][j - 1], temp);
+		}
+
+		cout << max(dp[0][n - 1], dp[1][n - 1]) << endl;
+	}
+}

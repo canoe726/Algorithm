@@ -1,0 +1,56 @@
+#include <iostream>
+
+using namespace std;
+
+int A[1000001] = { 0 };
+int B[1000001] = { 0 };
+
+int main()
+{
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < N; i++)
+	{
+		scanf("%d", &A[i]);
+	}
+
+	for (i = 0; i < M; i++)
+	{
+		scanf("%d", &B[i]);
+	}
+
+	int index_A = 0, index_B = 0;
+	while (index_A < N && index_B < M)
+	{
+		if (A[index_A] < B[index_B])
+		{
+			printf("%d ", A[index_A++]);
+		}
+		else
+		{
+			printf("%d ", B[index_B++]);
+		}
+	}
+	
+	if (index_A < N)
+	{
+		while (index_A < N - 1)
+		{
+			printf("%d ", A[index_A++]);
+		}
+		printf("%d\n", A[index_A++]);
+	}
+	if (index_B < M)
+	{
+		while (index_B < M - 1)
+		{
+			printf("%d ", B[index_B++]);
+		}
+		printf("%d\n", B[index_B++]);
+	}
+
+	return 0;
+}
+

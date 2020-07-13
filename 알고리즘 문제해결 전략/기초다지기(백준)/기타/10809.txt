@@ -1,0 +1,37 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int alphabet[26] = { 0 };
+int index[26];
+
+int main()
+{		
+	string str;
+	cin >> str;
+
+	int i;
+	for (i = 0; i < 26; i++)
+	{
+		index[i] = -1;
+	}
+
+	for (i = 0; i < str.size(); i++)
+	{
+		if (alphabet[str[i] - 'a'] != 1)
+		{
+			index[str[i] - 'a'] = i;
+		}
+		alphabet[str[i] - 'a'] = 1;
+	}
+
+	for (i = 0; i < 25; i++)
+	{
+		cout << index[i] << " ";
+	}
+	cout << index[25] << '\n';
+
+	return 0;
+}
+

@@ -1,0 +1,120 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+#include<climits>
+
+using namespace std;
+
+const int INF = INT_MAX;
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int dist[21][21];
+char room[21][21];
+
+vector<pair<int, int>> pos;
+
+vector<vector<int>> bfs(int w, int h, int sy, int sx) {
+	vector<vector<int>> ret(h, vector<int>(w, -1));
+
+	queue<pair<int, int>> q;
+	q.push(make_pair(sy, sx));
+	ret[sy][sx] = 0;
+	
+	int i;
+	while (!q.empty()) {
+		int cy = q.front().first;
+		int cx = q.front().second;
+		q.pop();
+
+		for (i = 0; i < 4; i++) {
+			int ny = cy + dir[i][0];
+			int nx = cx + dir[i][1];
+
+			if (ny < 0 || ny >= h || nx < 0 || nx >= w) continue;
+
+			// ret[i][j] = -1 이면 방문하지 않은 곳
+			if (ret[ny][nx] == -1 && room[ny][nx] != 'x') {
+				ret[ny][nx] = ret[cy][cx] + 1;
+				q.push(make_pair(ny, nx));
+			}
+		}
+	}
+	   	 
+	return ret;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int w, h, i, j;
+	cin >> w >> h;
+	while (w != 0 && h != 0) {
+		memset(room, '\0', sizeof(room));
+		memset(dist, -1, sizeof(dist));
+		pos.clear();
+
+		pos.push_back(make_pair(-1, -1));		// 항상 0 에는 'o' 위치가 들어가게 설정
+
+		for (i = 0; i < h; i++) {
+			for (j = 0; j < w; j++) {
+				cin >> room[i][j];
+
+				if (room[i][j] == 'o') {
+					pos[0] = make_pair(i, j);
+				}
+				else if (room[i][j] == '*') {
+					pos.push_back(make_pair(i, j));
+				}
+			}
+		}
+
+		bool isSweep = true;
+		for (i = 0; i < pos.size(); i++) {
+			auto d = bfs(w, h, pos[i].first, pos[i].second);
+
+			for (j = 0; j < pos.size(); j++) {
+				dist[i][j] = d[pos[j].first][pos[j].second];
+
+				if (dist[i][j] == -1) isSweep = false;
+			}
+		}
+
+		if (!isSweep) {				// 모두 깨끗한 칸을 만들 수 없을 때
+			cout << "-1" << "\n";
+		}
+		else {
+			vector<int> comb;
+			for (i = 0; i < pos.size() - 1; i++) {
+				comb.push_back(i + 1);
+			}
+
+			int answer = INF;
+
+			// 더러운 칸의 최대 개수 : 10 -> 10! = 3,628,800
+			do {
+				int sum = 0;
+				sum += dist[0][comb[0]];		// 항상 'o' 에서 출발함
+
+				for (i = 0; i < comb.size() - 1; i++) {
+					sum += dist[comb[i]][comb[i + 1]];
+				}
+
+				answer = min(answer, sum);
+				
+			} while (next_permutation(comb.begin(), comb.end()));
+
+			cout << answer << "\n";
+		}
+
+		cin >> w >> h;
+	}
+}

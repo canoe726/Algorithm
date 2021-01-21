@@ -1,0 +1,54 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// left, right 로 분리해서 구간합을 구하면 O(N) 시간만에 정답을 구할 수 있다.
+int A[10001];
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
+	}
+
+	int answer = 0;
+	int sum = A[0];
+	int left = 0, right = 0;
+	while (left <= right && right < N) {
+		if (sum < M) {
+			right += 1;
+			sum += A[right];
+		}
+		else if (sum == M) {
+			answer += 1;
+			right += 1;
+			sum += A[right];
+		}
+		else {
+			sum -= A[left];
+			left += 1;
+			if (left > right && left < N) {
+				right = left;
+				sum += A[left];
+			}
+		}
+	}
+
+	cout << answer << "\n";
+}
+
+/*
+반례
+2 1
+9 1
+
+*/

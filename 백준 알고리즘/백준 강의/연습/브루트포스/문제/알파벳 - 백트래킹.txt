@@ -1,0 +1,55 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 보드
+char board[21][21];
+// 지나온 알파벳 체크
+bool alphabet[26];
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int R, C;
+
+int go(int y, int x, int cnt) {
+	int ret = 0;
+
+	for (int i = 0; i < 4; i++) {
+		int ny = y + dir[i][0];
+		int nx = x + dir[i][1];
+
+		// 범위 초과
+		if (ny < 0 || ny >= R || nx < 0 || nx >= C) continue;
+
+		// 알파벳 사용 여부 검사
+		if (!alphabet[board[ny][nx] - 'A']) {
+			alphabet[board[ny][nx] - 'A'] = true;
+			ret = max(ret, go(ny, nx, cnt + 1));
+			alphabet[board[ny][nx] - 'A'] = false;
+		}
+	}
+
+	return ret + 1;
+}
+
+int main() {
+	cin >> R >> C;
+
+	int i, j;
+	for (i = 0; i < R; i++) {
+		string input;
+		cin >> input;
+		for (j = 0; j < input.size(); j++) {
+			board[i][j] = input[j];
+		}
+	}
+
+	alphabet[board[0][0] - 'A'] = true;
+	cout << go(0, 0, 1) << "\n";
+}

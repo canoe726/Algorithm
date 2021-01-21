@@ -1,0 +1,34 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int coin[101];
+// dp[i] = n가지 동전을 사용해서 합이 i 가 되는 경우의 수
+int dp[10001];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	memset(dp, 0, sizeof(dp));
+
+	int n, k;
+	cin >> n >> k;
+
+	int i, j;
+	for (i = 0; i < n; i++) {
+		cin >> coin[i];
+	}
+
+	dp[0] = 1;
+	for (i = 0; i < n; i++) {
+		// 마지막 동전을 사용하기 전까지 최대 경우의 수
+		for (j = coin[i]; j <= k; j++) {
+			dp[j] += dp[j - coin[i]];
+		}
+	}
+
+	cout << dp[k] << "\n";
+}

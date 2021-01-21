@@ -1,0 +1,75 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+const int INF = 987654321;
+
+vector<char> symbol;
+
+// 순회하면서 부등호 방향이 맞는지 검사
+bool check_num(vector<int> temp) {
+	for (int i = 0; i < temp.size() - 1; i++) {
+		int left = temp[i];
+		int right = temp[i + 1];
+
+		if (symbol[i] == '<') {
+			if (left > right) {
+				return false;
+			}
+		}
+		else {
+			if (left < right) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+int main() {
+	int k;
+	cin >> k;
+
+	int i;
+	for (i = 0; i < k; i++) {
+		char input;
+		cin >> input;
+		symbol.push_back(input);
+	}
+
+	vector<int> big;
+	vector<int> small;
+	
+	// 최대 값은 항상 k 개의 9876543210 보다 작거나 같다
+	// 최소 값은 항상 k 개의 0123456789 보다 크거나 같다
+	for (i = 0; i <= k; i++) {
+		big.push_back(9 - i);
+		small.push_back(i);
+	}
+
+	do {
+		if (check_num(big)) {
+			for (i = 0; i < big.size(); i++) cout << big[i];
+			cout << "\n";
+			break;
+		}
+
+	} while (prev_permutation(big.begin(), big.end()));
+
+	do {
+		if (check_num(small)) {
+			for (i = 0; i < small.size(); i++) cout << small[i];
+			cout << "\n";
+			break;
+		}
+
+	} while (next_permutation(small.begin(), small.end()));
+
+}

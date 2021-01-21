@@ -1,0 +1,38 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+// dp[i][j] = i 번째 물건까지 고려했을 때, j 크기만큼 베낭에 물건을 넣은 경우 최대가치값
+int dp[100001];
+int weight[101];
+int value[101];
+
+int main() {
+	int N, K;
+	cin >> N >> K;
+
+	int i, j;
+	for (i = 1; i <= N; i++) {
+		cin >> weight[i];
+		cin >> value[i];
+	}
+
+	for (i = 1; i <= N; i++) {
+		// 중복 제거를 위해 역순으로
+		for (j = K; j >= 1; j--) {
+			if (j - weight[i] >= 0) {
+				// 베낭에 i 번째 물건을 넣는 경우
+				dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);
+			}
+		}
+	}
+
+	cout << dp[K] << "\n";
+}

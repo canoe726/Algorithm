@@ -1,0 +1,63 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+vector<string> answer;
+
+bool used[10];
+
+// 부등호 위치가 올바르게 설정되어있는지 검사
+bool check(char s, char e, char cmp) {
+	if (cmp == '<') {
+		if (s > e) return false;
+	}
+	else {
+		if (s < e) return false;
+	}
+	return true;
+}
+
+void go(int index, int N, vector<char> symbol, string res) {
+	if (index == N + 1) {
+		answer.push_back(res);
+		return;
+	}
+
+	for (int i = 0; i <= 9; i++) {
+		if (used[i]) continue;
+		// index 가 1 이상이고 부등호식이 만족할 때 다음 경우
+		if (index == 0 || check(res[index - 1], i + '0', symbol[index - 1])) {
+			used[i] = true;
+			go(index + 1, N, symbol, res + to_string(i));
+			used[i] = false;
+		}
+	}
+}
+
+int main() {
+	memset(used, false, sizeof(used));
+
+	int N;
+	cin >> N;
+
+	vector<char> symbol;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		char input;
+		cin >> input;
+		symbol.push_back(input);
+	}
+
+	go(0, N, symbol, "");
+
+	sort(answer.begin(), answer.end());
+	cout << answer[answer.size() - 1] << "\n";
+	cout << answer[0] << "\n";
+}

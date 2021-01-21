@@ -1,0 +1,56 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+const int INF = 987654321;
+
+int A[100001];
+
+int main() {
+	int N, S;
+	cin >> N >> S;
+
+	int answer = INF;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
+	}
+
+	int sum = A[0];
+	int left = 0, right = 0;
+	while (left <= right && right < N) {
+		if (sum < S) {
+			right += 1;
+			sum += A[right];
+		}
+		// 합이 S 이상이 되는 것 중 가장 작은 값 찾기
+		else if (sum == S) {
+			answer = min(answer, right - left + 1);
+			right += 1;
+			sum += A[right];
+		}
+		else {
+			answer = min(answer, right - left + 1);
+			sum -= A[left];
+			left += 1;
+			if (left > right && left < N) {
+				right = left;
+				sum += A[left];
+			}
+		}
+	}
+
+	if (answer == INF) {
+		cout << 0 << "\n";
+	}
+	else {
+		cout << answer << "\n";
+	}
+}

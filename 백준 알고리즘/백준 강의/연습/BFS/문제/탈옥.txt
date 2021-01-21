@@ -1,0 +1,116 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+#include<climits>
+
+using namespace std;
+
+const int INF = INT_MAX;
+
+// 0-1BFS : 가중치가 0 인 간선들을 전부 순회한 후 가중치가 1인 간선 순회하는 방식
+// current 값 : pop_front
+// weight : 1 -> push_back, weight : 0 -> push_front
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+int dist[3][102][102];
+char prison[102][102];
+
+vector<pair<int, int>> pos;
+
+void bfs(int idx, int y, int x, int h, int w) {
+	int i;
+	deque<pair<int, int>> q;
+	q.push_front(make_pair(y, x));
+
+	dist[idx][y][x] = 0;
+
+	while (!q.empty()) {
+		int cur_y = q.front().first;
+		int cur_x = q.front().second;
+		q.pop_front();
+
+		for (i = 0; i < 4; i++) {
+			int next_y = cur_y + dir[i][0];
+			int next_x = cur_x + dir[i][1];
+		
+			if (next_y < 0 || next_y >= h || next_x < 0 || next_x >= w) continue;
+			if (dist[idx][next_y][next_x] != -1) continue;
+			if (prison[next_y][next_x] == '*') continue;
+
+			if (prison[next_y][next_x] == '#') {
+				dist[idx][next_y][next_x] = dist[idx][cur_y][cur_x] + 1;
+				q.push_back(make_pair(next_y, next_x));
+			}
+			else {
+				dist[idx][next_y][next_x] = dist[idx][cur_y][cur_x];
+				q.push_front(make_pair(next_y, next_x));
+			}			
+		}
+	}
+}
+
+int find_answer(int h, int w) {
+	int i, j;
+	int answer = INF;
+	for (i = 0; i < h; i++) {
+		for (j = 0; j < w; j++) {
+			if (prison[i][j] == '*') continue;
+			if (dist[0][i][j] == -1 || dist[1][i][j] == -1 || dist[2][i][j] == -1) continue;
+
+			int sum = dist[0][i][j] + dist[1][i][j] + dist[2][i][j];
+
+			if (prison[i][j] == '#') sum -= 2;		// 문에서 만나는 경우
+
+			answer = min(answer, sum);
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+	int T;
+	cin >> T;
+	   
+	int t, i, j;
+	for (t = 0; t < T; t++) {
+		memset(prison, '\0', sizeof(prison));
+		memset(dist, -1, sizeof(dist));
+		pos.clear();
+
+		pos.push_back(make_pair(0, 0));
+
+		int h, w;
+		cin >> h >> w;
+
+		h += 2;
+		w += 2;
+
+		for (i = 0; i < h; i++) {
+			for (j = 0; j < w; j++) {
+				if ((i == 0) || (j == 0) || (i == h - 1) || (j == w - 1)) {
+					prison[i][j] = '.';
+					continue;
+				}
+
+				cin >> prison[i][j];
+
+				if (prison[i][j] == '$') {
+					pos.push_back(make_pair(i, j));
+				}
+			}
+		}
+
+		for (i = 0; i < pos.size(); i++) {
+			bfs(i, pos[i].first, pos[i].second, h, w);
+		}
+
+		cout << find_answer(h, w) << "\n";
+	}
+}

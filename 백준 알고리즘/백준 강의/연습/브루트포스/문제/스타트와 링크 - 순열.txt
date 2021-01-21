@@ -1,0 +1,79 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int status[21][21];
+
+int find_combination(vector<int> team) {
+	int ret = 0;
+
+	// team 구성원들의 능력치는 i,j 쌍을 가지므로 2개씩 뽑는다.
+	vector<int> choose;
+	int i;
+	for (i = 0; i < 2; i++) choose.push_back(1);
+	for (i = 2; i < team.size(); i++) choose.push_back(0);
+	sort(choose.begin(), choose.end());
+
+	do {
+		vector<int> c;
+
+		for (i = 0; i < choose.size(); i++) {
+			if (choose[i]) {
+				c.push_back(team[i]);
+			}
+		}
+
+		// i,j 와 j,i 쌍 모두 더해야 함
+		ret += status[c[0]][c[1]];
+		ret += status[c[1]][c[0]];
+
+	} while (next_permutation(choose.begin(), choose.end()));
+
+	return ret;
+}
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> status[i][j];
+		}
+	}
+
+	// N/2 명으로 이루어진 팀 2개를 만드는 경우의 수 만들기
+	vector<int> choose;
+	for (i = 0; i < N / 2; i++) choose.push_back(0);
+	for (i = 0; i < N / 2; i++) choose.push_back(1);
+
+	int answer = 987654321;
+
+	do {
+		vector<int> team_a;
+		vector<int> team_b;
+
+		// 팀 나누기, 1: team_a, 0: team_b
+		for (i = 0; i < choose.size(); i++) {
+			if (choose[i]) team_a.push_back(i);
+			else team_b.push_back(i);
+		}
+
+		// 팀별 점수 구하기
+		int temp_a, temp_b;
+		temp_a = find_combination(team_a);
+		temp_b = find_combination(team_b);
+
+		answer = min(answer, abs(temp_a - temp_b));
+
+	} while (next_permutation(choose.begin(), choose.end()));
+
+	cout << answer << "\n";
+}

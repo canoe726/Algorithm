@@ -1,0 +1,73 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+// 정해진 물통의 부피
+int volume[3];
+
+bool answer[201];
+bool visited[201][201];
+
+// A : 0, B : 1, C : 2
+// A->B, A->C, B->A, B->C, C->A, C->B
+int from[6] = { 0,0,1,1,2,2 };
+int to[6]	= { 1,2,0,2,0,1 };
+
+void bfs() {
+	// C = 전체 물의양 - A - B
+	int sum = volume[2];
+
+	// <int, int> : <A, B>
+	queue<pair<int, int>> q;
+	q.push(make_pair(0, 0));
+	visited[0][0] = true;
+	answer[volume[2]] = true;
+
+	while (!q.empty()) {
+		pair<int, int> cur = q.front();
+		q.pop();
+
+		for (int i = 0; i < 6; i++) {
+			int cur_vol[3] = { cur.first, cur.second, sum - cur.first - cur.second};
+
+			// 일단 from -> to 로 물을 모두 붓는다.
+			cur_vol[to[i]] += cur_vol[from[i]];
+			cur_vol[from[i]] = 0;
+
+			// 넘치면 남은 양 만큼 from 으로 옮긴다.
+			if (cur_vol[to[i]] > volume[to[i]]) {
+				int remain = cur_vol[to[i]] - volume[to[i]];
+				cur_vol[to[i]] = volume[to[i]];
+				cur_vol[from[i]] = remain;
+			}
+
+			// 이미 옮긴적이 있다면 실행하지 않는다.
+			if (!visited[cur_vol[0]][cur_vol[1]]) {
+				q.push(make_pair(cur_vol[0], cur_vol[1]));
+				visited[cur_vol[0]][cur_vol[1]] = true;
+
+				// A 의 물의 양이 0 인 경우라면 정답
+				if (cur_vol[0] == 0) answer[sum - cur_vol[0] - cur_vol[1]] = true;
+			}
+		}
+	}
+}
+
+int main() {
+	cin >> volume[0] >> volume[1] >> volume[2];
+
+	bfs();
+	for (int i = 0; i < 201; i++) {
+		if (answer[i]) {
+			cout << i << " ";
+		}
+	}
+	cout << "\n";
+}

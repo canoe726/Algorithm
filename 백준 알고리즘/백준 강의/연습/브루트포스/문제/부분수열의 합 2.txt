@@ -1,0 +1,90 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int A[41];
+
+int main() {
+	int N, S;
+	cin >> N >> S;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
+	}
+
+	// 절반 만큼 경우의 수를 나눈다.
+	int up_size = N / 2;
+	int down_size = N - up_size;
+
+	vector<int> up(1 << up_size);
+	vector<int> down(1 << down_size);
+
+	for (i = 0; i < (1 << up_size); i++) {
+		for (j = 0; j < up_size; j++) {
+			if (i & (1 << j)) {
+				// N / 2 개 만큼의 부분집합의 합 경우의 수를 찾는다.
+				up[i] += A[j];
+			}
+		}
+	}
+
+	for (i = 0; i < (1 << down_size); i++) {
+		for (j = 0; j < down_size; j++) {
+			if (i & (1 << j)) {
+				// up_size 만큼 인덱스를 더해주면 나머지 부분집합의 합 경우의 수를 찾을 수 있다.
+				down[i] += A[up_size + j];
+			}
+		}
+	}
+
+	sort(up.begin(), up.end());
+	sort(down.begin(), down.end());
+	reverse(down.begin(), down.end());
+
+	long long answer = 0;
+
+	int left = 0, right = 0;
+
+	while (left < up.size() && right < down.size()) {
+		if (up[left] + down[right] == S) {
+			long long l_size = 1;
+			long long r_size = 1;
+
+			left += 1;
+			right += 1;
+			while (left < up.size() && up[left] == up[left - 1]) {
+				l_size += 1;
+				left += 1;
+			}
+			while (right < down.size() && down[right] == down[right - 1]) {
+				r_size += 1;
+				right += 1;
+			}
+
+			answer += (l_size * r_size);
+		}
+		else if (up[left] + down[right] < S) {
+			left += 1;
+		}
+		else {
+			right += 1;
+		}
+	}
+
+	// 합이 0 인 경우 공집합 경우의 수가 생기므로 하나 빼준다.
+	if (S == 0) answer -= 1;
+	cout << answer << "\n";
+}
+
+/*
+6 4
+1 2 1 3 1 2
+
+*/

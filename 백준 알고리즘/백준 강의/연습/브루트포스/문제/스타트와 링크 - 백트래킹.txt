@@ -1,0 +1,70 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int N;
+int status[21][21];
+
+int go(int index, vector<int> &first, vector<int> &second) {
+	int ret = 987654231;
+	int res;
+
+	// 정답인 경우
+	if (index == N) {
+		// 오답인 경우
+		if (first.size() > N / 2) return -1;
+		if (second.size() > N / 2) return -1;
+
+		int s = 0, e = 0;
+		int i, j;
+		for (i = 0; i < first.size(); i++) {
+			for (j = 0; j < second.size(); j++) {
+				if (i == j) continue;
+				s += status[first[i]][first[j]];
+				e += status[second[i]][second[j]];
+			}
+		}
+
+		return abs(s - e);
+	}
+
+	// 오답인 경우
+	if (first.size() > N / 2) return -1;
+	if (second.size() > N / 2) return -1;
+
+	// 다음 경우 first 추가
+	first.push_back(index);
+	res = go(index + 1, first, second);
+	if (res != -1) ret = min(ret, res);
+	first.pop_back();
+
+	// 다음 경우 second 추가
+	second.push_back(index);
+	res = go(index + 1, first, second);
+	if (res != -1) ret = min(ret, res);
+	second.pop_back();
+
+	return ret;
+}
+
+int main() {
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> status[i][j];
+		}
+	}
+
+	vector<int> first;
+	vector<int> second;
+
+	cout << go(0, first, second) << "\n";
+}

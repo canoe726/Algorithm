@@ -1,0 +1,75 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int A[4001][4];
+
+int find_lower_bound(vector<int> arr, int val) {
+	int left = 0, right = arr.size();
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] < val) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+	}
+	return right;
+}
+
+int find_upper_bound(vector<int> arr, int val) {
+	int left = 0, right = arr.size();
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] <= val) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+	}
+	return right;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int n;
+	cin >> n;
+
+	int i, j;
+	for (i = 0; i < n; i++) {
+		cin >> A[i][0] >> A[i][1] >> A[i][2] >> A[i][3];
+	}
+
+	vector<int> first, second;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
+			first.push_back(A[i][0] + A[j][1]);
+			second.push_back(A[i][2] + A[j][3]);
+		}
+	}
+
+	sort(second.begin(), second.end());
+
+	long long answer = 0;
+	for (int num : first) {
+		// -num 값을 가진 lower, upper bound 값을 찾아 부분 수열의 개수를 찾는다.
+		// int lower_bound = find_lower_bound(second, -num);
+		// int upper_bound = find_upper_bound(second, -num);
+		// answer += (upper_bound - lower_bound);
+		auto bound = equal_range(second.begin(), second.end(), -num);
+		answer += (bound.second - bound.first);
+	}
+
+	cout << answer << "\n";
+}

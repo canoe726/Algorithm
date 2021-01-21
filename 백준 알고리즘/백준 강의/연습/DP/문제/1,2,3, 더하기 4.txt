@@ -1,0 +1,35 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+// dp[i] = 1,2,3 으로 이루어진 합이 i가 되는 방법의 수
+int dp[10001];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int T;
+	cin >> T;
+
+	int i, j, t;
+	for (t = 0; t < T; t++) {
+		memset(dp, 0, sizeof(dp));
+
+		int N;
+		cin >> N;
+
+		dp[0] = 1;
+		// 1 부터 3 까지 순서대로 그룹화 하여 진행
+		for (i = 1; i <= 3; i++) {
+			for (j = i; j <= N; j++) {
+				// 마지막에 i 가 오는 최대 방법의 수를 더함
+				dp[j] += dp[j - i];
+			}
+		}
+
+		cout << dp[N] << "\n";
+	}
+}

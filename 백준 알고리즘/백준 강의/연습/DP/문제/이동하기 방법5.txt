@@ -1,0 +1,48 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+int maze[1001][1001];
+// dp[i][j] = (1,1) 에서 (i,j) 로 이동할 때 가져올 수 있는 사탕의 최대 개수
+// -1 : 아직 정해지지 않음, dp[i][j] > 0 : 최댓값
+int dp[1001][1001];
+
+int N, M;
+
+int go(int n, int m) {
+	if (n > N || m > M) {		// 종료 조건
+		return -1;
+	}
+	if (dp[n][m] >= 0) {
+		return dp[n][m];
+	}
+
+	dp[n][m] = max(go(n + 1, m), go(n, m + 1)) + maze[n][m];
+
+	return dp[n][m];
+}
+
+int main() {
+	memset(maze, 0, sizeof(maze));
+	memset(dp, -1, sizeof(dp));
+
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 1; i <= N; i++) {
+		for (j = 1; j <= M; j++) {
+			cin >> maze[i][j];
+		}
+	}
+
+	// (1,1) 에서 출발하는 코드
+	dp[N][M] = maze[N][M];
+	cout << go(1, 1) << "\n";
+}

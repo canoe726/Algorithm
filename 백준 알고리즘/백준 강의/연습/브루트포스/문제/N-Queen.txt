@@ -1,0 +1,60 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int N;
+
+int check_col[16];		// 열에 체스를 이미 놓은 경우 true
+int check_dig[30];		// / 대각선에 체스를 이미 놓은 경우 true
+/* 인덱스, 개수 : (N-1)*2+1
+0 1 2
+1 2 3
+2 3 4
+*/
+int check_dig2[30];		// \ 대각선에 체스를 이미 놓은 경우 true
+/* 인덱스, 개수 : (N-1)*2+1
+2 1 0
+3 2 1
+4 3 2
+*/
+
+bool check(int row, int col) {
+	if (check_col[col]) return false;
+	if (check_dig[row + col]) return false;
+	if (check_dig2[row - col + N - 1]) return false;
+
+	return true;
+}
+
+int go(int row) {
+	int ret = 0;
+	if (row == N) return 1;
+
+	for (int col = 0; col < N; col++) {
+		if (check(row, col)) {
+			check_col[col] = true;
+			check_dig[row + col] = true;
+			check_dig2[row - col + N - 1] = true;
+
+			ret += go(row + 1);
+
+			check_col[col] = false;
+			check_dig[row + col] = false;
+			check_dig2[row - col + N - 1] = false;
+		}
+	}
+
+	return ret;
+}
+
+int main() {
+	cin >> N;
+
+	cout << go(0) << "\n";
+}

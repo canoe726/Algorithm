@@ -1,0 +1,78 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+const int LEN = 200000;
+
+bool visited[LEN + 1];
+int from[LEN + 1];
+int dist[LEN + 1];
+
+int bfs(int N, int K) {
+	int ret = 0;
+
+	queue<int> q;
+	q.push(N);
+	visited[N] = true;
+	dist[N] = 0;
+	
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		int next1 = cur + 1;
+		int next2 = cur - 1;
+		int next3 = cur * 2;
+
+		if (next1 < LEN) {
+			if (!visited[next1]) {
+				q.push(next1);
+				from[next1] = cur;
+				dist[next1] = dist[cur] + 1;
+				visited[next1] = true;
+			}
+		}
+
+		if (next2 >= 0) {
+			if (!visited[next2]) {
+				q.push(next2);
+				from[next2] = cur;
+				dist[next2] = dist[cur] + 1;
+				visited[next2] = true;
+			}
+		}
+
+		if (next3 < LEN) {
+			if (!visited[next3]) {
+				q.push(next3);
+				from[next3] = cur;
+				dist[next3] = dist[cur] + 1;
+				visited[next3] = true;
+			}
+		}
+	}
+
+	return dist[K];
+}
+
+void find_path(int N, int K) {
+	if (N != K) {
+		find_path(N, from[K]);
+	}
+	cout << K << " ";
+}
+
+int main() {
+	int N, K;
+	cin >> N >> K;
+
+	cout << bfs(N, K) << "\n";
+	find_path(N, K);
+	cout << "\n";
+}

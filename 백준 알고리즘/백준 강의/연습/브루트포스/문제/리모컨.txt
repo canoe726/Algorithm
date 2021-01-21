@@ -1,0 +1,69 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+bool broken[10];
+
+// 버튼을 눌러서 만들 수 없으면 0 을 리턴
+// 그렇지 않으면 버튼을 눌러서 만들 수 있는 횟수 리턴
+int push_button(int num) {
+	// 0 인 경우 예외 처리
+	if (num == 0) return broken[0] ? 0 : 1;
+
+	int ret = 0;
+	while (num > 0) {
+		if (!broken[num % 10]) ret += 1;
+		else return 0;
+		num /= 10;
+	}
+
+	return ret;
+}
+
+int main() {
+	memset(broken, false, sizeof(broken));
+
+	int N;
+	cin >> N;
+
+	int M;
+	cin >> M;
+
+	int i;
+	for (i = 0; i < M; i++) {
+		int idx;
+		cin >> idx;
+		broken[idx] = true;
+	}
+
+	// 현재 100번 채널에서 +/- 버튼으로 이동하는 경우를 초기값으로 설정
+	int answer = N - 100;
+	if (answer < 0) answer *= -1;
+
+	// 이동 하려는 채널보다 큰 채널에서 내려가는게 좋은 방법일 수 있다.
+	// 버튼을 눌러서 해당 숫자로 이동 가능한지 검사
+	for (i = 0; i <= 1000000; i++) {
+		int ret = push_button(i);
+		if (ret > 0) {
+			int cnt = i - N;
+			if (cnt < 0) cnt *= -1;
+
+			answer = min(answer, ret + cnt);
+		}
+	}
+	cout << answer << "\n";
+}
+
+/*
+1
+10
+0 1 2 3 4 5 6 7 8 9
+99
+
+*/

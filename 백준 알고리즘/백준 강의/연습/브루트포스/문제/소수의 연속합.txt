@@ -1,0 +1,60 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+const int LEN = 4000000;
+
+bool check[LEN + 1];
+vector<int> prime_number;
+
+// 에라토스테네스의 체
+void find_prime_number() {
+	int idx = 0;
+	memset(check, false, sizeof(check));
+
+	int i, j;
+	for (i = 2; i <= LEN; i++) {
+		if (!check[i]) {
+			prime_number.push_back(i);
+			for (j = i * 2; j <= LEN; j += i) {
+				check[j] = true;
+			}
+		}
+	}
+}
+
+
+int main() {
+	int N;
+	cin >> N;
+
+	find_prime_number();
+
+	int answer = 0;
+
+	int sum = prime_number[0];
+	int left = 0, right = 0;
+	while (left <= right && right < prime_number.size()) {
+		if (sum < N) {
+			right += 1;
+			sum += prime_number[right];
+		}
+		else if (sum == N) {		// 합이 N 인 경우만 정답
+			answer += 1;
+			right += 1;
+			sum += prime_number[right];
+		}
+		else {
+			sum -= prime_number[left];
+			left += 1;
+		}
+	}
+
+	cout << answer << "\n";
+}

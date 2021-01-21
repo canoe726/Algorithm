@@ -1,0 +1,81 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int bfs(int start) {
+	int cnt = 0;
+
+	// bfs 를 위한 큐
+	queue<int> q;
+	q.push(start);
+
+	// <int, int> : <퍼즐 형태, 횟수>
+	map<int, int> dist;
+	dist[start] = 0;
+
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		string s_cur = to_string(cur);
+
+		// 3*3 퍼즐에서 빈 칸의 y, x 좌표 찾기
+		int z = s_cur.find('9');
+		int y = z / 3;
+		int x = z % 3;
+
+		for (int i = 0; i < 4; i++) {
+			// 빈 칸을 기준으로 위치 변경
+			int ny = y + dir[i][0];
+			int nx = x + dir[i][1];
+
+			if (ny < 0 || ny >= 3 || nx < 0 || nx >= 3) continue;
+
+			int before = y * 3 + x;
+			int after = ny * 3 + nx;
+
+			// 빈 칸 주변 4 방향 이동
+			string temp = s_cur;
+			swap(temp[before], temp[after]);
+
+			int next = stoi(temp);
+			// 방문하지 않았다면 이동
+			if (dist.count(next) == 0) {
+				q.push(next);
+				dist[next] = dist[cur] + 1;
+			}
+		}
+	}
+
+	// 이동이 불가능한 경우
+	if (dist.count(123456789) == 0) {
+		return -1;
+	}
+	else {
+		return dist[123456789];
+	}
+}
+
+int main() {
+	int start = 0;
+	
+	for (int i = 0; i < 9; i++) {
+		int num;
+		cin >> num;
+		// 0 -> 9 로 만들면 항상 9 자리 숫자로 표현 가능
+		if (num == 0) num = 9;
+		start = start * 10 + num;
+	}
+
+	cout << bfs(start) << "\n";
+}

@@ -1,0 +1,58 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int team[21][21];
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i, j, a, b;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> team[i][j];
+		}
+	}
+	
+	int answer = 987654321;
+	for (i = 0; i < (1 << N); i++) {
+		vector<int> first, second;
+
+		for (j = 0; j < N; j++) {
+			// 0 1 두가지 경우로 팀 나누기
+			if (i&(1 << j)) {
+				first.push_back(j);
+			}
+			else {
+				second.push_back(j);
+			}
+		}
+
+		// 팀의 크기는 항상 N/2
+		if (first.size() > N / 2) continue;
+		if (second.size() > N / 2) continue;
+
+		int A = 0;
+		int B = 0;
+
+		for (a = 0; a < first.size(); a++) {
+			for (b = 0; b < second.size(); b++) {
+				if (a == b) continue;
+
+				A += team[first[a]][first[b]];
+				B += team[second[a]][second[b]];
+			}
+		}
+		
+		answer = min(answer, abs(A - B));
+	}
+
+	cout << answer << "\n";
+}

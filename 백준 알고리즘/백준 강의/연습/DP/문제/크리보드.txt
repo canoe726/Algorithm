@@ -1,0 +1,42 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+// Ctrl + A, C, V 동시에 3 번 버튼을 눌러야 의미가 있다.
+// 3 번 누른 후 Ctrl + V 만 누르는 경우도 있다.
+
+// dp[i] = N 번 버튼을 눌렀을 때 A 개수의 최댓값
+long long dp[101];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	memset(dp, 0, sizeof(dp));
+
+	int N, i, j;
+	cin >> N;
+	for (i = 1; i <= N; i++) {
+		// 일단 A 버튼을 누르는 경우
+		dp[i] = dp[i - 1] + 1;
+
+		// dp[N - 3] ~ dp[1] + 연속된 V 버튼
+		// V 버튼을 누르는 모든 경우의 수를 계산해본다.
+		for (j = 0; j < i - 3; j++) {
+			long long next = dp[i - (3 + j)] * (2 + j);
+			if (next > dp[i]) {
+				dp[i] = next;
+			}
+		}
+	}
+
+	cout << dp[N] << "\n";
+}

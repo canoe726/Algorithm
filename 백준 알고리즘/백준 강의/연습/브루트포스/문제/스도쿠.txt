@@ -1,0 +1,156 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 0 1 2 3 4 5 6 7 8
+//      ... 78 79 80
+// board는 80번 숫자까지로 이루어져 있다.
+int board[10][10];
+int N = 9;
+
+// i 행에 숫자 j 가 있으면 true (숫자가 1~9까지 이므로 10개 할당)
+bool row[10][10];
+// i 열에 숫자 j 가 있으면 true
+bool col[10][10];
+// i 번째 작은 정사각형에 숫자 j 가 있으면 true
+bool rect[10][10];
+
+int square(int y, int x) {
+	return (y / 3) * 3 + (x / 3);
+}
+
+void go(int z) {
+	//  정답을 찾은 경우
+	if (z == 81) {
+		int i, j;
+		for (i = 0; i < N; i++) {
+			for (j = 0; j < N; j++) {
+				cout << board[i][j] << " ";
+			}
+			cout << "\n";
+		}
+		exit(0);
+	}
+
+	int y = z / N;
+	int x = z % N;
+
+	// 이미 스도쿠 값이 채워져 있는 경우
+	if (board[y][x] != 0) {
+		go(z + 1);
+	}
+	else {
+		for (int i = 1; i <= 9; i++) {
+			if (row[y][i] == 0 && col[x][i] == 0 && rect[square(y, x)][i] == 0) {
+				row[y][i] = col[x][i] = rect[square(y, x)][i] = true;
+				board[y][x] = i;
+
+				go(z + 1);
+
+				board[y][x] = 0;
+				row[y][i] = col[x][i] = rect[square(y, x)][i] = false;
+			}
+		}
+	}
+}
+
+int main() {
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> board[i][j];
+			
+			row[i][board[i][j]] = true;
+			col[j][board[i][j]] = true;
+			rect[square(i, j)][board[i][j]] = true;
+		}
+	}
+
+	go(0);	
+}
+
+/*
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 0 1 2 3 4 5 6 7 8
+//      ... 78 79 80
+// board는 80번 숫자까지로 이루어져 있다.
+int board[10][10];
+int N = 9;
+
+// i 행에 숫자 j 가 있으면 true
+bool row[10][10];
+// i 열에 숫자 j 가 있으면 true
+bool col[10][10];
+// i 번째 작은 정사각형에 숫자 j 가 있으면 true
+bool rect[10][10];
+
+int square(int y, int x) {
+	return (y / 3) * 3 + (x / 3);
+}
+
+bool go(int z) {
+	//  정답을 찾은 경우
+	if (z == 81) {
+		int i, j;
+		for (i = 0; i < N; i++) {
+			for (j = 0; j < N; j++) {
+				cout << board[i][j] << " ";
+			}
+			cout << "\n";
+		}
+		return true;
+	}
+
+	int y = z / N;
+	int x = z % N;
+
+	// 이미 스도쿠 값이 채워져 있는 경우
+	if (board[y][x] != 0) {
+		return go(z + 1);
+	}
+	else {
+		for (int i = 1; i <= 9; i++) {
+			if (row[y][i] == 0 && col[x][i] == 0 && rect[square(y, x)][i] == 0) {
+				row[y][i] = col[x][i] = rect[square(y, x)][i] = true;
+				board[y][x] = i;
+
+				if(go(z + 1)) return true;
+
+				board[y][x] = 0;
+				row[y][i] = col[x][i] = rect[square(y, x)][i] = false;
+			}
+		}
+	}
+	return false;
+}
+
+int main() {
+	int i, j;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> board[i][j];
+			
+			row[i][board[i][j]] = true;
+			col[j][board[i][j]] = true;
+			rect[square(i, j)][board[i][j]] = true;
+		}
+	}
+
+	go(0);	
+}
+*/

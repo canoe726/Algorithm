@@ -1,0 +1,99 @@
+#include<iostream>
+#include<queue>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+const int LEN = 10000;
+
+// 모든 값이 LEN 을 벗어날 수 없다.
+bool visited[LEN + 1];
+// 이때까지의 거리 저장
+int dist[LEN + 1];
+// 어떤 숫자로 부터 도출되었는지 저장
+int from[LEN + 1];
+// 어떤 연산을 사용 했는지 저장
+char how[LEN + 1];
+
+void find_path(int A, int B) {
+	if (A != B) {
+		find_path(A, from[B]);
+		// how[A] 는 출력하지 않는다.
+		cout << how[B];
+	}
+}
+
+void bfs(int A, int B) {
+	queue<int> q;
+	q.push(A);
+	
+	visited[A] = true;
+	dist[A] = 0;
+	from[A] = -1;
+
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		int D = (cur * 2) % 10000;
+		int S = cur - 1;
+		if (S == -1) S = 9999;
+		int L = (cur % 1000) * 10 + cur / 1000;
+		int R = (cur % 10) * 1000 + (cur / 10);
+
+		if (!visited[D]) {
+			q.push(D);
+			visited[D] = true;
+			dist[D] = dist[cur] + 1;
+			from[D] = cur;
+			how[D] = 'D';
+		}
+
+		if (!visited[S]) {
+			q.push(S);
+			visited[S] = true;
+			dist[S] = dist[cur] + 1;
+			from[S] = cur;
+			how[S] = 'S';
+		}
+
+		if (!visited[L]) {
+			q.push(L);
+			visited[L] = true;
+			dist[L] = dist[cur] + 1;
+			from[L] = cur;
+			how[L] = 'L';
+		}
+
+		if (!visited[R]) {
+			q.push(R);
+			visited[R] = true;
+			dist[R] = dist[cur] + 1;
+			from[R] = cur;
+			how[R] = 'R';
+		}
+	}
+
+	find_path(A, B);
+	cout << "\n";
+}
+
+int main() {
+	int T;
+	cin >> T;
+
+	int i;
+	for (i = 0; i < T; i++) {
+		memset(visited, false, sizeof(visited));
+		memset(dist, 0, sizeof(dist));
+		memset(from, 0, sizeof(from));
+		memset(how, '\0', sizeof(how));
+
+		int A, B;
+		cin >> A >> B;
+
+		bfs(A, B);
+	}
+}

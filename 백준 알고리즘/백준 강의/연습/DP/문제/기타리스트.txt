@@ -1,0 +1,56 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+// dp[i][j] = i 번째 곡까지 고려하고, 현재 볼륨이 j 일때 최댓값
+int dp[101][1001];
+int v[101];
+
+int main() {
+	int N, S, M;
+	cin >> N >> S >> M;
+
+	int i, j;
+	for (i = 1; i <= N; i++) {
+		cin >> v[i];
+	}
+
+	memset(dp, -1, sizeof(dp));
+
+	dp[0][S] = S;
+
+	for (i = 1; i <= N; i++) {
+		// 볼륨의 범위는 0 부터 M 까지 이다.
+		for (j = 0; j <= M; j++) {
+
+			if (dp[i - 1][j] != -1) {
+				// 볼륨을 낮추는 경우
+				int minV = dp[i - 1][j] - v[i];
+				if (minV >= 0) {
+					dp[i][minV] = max(dp[i][minV], minV);
+				}
+				
+				// 볼륨을 높이는 경우
+				int maxV = dp[i - 1][j] + v[i];
+				if (maxV <= M) {
+					dp[i][maxV] = max(dp[i][maxV], maxV);
+				}
+			}
+		}
+	}
+
+	int answer = -1;
+	for (j = 0; j <= M; j++) {
+		if (answer < dp[N][j]) {
+			answer = dp[N][j];
+		}
+	}
+	cout << answer << "\n";
+}

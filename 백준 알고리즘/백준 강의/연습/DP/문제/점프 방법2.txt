@@ -1,0 +1,47 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+#include<map>
+
+using namespace std;
+
+int board[100][100];
+// (1,1) 에서 (N,N) 으로 가는 경로의 개수
+// 경로의 개수가 2^63-1 보다 작음
+long long dp[100][100];
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i, j, k;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			cin >> board[i][j];
+		}
+	}
+
+	// 처음 경우의 수 1개
+	dp[0][0] = 1;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			// 이동할 수 없는 경우 제외 (도착)
+			if (board[i][j] == 0) continue;
+
+			// 오른쪽으로 범위 내 이동
+			if (j + board[i][j] < N) {
+				dp[i][j + board[i][j]] += dp[i][j];
+			}
+			// 아래쪽으로 범위 내 이동
+			if (i + board[i][j] < N) {
+				dp[i + board[i][j]][j] += dp[i][j];
+			}
+		}
+	}
+
+	cout << dp[N - 1][N - 1] << "\n";
+}

@@ -1,0 +1,32 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+// 9C7 = 9C2 = 36
+int height[9];
+
+int main() {
+	int sum = 0;
+	int i, j, k;
+	for (i = 0; i < 9; i++) {
+		cin >> height[i];
+		sum += height[i];
+	}
+	sort(height, height + 9);
+
+	// 100 이 되면 아무거나 출력하면 된다.
+	for (i = 0; i < 8; i++) {
+		int temp = 0;
+		for (j = i + 1; j < 9; j++) {
+			temp = sum - (height[i] + height[j]);
+			if (temp == 100) break;
+		}
+		if (temp == 100) break;
+	}
+
+	for (k = 0; k < 9; k++) {
+		if (k == i || k == j) continue;
+		else cout << height[k] << "\n";
+	}
+}

@@ -1,0 +1,55 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+int A[101];
+int operators[4];
+
+// 최댓값, 최솟값 순서로 리턴
+pair<int, int> input_operators(int index, int sum, int n, int plus, int minus, int mul, int div) {	
+	vector<pair<int, int>> answer;
+
+	// 최대값 : 10억 이하, 최소값 : -10억 이상
+	if (plus < 0 || minus < 0 || mul < 0 || div < 0) return make_pair(-1000000000, 1000000000);
+
+	if (index == n) return make_pair(sum, sum);
+
+	// answer 벡터에 모든 후보 값을 넣어서 답을 찾음
+	answer.push_back(input_operators(index + 1, sum + A[index], n, plus - 1, minus, mul, div));
+	answer.push_back(input_operators(index + 1, sum - A[index], n, plus, minus - 1, mul, div));
+	answer.push_back(input_operators(index + 1, sum * A[index], n, plus, minus, mul - 1, div));
+	answer.push_back(input_operators(index + 1, sum / A[index], n, plus, minus, mul, div - 1));
+
+	pair<int, int> ret = answer[0];
+	for (int i = 1; i < answer.size(); i++) {
+		ret.first = max(ret.first, answer[i].first);
+		ret.second = min(ret.second, answer[i].second);
+	}
+
+	return ret;
+}
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> A[i];
+	}
+
+	for (i = 0; i < 4; i++) {
+		cin >> operators[i];
+	}
+
+	// index : 연산자 계산은 1 번 인덱스 부터 시작해야함
+	// sum : 초기 값은 1 번 인덱스 값을 포함해야 함 (무조건 포함)
+	pair<int, int> answer = input_operators(1, A[0], N, operators[0], operators[1], operators[2], operators[3]);
+
+	cout << answer.first << "\n";
+	cout << answer.second << "\n";
+}

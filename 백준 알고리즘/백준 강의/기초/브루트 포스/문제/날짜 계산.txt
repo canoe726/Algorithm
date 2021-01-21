@@ -1,0 +1,49 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+// 총 경우의수 : 15 * 28 * 19 = 7980
+
+int main() {
+	int year = 15 * 28 * 19 - 1;
+	
+	int E, S, M;
+	cin >> E >> S >> M;
+
+	E -= 1;
+	S -= 1;
+	M -= 1;
+
+	while (year > 0) {
+		if (year % 15 == E && year % 28 == S && year % 19 == M) break;
+		year -= 1;
+	}
+
+	cout << year + 1 << "\n";
+
+	/*
+	int year = 1;
+	
+	int E, S, M;
+	cin >> E >> S >> M;
+
+	int e, s, m;
+	e = s = m = 1;
+
+	while (e != E || s != S || m != M) {
+		e += 1;
+		if (e > 15) e = 1;
+
+		s += 1;
+		if (s > 28) s = 1;
+
+		m += 1;
+		if (m > 19) m = 1;
+
+		year += 1;
+	}
+
+	cout << year << "\n";
+	*/
+}

@@ -1,0 +1,69 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+const int MAX = 100000;
+
+// 움직인 위치로 순간이동 했었는지 검사
+bool visited[MAX + 1];
+// 움직인 위치로 가는데 걸린 시간
+int dist[MAX + 1];
+
+int bfs_search(int N, int K) {
+	memset(dist, 0, sizeof(dist));
+	memset(visited, false, sizeof(visited));
+
+	queue<int> cur;
+	queue<int> next;
+
+	cur.push(N);
+	dist[N] = 0;
+	visited[N] = true;
+
+	while (!cur.empty()) {
+		int val = cur.front();
+		cur.pop();
+
+		if (val * 2 <= MAX && !visited[val * 2]) {
+			visited[val * 2] = true;
+			// 0 초가 걸리므로 똑같은 시간을 넣어준다.
+			dist[val * 2] = dist[val];
+			cur.push(val * 2);
+		}
+
+		if (val + 1 <= MAX && !visited[val + 1]) {
+			visited[val + 1] = true;
+			dist[val + 1] = dist[val] + 1;
+			next.push(val + 1);
+		}
+
+		if (val - 1 >= 0 && !visited[val - 1]) {
+			visited[val - 1] = true;
+			dist[val - 1] = dist[val] + 1;
+			next.push(val - 1);
+		}
+
+		// 현재 큐가 비었다면, 다음 큐를 현재 큐로 가져온다.
+		if (cur.empty()) {
+			while (!next.empty()) {
+				cur.push(next.front());
+				next.pop();
+			}
+		}
+	}
+
+	return dist[K];
+}
+
+int main() {
+	int N, K;
+	cin >> N >> K;
+	
+	cout << bfs_search(N, K) << "\n";
+}

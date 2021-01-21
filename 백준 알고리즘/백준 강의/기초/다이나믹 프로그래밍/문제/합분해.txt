@@ -1,0 +1,39 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// D[K][N] : 정수 K개 사용, 합이 N인 경우의 수
+int d[201][201];
+
+int mod = 1e9;
+
+// 마지막에 사용한 수가 L
+// D[K][N] = 시그마 D[K-1][N-L]
+// 0 <= N <= 200, 0 <= L <= N, 1 <= K <= 200
+
+int main() {
+	memset(d, 0, sizeof(d));
+
+	int N, K;
+	cin >> N >> K;
+
+	d[0][0] = 1;
+
+	int i, j, k;
+	for (i = 1; i <= K; i++) {
+		for (j = 0; j <= N; j++) {
+			for (k = 0; k <= j; k++) {
+				d[i][j] += d[i - 1][j - k];
+				d[i][j] %= mod;
+			}
+		}
+	}
+
+	cout << d[K][N] << "\n";
+}

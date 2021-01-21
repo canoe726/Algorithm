@@ -1,0 +1,53 @@
+#include<iostream>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int S = 0;
+
+	int M;
+	cin >> M;
+
+	string input;
+	int num;
+	for (int i = 0; i < M; i++) {
+		cin >> input;
+		
+		int n;
+		if (input == "add") {
+			cin >> num;
+
+			S = S | (1 << num);
+		}
+		if (input == "remove") {
+			cin >> num;
+
+			S = S & ~(1 << num);
+		}
+		if (input == "check") {
+			cin >> num;
+
+			if (S & (1 << num)) cout << 1 << "\n";
+			else cout << 0 << "\n";
+		}
+		if (input == "toggle") {
+			cin >> num;
+
+			S = S ^ (1 << num);
+		}
+		if (input == "all") {
+			// 공집합인 1을 제외하고 모두 1로 만들기
+			S = (1 << 21) - 1;
+		}
+		if (input == "empty") {
+			// 모든 값을 0으로 만듦
+			S = 0;
+		}
+	}
+}

@@ -1,0 +1,73 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 가중치 : 벽을 부순 횟수 -> 벽을 부수지 않음 : 0, 벽을 부숨 : 1
+// 벽을 부수지 않는 경우 : 0 -> 0
+// 벽을 부수는 경우 : 0 -> 1, 1 -> 1
+int maze[101][101];
+// 방문하지 않으면 -1, 방문한 경우는 0 이상
+int dist[101][101];
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int bfs_search(int M, int N) {
+	memset(dist, -1, sizeof(dist));
+
+	deque<pair<int, int>> d;
+	d.push_back(make_pair(0, 0));
+	dist[0][0] = 0;
+	
+	while (!d.empty()) {
+		int y = d.front().first;
+		int x = d.front().second;
+		d.pop_front();
+
+		for (int i = 0; i < 4; i++) {
+			int ny = y + dir[i][0];
+			int nx = x + dir[i][1];
+		
+			if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
+
+			if (dist[ny][nx] == -1) {
+				// 벽을 부수지 않는 경우 : front
+				if (maze[ny][nx] == 0) {
+					d.push_front(make_pair(ny, nx));
+					dist[ny][nx] = dist[y][x];
+				}
+				// 벽을 부수는 경우 : back
+				else {
+					d.push_back(make_pair(ny, nx));
+					dist[ny][nx] = dist[y][x] + 1;
+				}
+			}
+		}
+	}
+
+	return dist[N - 1][M - 1];
+}
+
+int main() {
+	memset(maze, 0, sizeof(maze));
+
+	int M, N;
+	cin >> M >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		string input;
+		cin >> input;
+		for (j = 0; j < input.size(); j++) {
+			maze[i][j] = input[j] - '0';
+		}
+	}
+
+	cout << bfs_search(M, N) << "\n";
+}

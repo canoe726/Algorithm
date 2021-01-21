@@ -1,0 +1,42 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 사용한 숫자 체크
+bool used[9];
+// 정답 순열 저장
+int answer[9];
+
+// index : answer 배열의 인덱스
+void combination(int index, int N, int M) {
+	int i;
+	if (index == M) {
+		for (i = 0; i < M; i++) {
+			cout << answer[i] << " ";
+		}
+		cout << "\n";
+		return;
+	}
+
+	for (i = 1; i <= N; i++) {
+		used[i] = true;
+		answer[index] = i;
+		combination(index + 1, N, M);
+		used[i] = false;
+	}
+}
+
+int main() {
+	memset(used, false, sizeof(used));
+
+	int N, M;
+	cin >> N >> M;
+
+	combination(0, N, M);
+}

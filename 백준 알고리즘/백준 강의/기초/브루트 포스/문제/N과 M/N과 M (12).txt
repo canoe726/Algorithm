@@ -1,0 +1,69 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// N과 M (5) 과 대응
+
+vector<vector<int>> comb;
+
+// 입력받는 숫자
+int num[9];
+
+// 사용한 숫자 체크
+bool used[9];
+// 정답 순열 저장
+int answer[9];
+
+// index : answer 배열의 인덱스
+// start : answer 배열의 순회 시작 위치 -> 오름차순이므로 index 보다 1 크다
+void combination(int index, int start, int N, int M) {
+	int i;
+	if (index == M) {
+		vector<int> temp;
+		for (i = 0; i < M; i++) {
+			temp.push_back(answer[i]);
+		}
+		comb.push_back(temp);
+
+		return;
+	}
+
+	for (i = start; i < N; i++) {
+		// if (used[i]) continue;
+		used[i] = true;
+		answer[index] = num[i];
+		combination(index + 1, i, N, M);
+		used[i] = false;
+	}
+}
+
+int main() {
+	memset(used, false, sizeof(used));
+
+	int N, M;
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		cin >> num[i];
+	}
+	sort(num, num + N);
+
+	combination(0, 0, N, M);
+
+	sort(comb.begin(), comb.end());
+	comb.erase(unique(comb.begin(), comb.end()), comb.end());
+
+	for (i = 0; i < comb.size(); i++) {
+		for (j = 0; j < comb[i].size(); j++) {
+			cout << comb[i][j] << " ";
+		}
+		cout << "\n";
+	}
+}

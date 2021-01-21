@@ -1,0 +1,62 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+
+using namespace std;
+
+int maze[101][101];
+bool visited[101][101];
+// 지나온 칸을 세는 배열
+int path[101][101];
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int bfs_search(int N, int M) {
+	queue<pair<int, int>> q;
+	q.push(make_pair(0, 0));
+	path[0][0] = 1;
+	visited[0][0] = true;
+
+	while (!q.empty()) {
+		pair<int, int> cur = q.front();
+		q.pop();
+
+		for (int i = 0; i < 4; i++) {
+			int y = cur.first + dir[i][0];
+			int x = cur.second + dir[i][1];
+
+			// 범위 초과 시 다음 경우 계산
+			if (y < 0 || y >= N || x < 0 || x >= M) continue;
+
+			if (!visited[y][x] && maze[y][x]) {
+				// 다음 경로 이동횟수 = 현재경로 이동횟수 + 1
+				path[y][x] = path[cur.first][cur.second] + 1;
+				visited[y][x] = true;
+				q.push(make_pair(y, x));
+			}
+		}
+	}
+
+	return path[N - 1][M - 1];
+}
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		string input;
+		cin >> input;
+
+		for (j = 0; j < input.size(); j++) {
+			maze[i][j] = input[j] - '0';
+		}
+	}
+
+	cout << bfs_search(N, M) << "\n";
+}

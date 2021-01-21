@@ -1,0 +1,88 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+
+using namespace std;
+
+int tomato[1001][1001];
+bool visited[1001][1001];
+
+queue<pair<int, int>> start;
+
+// (y,x) : 상 하 좌 우
+int dir[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+int bfs_search(int N, int M) {
+	int ret = -987654321;
+	bool ok = true;
+
+	queue<pair<int, int>> q;
+	while (!start.empty()) {
+		q.push(start.front());
+		visited[start.front().first][start.front().second] = true;
+		start.pop();
+	}
+
+	int i, j;
+	do {
+		// 여러개 시작점 동시에 검사
+		while (!q.empty()) {
+			pair<int, int> cur = q.front();
+			q.pop();
+
+			bool exist = false;
+			for (i = 0; i < 4; i++) {
+				int y = cur.first + dir[i][0];
+				int x = cur.second + dir[i][1];
+
+				// 범위 초과 시 다음 경우 계산
+				if (y < 0 || y >= N || x < 0 || x >= M) continue;
+				if (tomato[y][x] == -1) continue;
+
+				if (!visited[y][x] && tomato[y][x] == 0) {
+					visited[y][x] = true;
+					tomato[y][x] = tomato[cur.first][cur.second] + 1;
+					start.push(make_pair(y, x));
+				}
+			}
+		}
+		// 여러개 시작점 초기화
+		while (!start.empty()) {
+			q.push(start.front());
+			visited[start.front().first][start.front().second] = true;
+			start.pop();
+		}
+	} while (!q.empty());
+
+	// 정답 구하기
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			if (tomato[i][j] == 0) ok = false;
+			ret = max(ret, tomato[i][j]);
+		}
+	}
+
+	if (ok) return ret - 1;
+	else return -1;
+}
+
+int main() {
+	int M, N;
+	cin >> M >> N;
+
+	int i, j, y, x;
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < M; j++) {
+			cin >> tomato[i][j];
+			if (tomato[i][j] == 1) {
+				// 시작점이 여러개 일 수 있음
+				start.push(make_pair(i, j));
+			}
+		}
+	}
+	
+	cout << bfs_search(N, M) << "\n";
+}

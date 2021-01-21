@@ -1,0 +1,31 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int find_answer(int n, int sum) {
+	int ret = 0;
+
+	if (n < sum) return 0;		// 아무리 더해도 sum 이 나올 수 없는 경우
+	if (n == sum) return 1;		// 경우의 수를 찾은 경우
+
+	// 1, 2, 3 을 다음 수로 더하는 경우
+	for (int i = 1; i <= 3; i++) {
+		ret += find_answer(n, sum + i);
+	}
+
+	return ret;
+}
+
+int main() {
+	int T;
+	cin >> T;
+
+	for (int i = 0; i < T; i++) {
+		int n;
+		cin >> n;
+
+		cout << find_answer(n, 0) << "\n";
+	}
+}

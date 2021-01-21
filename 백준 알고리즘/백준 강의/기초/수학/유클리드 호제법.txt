@@ -1,0 +1,35 @@
+#include<iostream>
+
+using namespace std;
+
+int gcd(int a, int b) {
+	if (b == 0) return a;
+	else {
+		return gcd(b, a%b);
+	}
+}
+
+int gcd2(int a, int b) {
+	while (b != 0) {
+		int r = a % b;
+		a = b;
+		b = r;
+	}
+
+	return a;
+}
+
+int gcd_multi(int a, int b, int c) {
+	return gcd(gcd(a, b), c);
+}
+
+int lcm(int a, int b) {
+	int g = gcd(a, b);
+	return a * b / g;
+}
+
+int main() {
+	int a, b, c;
+	cin >> a >> b;
+	cout << lcm(a, b) << endl;
+}

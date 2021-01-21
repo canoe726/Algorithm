@@ -1,0 +1,39 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cmath>
+
+using namespace std;
+
+int num[10001];
+
+int calc(vector<int> num) {
+	int ret = 0;
+
+	int i;
+	for (i = 0; i < num.size() - 1; i++) {
+		ret += abs(num[i] - num[i + 1]);
+	}
+
+	return ret;
+}
+
+int main() {
+	int N;
+	cin >> N;
+
+	vector<int> num(N);
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> num[i];
+	}
+	sort(num.begin(), num.end());
+
+	int answer = -987654321;
+	do {
+		answer = max(answer, calc(num));			// 모든 경우의 수를 다 계산해서 최솟값 찾기
+	} while (next_permutation(num.begin(), num.end()));
+
+	cout << answer << "\n";
+}

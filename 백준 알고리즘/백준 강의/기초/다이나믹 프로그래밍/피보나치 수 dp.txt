@@ -1,0 +1,23 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+long long memo[1001];
+
+long long fibo(int n) {
+	if (n <= 1) return n;
+	else {
+		if (memo[n] != -1) return memo[n];
+		return memo[n] = fibo(n - 1) + fibo(n - 2);
+	}
+}
+
+int main() {
+	memset(memo, -1, sizeof(memo));
+
+	int n;
+	cin >> n;
+
+	cout << fibo(n) << endl;
+}

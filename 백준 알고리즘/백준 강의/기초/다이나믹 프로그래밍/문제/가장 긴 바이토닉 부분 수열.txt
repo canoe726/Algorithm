@@ -1,0 +1,64 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+int increase[1001];
+int decrease[1001];
+
+int num[1001];
+
+int main() {
+	memset(increase, 0, sizeof(increase));
+	memset(decrease, 0, sizeof(decrease));
+
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		cin >> num[i];
+	}
+
+	// 오름차순 LIS
+	for (i = 0; i < N; i++) {
+		// 자신은 항상 길이가 1 인 LIS
+		increase[i] = 1;
+
+		for (j = i - 1; j >= 0; j--) {
+			// 자신보다 앞에 있는데 큰 수면 오름차순이 된다.
+			// 그 때 d[i] + 1 한 값이 LIS 길이이며 최대값으로 갱신한다.
+			if (num[j] < num[i] && increase[i] < increase[j] + 1) {
+				increase[i] = increase[j] + 1;
+			}
+		}
+	}
+
+	// 역순으로 증가하는 LIS 찾기 == 내림차순
+	for (i = N - 1; i >= 0; i--) {
+		// 자신은 항상 길이가 1 인 LIS
+		decrease[i] = 1;
+
+		for (j = i + 1; j < N; j++) {
+			// 그 때 d[i] + 1 한 값이 LIS 길이이며 최대값으로 갱신한다.
+			if (num[j] < num[i] && decrease[i] < decrease[j] + 1) {
+				decrease[i] = decrease[j] + 1;
+			}
+		}
+	}
+
+	int val = increase[0] + decrease[0] - 1;
+	for (i = 1; i < N; i++) {
+		int res = increase[i] + decrease[i] - 1;
+		if (val < res) {
+			val = res;
+		}
+	}
+
+	cout << val << "\n";
+}

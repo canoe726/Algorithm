@@ -1,0 +1,48 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+int k[14];
+
+void lotto(int index, int len, vector<int> &comb) {
+	int i;
+	// 전체 T 개 중 6 개를 뽑으면 정답
+	if (comb.size() == 6) {
+		for (i = 0; i < comb.size(); i++) cout << comb[i] << " ";
+		cout << "\n";
+		return;
+	}
+
+	// 전체 T 개 수의 index 를 초과하면 더이상 정답이 성립할 수 없음
+	if (index >= len) return;
+
+	// index 번째 수를 사용하는 경우
+	comb.push_back(k[index]);
+	lotto(index + 1, len, comb);
+	comb.pop_back();
+
+	// index 번째 수를 사용하지 않는 경우
+	lotto(index + 1, len, comb);
+}
+
+int main() {
+	int T;
+	cin >> T;
+
+	int i;
+	while (T != 0) {
+		for (i = 0; i < T; i++) {
+			cin >> k[i];
+		}
+
+		vector<int> comb;
+		lotto(0, T, comb);
+		cout << "\n";
+
+		cin >> T;
+	}
+}

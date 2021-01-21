@@ -1,0 +1,81 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+
+using namespace std;
+
+vector<vector<int>> edge(1001);
+bool visited[1001];
+
+void dfs_search(int V) {
+	visited[V] = true;
+
+	for (int i = 0; i < edge[V].size(); i++) {
+		if (!visited[edge[V][i]]) {
+			dfs_search(edge[V][i]);
+		}
+	}
+}
+
+void bfs_search(int V) {
+	queue<int> q;
+	q.push(V);
+	visited[V] = true;
+
+	while (!q.empty()) {
+		int cur = q.front();
+		q.pop();
+
+		for (int i = 0; i < edge[cur].size(); i++) {
+			if (!visited[edge[cur][i]]) {
+				q.push(edge[cur][i]);
+				visited[edge[cur][i]] = true;
+			}
+		}
+	}
+}
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < M; i++) {
+		int s, e;
+		cin >> s >> e;
+
+		edge[s].push_back(e);
+		edge[e].push_back(s);
+	}
+
+	for (i = 1; i <= N; i++) {
+		sort(edge[i].begin(), edge[i].end());
+	}
+
+	int answer = 0;
+
+	// dfs
+	memset(visited, false, sizeof(visited));
+	for (i = 1; i <= N; i++) {
+		if (!visited[i]) {
+			answer += 1;
+			dfs_search(i);
+		}
+	}
+	cout << answer << "\n";
+
+	/*
+	// bfs
+	memset(visited, false, sizeof(visited));
+	for (i = 1; i <= N; i++) {
+		if (!visited[i]) {
+			answer += 1;
+			bfs_search(i);
+		}
+	}
+	cout << answer << "\n";
+	*/
+}

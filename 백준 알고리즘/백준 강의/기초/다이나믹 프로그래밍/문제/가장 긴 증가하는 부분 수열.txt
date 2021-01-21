@@ -1,0 +1,45 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// LIS 최대값 저장
+int d[1001];
+
+int num[1001];
+
+int main() {
+	int answer = -1;
+
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 0; i < N; i++) {
+		cin >> num[i];
+	}
+
+	for (i = 0; i < N; i++) {
+		// 자신은 항상 길이가 1 인 LIS
+		d[i] = 1;
+
+		for (j = i - 1; j >= 0; j--) {
+			// 자신보다 앞에 있는데 작은 수면 오름차순이 된다.
+			// 그 때 d[i] + 1 한 값이 LIS 길이이며 최대값으로 갱신한다.
+			if (num[j] < num[i]) {
+				d[i] = max(d[i], d[j] + 1);
+			}
+		}
+	}
+
+	for (i = 0; i < N; i++) {
+		answer = max(answer, d[i]);
+	}
+
+	cout << answer << "\n";
+}

@@ -1,0 +1,40 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+int number[21];
+
+int find_sum(int index, int cur, int n, int sum) {
+	int ret = 0;
+	// 정답 1 : 현재까지의 합 == 구하려는 합
+	// 정답 2 : index == n -> 모든 부분수열을 사용 또는 사용하지 않았을 때 결과가 필요함
+	if (cur == sum && index == n) return 1;
+
+	// 불가능 : 더이상 수를 찾을 수 없으면서 구하는 값이 아닌 경우
+	if (index == n && cur != sum) return 0;
+
+	// index 수를 사용하는 경우
+	ret += find_sum(index + 1, cur + number[index], n, sum);
+	// index 수를 사용하지 않는 경우
+	ret += find_sum(index + 1, cur, n, sum);
+
+	return ret;
+}
+
+int main() {
+	int N, S;
+	cin >> N >> S;
+
+	for (int i = 0; i < N; i++) {
+		cin >> number[i];
+	}
+
+	int answer = find_sum(0, 0, N, S);
+	// 합이 0 일 때 == 공집합 이 되기 때문에 경우의 수를 1 빼준다.
+	if (S == 0) answer -= 1;
+	cout << answer << "\n";
+}

@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+int d[1001];
+
+const int MOD = 1e4 + 7;
+
+int top_bottom(int n) {
+	if (n <= 2) return n;
+	else {
+		if (d[n] != -1) return d[n];
+		return d[n] = (top_bottom(n - 1) + top_bottom(n - 2)) % MOD;
+	}
+}
+
+int bottom_up(int n) {
+	d[1] = 1;
+	d[2] = 2;
+
+	for (int i = 3; i <= n; i++) {
+		d[i] = (d[i - 1] + d[i - 2]) % MOD;
+	}
+
+	return d[n];
+}
+
+int main() {
+	memset(d, -1, sizeof(d));
+
+	int n;
+	cin >> n;
+
+	cout << top_bottom(n) << endl;
+	// cout << bottom_up(n) << endl;
+}

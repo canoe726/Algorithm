@@ -1,0 +1,80 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+// i번째 포도주의 값
+int A[10001];
+
+// d[i][j] = 포도주 잔의 개수가 i개 있을 때 최댓값
+// j=0 일때, i번째 포도주는 마시지 않음 X, i-1번째 포도주는 안마시거나, 1번연속, 2번연속 가능 => j=0,1,2
+// j=1 일때, i번째 포도주는 마심 O, 1번 연속, i-1번째 포도주는 마시지 않아야 1번연속 마신것이 됨 => j=0
+// j=2 일때, i번째 포도주는 마심 O, 2번 연속, i-1번째 포도주는 마셔야 2번연속 마신것이 됨 => j=1
+int d[10001][3];
+
+// i가 1일 때, 1번 연속 마시는 경우만 가능함
+// i가 2일 때,
+// j=0 이면, 첫 번째 포도주만 마시는 경우
+// j=1 이면, 두 번째 포도주만 마시는 경우
+// j=2 이면, 둘다 마시는 경우
+
+int bottom_up(int n) {
+	d[1][0] = 0;
+	d[1][1] = A[1];
+	d[1][2] = 0;
+
+	d[2][0] = A[1];
+	d[2][1] = A[2];
+	d[2][2] = A[1] + A[2];
+
+	for (int i = 3; i <= n; i++) {
+		d[i][0] = max(d[i - 1][0], max(d[i - 1][1], d[i - 1][2]));
+		d[i][1] = d[i - 1][0] + A[i];
+		d[i][2] = d[i - 1][1] + A[i];
+	}
+
+	return max(d[n][0], max(d[n][1], d[n][2]));
+}
+
+// dp[i] = 포도주 잔의 개수가 i개 있을 때 최댓값
+int dp[10001];
+
+// i번째 포도주는 마시지 않은 경우 : 
+// i-1번째 포도주는 무엇이 와도 상관 없음 -> d[i-1]
+//
+// i번째 포도주는 마시고 O, 1번 연속인 경우 : 
+// i-1번째 포도주는 마시지 않는 것으로 고정, i-2번째 포도주는 무엇이 와도 상관 없음 -> d[i-2] + A[i]
+//
+// i번째 포도주는 마시고 O, 2번 연속인 경우 : 
+// i-1번째 포도주는 마시는 것으로 고정, i-2번째 포도주는 마시지 않는 것으로 고정,
+// i-3번째 포도주는 무엇이 와도 상관 없음 -> d[i-3] + A[i-1] + A[i]
+
+int one_dimension(int n) {
+	dp[1] = A[1];
+	dp[2] = A[1] + A[2];
+
+	for (int i = 3; i <= n; i++) {
+		int s = dp[i - 1];
+		int m = dp[i - 2] + A[i];
+		int e = dp[i - 3] + A[i - 1] + A[i];
+
+		dp[i] = max(s, max(m, e));
+	}
+
+	return dp[n];
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N;
+	cin >> N;
+
+	for (int i = 1; i <= N; i++) cin >> A[i];
+
+	// cout << bottom_up(N) << "\n";
+	cout << one_dimension(N) << "\n";
+}

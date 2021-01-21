@@ -1,0 +1,39 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+// 순열 정답 저장 배열
+int a[10];
+// 수 사용 여부 검사
+bool c[10];
+
+// index : m 개 중 몇개의 수를 선택했는지의 크기
+void combination(int index, int n, int m) {
+	if (index == m) {
+		for (int i = 0; i < m; i++) {
+			cout << a[i] << " ";
+		}
+		cout << "\n";
+		return;
+	}
+
+	// 1 부터 N 까지 수 사용
+	for (int i = 1; i <= n; i++) {
+		if (c[i]) continue;
+		c[i] = true;
+		a[index] = i;
+		combination(index + 1, n, m);
+		c[i] = false;
+	}
+}
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+
+	combination(0, N, M);
+}

@@ -1,0 +1,45 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+int T[16];
+int P[16];
+
+const int INF = -987654321;
+
+// 시작일 : 0 일, 퇴사일 : N 일 기준으로 코드 작성
+
+int maximum_benefit(int index, int cur, int N) {
+	int ret = INF;
+
+	// 퇴사일이 N 일 이면 알맞게 그만 둔 경우
+	if (index == N) return cur;
+
+	// 퇴사일이 N 보다 크면 초과로 회사를 다닌 것이기 때문에 고려하지 않음
+	if (index > N) return INF;
+
+	// index 번째 일에 일을 하는 경우
+	ret = max(ret, maximum_benefit(index + T[index], cur + P[index], N));
+	
+	// index 번째 일에 일을 하지 않는 경우
+	ret = max(ret, maximum_benefit(index + 1, cur, N));
+
+	return ret;
+}
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i;
+	for (i = 0; i < N; i++) {
+		cin >> T[i];
+		cin >> P[i];
+	}
+
+	cout << maximum_benefit(0, 0, N) << "\n";
+}

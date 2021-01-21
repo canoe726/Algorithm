@@ -1,0 +1,44 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+
+using namespace std;
+
+vector<pair<int, int>> edge;
+int cnt[2001];
+
+bool cmp(pair<int, int> a, pair<int, int> b) {
+	if (a.first == b.second) {
+		return a.second < b.second;
+	}
+	else {
+		return a.first < b.first;
+	}
+}
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+
+	int i;
+	for (i = 0; i < M; i++) {
+		int s, e;
+		cin >> s >> e;
+
+		edge.push_back(make_pair(s, e));
+	}
+
+	sort(edge.begin(), edge.end(), cmp);
+
+	for (i = 0; i < edge.size(); i++) {
+		cnt[edge[i].first] += 1;
+	}
+
+	for (i = 1; i < edge.size(); i++) {
+		cnt[i] += cnt[i - 1];
+	}
+
+	cout << 1 << "\n";
+}

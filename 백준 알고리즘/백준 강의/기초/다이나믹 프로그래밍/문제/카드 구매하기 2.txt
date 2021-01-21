@@ -1,0 +1,34 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int d[1001];
+int p[10001] = { 0 };
+
+int bottom_up(int n) {
+	d[0] = 0;
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= i; j++) {
+			d[i] = min(d[i], p[j] + d[i - j]);
+		}
+	}
+
+	return d[n];
+}
+
+int main() {
+	int N;
+	cin >> N;
+	
+	for (int i = 1; i <= N; i++) {
+		d[i] = 10000 * 1000;
+	}
+
+	for (int i = 1; i <= N; i++) {
+		cin >> p[i];
+	}
+
+	cout << bottom_up(N) << endl;
+}

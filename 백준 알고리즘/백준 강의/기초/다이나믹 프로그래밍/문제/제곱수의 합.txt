@@ -1,0 +1,31 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// D[N] : N 이 되는 제곱수 항의 최소 개수
+// D[N] = D[N - i^2] + 1 (i를 한번 씀), 1 <= i^2 <= N
+int d[100001];
+
+int main() {
+	int N;
+	cin >> N;
+
+	int i, j;
+	for (i = 1; i <= N; i++) {
+		// 최대값 설정
+		d[i] = i;
+
+		// 1 <= j^2 <= N
+		for (j = 1; j * j <= i; j++) {
+			d[i] = min(d[i], d[i - j * j] + 1);
+		}
+	}
+
+	cout << d[N] << "\n";
+}

@@ -1,0 +1,64 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 거리는 항상 0 보다 크거나 같은 값
+// 거리가 0 보다 크면 방문한 것, 그렇지 않으면(-1) 방문하지 않은 것
+// 스크린에 존재하는 이모티콘 개수, 클립보드에 존재하는 이모티콘 개수
+int dist[1001][1001];
+
+int bfs_search(int S) {
+	memset(dist, -1, sizeof(dist));
+	
+	queue<pair<int, int>> q;
+	// 화면에 1개, 클립보드에 0개
+	q.push(make_pair(1, 0));
+	dist[1][0] = 0;
+
+	while (!q.empty()) {
+		int s, c;
+		tie(s, c) = q.front();
+		q.pop();
+
+		// 화면에 있는 이모티콘을 모두 복사해서 클립보드에 저장한다.
+		if (dist[s][s] == -1) {
+			dist[s][s] = dist[s][c] + 1;
+			q.push(make_pair(s, s));
+		}
+
+		// 클립보드에 있는 모든 이모티콘을 화면에 붙여넣기 한다.
+		if (s + c <= S && dist[s + c][c] == -1) {
+			dist[s + c][c] = dist[s][c] + 1;
+			q.push(make_pair(s + c, c));
+		}
+
+		// 화면에 있는 이모티콘 중 하나를 삭제한다.
+		if (s - 1 >= 0 && dist[s - 1][c] == -1) {
+			dist[s - 1][c] = dist[s][c] + 1;
+			q.push(make_pair(s - 1, c));
+		}
+	}
+
+	int ret = 987654321;
+	for (int i = 0; i < S; i++) {
+		// 화면에 이모티콘이 존재하면서 S 개의 이모티콘이 화면에 존재하는 경우 검사
+		if (dist[S][i] != -1) {
+			ret = min(ret, dist[S][i]);
+		}
+	}
+
+	return ret;
+}
+
+int main() {
+	int S;
+	cin >> S;
+	
+	cout << bfs_search(S) << "\n";
+}

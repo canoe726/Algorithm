@@ -1,0 +1,40 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int MOD = 1e4 + 7;
+
+// d[i][j] = 길이가 i인 오르막 수의 개수, j가 마지막 수인 경우
+int d[1001][10];
+
+// i번째 수가 j인 경우, i-1번째 수는 k이다. (0<=k<=j)
+
+int bottom_up(int n) {
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 0; j <= 9; j++) {
+			if (i == 1) d[i][j] = 1;
+			else {
+				for (int k = 0; k <= j; k++) d[i][j] += d[i - 1][k] % MOD;
+			}
+		}
+	}
+
+	int answer = 0;
+	for (int i = 0; i <= 9; i++) answer += d[n][i];
+
+	return answer % MOD;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N;
+	cin >> N;
+
+	cout << bottom_up(N) << "\n";
+}

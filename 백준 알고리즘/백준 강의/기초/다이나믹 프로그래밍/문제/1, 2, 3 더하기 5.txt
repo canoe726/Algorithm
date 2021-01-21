@@ -1,0 +1,56 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int MOD = 1e9 + 9;
+
+// D[i][j] = i를 1,2,3 으로 나타내는 방법의 수, j를 마지막수로 경우 
+long long d[100001][4];
+
+// 마지막 수가 1일 때, 2일 때, 3일 때로 나누어서 방법 계산
+// 100,000 까지 한번만 정답을 구하고 배열에서 꺼내면 된다.
+// MOD 보다 작은 수 *2, *3 을 했을 때 int 형의 범위를 초과하는 경우가 생기므로 long long 으로 선언
+
+void bottom_up(int n) {
+
+	for (int i = 0; i <= n; i++) {
+		for (int j = 1; j <= 3; j++) {
+			if (j == 1) {
+				if (i < 1)	 d[i][j] = 0;
+				else if (i == 1) d[i][j] = 1;
+				else			 d[i][1] = (d[i - 1][2] + d[i - 1][3]) % MOD;
+			}
+			if (j == 2) {
+				if (i < j)	 d[i][j] = 0;
+				else if (i == j) d[i][j] = 1;
+				else			 d[i][j] = (d[i - 2][1] + d[i - 2][3]) % MOD;
+			}
+			if (j == 3) {
+				if (i < j)  d[i][j] = 0;
+				else if (i == j) d[i][j] = 1;
+				else			 d[i][j] = (d[i - 3][1] + d[i - 3][2]) % MOD;
+			}
+		}
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int T;
+	cin >> T;
+
+	bottom_up(100000);
+
+	for (int i = 0; i < T; i++) {
+		int n;
+		cin >> n;
+
+		long long answer = (d[n][1] + d[n][2] + d[n][3]) % MOD;
+		cout << answer << "\n";
+	}
+}

@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+#include<string>
+#include<queue>
+#include<tuple>
+
+using namespace std;
+
+// 연속합
+int d[100001];
+
+// 입력받는 수
+int num[100001];
+
+// 경우 1 (연속합이 추가되는 경우) : 이전 연속합 + 현재수 > 현재수 = 이전 연속합 + 현재수
+// 경우 2 (새롭게 연속합을 만드는 경우) : 이전 연속합 + 현재수 <= 현재수 = 현재수
+int main() {
+	int n;
+	cin >> n;
+
+	int i;
+	for (i = 0; i < n; i++) {
+		cin >> num[i];
+	}
+
+	for (i = 0; i < n; i++) {
+		d[i] = num[i];
+
+		if (i == 0) continue;
+		if (d[i - 1] + num[i] > d[i]) {
+			d[i] = d[i - 1] + num[i];
+		}
+	}
+
+	int answer = -987654321;
+	for (i = 0; i < n; i++) {
+		answer = max(answer, d[i]);
+	}
+
+	cout << answer << "\n";
+}

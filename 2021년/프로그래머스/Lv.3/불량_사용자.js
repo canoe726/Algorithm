@@ -49,9 +49,7 @@ function getBannedUserList(user_id, banned_id) {
     return bannedUserList;
 }
 
-let answer = [];
-
-function findUserCase(userIdMap, bannedUserList, start, caseList) {
+function findUserCase(answer, userIdMap, bannedUserList, start, caseList) {
     let bLen = bannedUserList.length;
     if (caseList.length == bLen) {
         answer.push(caseList);
@@ -63,18 +61,19 @@ function findUserCase(userIdMap, bannedUserList, start, caseList) {
                 const selected = userIdMap.get(bannedUserList[i][j]);
                 if (selected) continue;
                 userIdMap.set(bannedUserList[i][j], true);
-                findUserCase(userIdMap, bannedUserList, i + 1, [...caseList, bannedUserList[i][j]]);
+                findUserCase(answer, userIdMap, bannedUserList, i + 1, [...caseList, bannedUserList[i][j]]);
                 userIdMap.set(bannedUserList[i][j], false);
             }
         }
     }
+    return answer;
 }
 
 function solution(user_id, banned_id) {
     const userIdMap = getUserIdMap(user_id);
     const bannedUserList = getBannedUserList(user_id, banned_id)
-    findUserCase(userIdMap, bannedUserList, 0, []);
-    
+    let answer = findUserCase([], userIdMap, bannedUserList, 0, []);
+
     for (let i = 0; i < answer.length; i++) {
         answer[i] = answer[i].sort();
     }
@@ -82,5 +81,3 @@ function solution(user_id, banned_id) {
     answer = [...answer];
     return answer.length;
 }
-
-

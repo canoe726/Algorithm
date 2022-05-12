@@ -65,12 +65,14 @@ class MinHeap {
   }
 }
 
-const data = [6, 3, 10, 5, 9, 1, 4, 7, 2, 8]
-const minHeap = new MinHeap();
-for (let i = 0; i < data.length; i++) {
-  minHeap.push(data[i]);
-}
+module.exports = MinHeap;
 
-while (!minHeap.empty()) {
-  console.log(minHeap.pop());
-}
+// const data = [6, 3, 10, 5, 9, 1, 4, 7, 2, 8]
+// const minHeap = new MinHeap();
+// for (let i = 0; i < data.length; i++) {
+//   minHeap.push(data[i]);
+// }
+
+// while (!minHeap.empty()) {
+//   console.log(minHeap.pop());
+// }

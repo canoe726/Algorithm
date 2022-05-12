@@ -65,12 +65,14 @@ class MaxHeap {
   }
 }
 
-const data = [6, 3, 10, 5, 11, 2, 3, 9, 1, 4, 7, 2, 8]
-const maxHeap = new MaxHeap();
-for (let i = 0; i < data.length; i++) {
-  maxHeap.push(data[i]);
-}
+module.exports = MaxHeap;
 
-while (!maxHeap.empty()) {
-  console.log(maxHeap.pop());
-}
+// const data = [6, 3, 10, 5, 11, 2, 3, 9, 1, 4, 7, 2, 8]
+// const maxHeap = new MaxHeap();
+// for (let i = 0; i < data.length; i++) {
+//   maxHeap.push(data[i]);
+// }
+
+// while (!maxHeap.empty()) {
+//   console.log(maxHeap.pop());
+// }

@@ -16,7 +16,28 @@ const graph = { // [노드, 거리]
   6: [[3, 5], [5, 2]],
 };
 
-const visited = Array.from({ length: size }, () => false);
-const dist = Array.from({ length: size }, () => 0);
+const dist = Array.from({ length: size + 1 }, () => INF);
 
-// dijkstra(1);
+function dijkstra (node) {
+  dist[node] = 0;
+  const pq = new MinHeap();
+  pq.push([node, 0]);
+
+  while (!pq.empty()) {
+    const [curNode, curDist] = pq.pop();
+    const curDistance = curDist * -1;
+
+    if (dist[curNode] < curDistance) continue;
+    for (let i = 0; i < graph[curNode].length; i++) {
+      const [n, d] = graph[curNode][i];
+      const nextDist = curDistance + d;
+      if (dist[n] > nextDist) {
+        dist[n] = nextDist;
+        pq.push([n, -nextDist]);
+      }
+    }
+  }
+}
+
+dijkstra(1);
+console.log(dist);

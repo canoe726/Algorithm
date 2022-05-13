@@ -6,15 +6,15 @@ function permutation (nums, pickSize) {
   const size = nums.length;
   const visited = Array.from({ length: size }, () => false);
 
-  function findPerm (pick, picked) {
-    if (picked == pickSize) {
-      perm.push(pick);
+  function findPerm (pickedNums, pickedSize) {
+    if (pickedSize == pickSize) {
+      perm.push(pickedNums);
       return;
     }
     for (let i = 0; i < size; i++) {
       if (!visited[i]) {
         visited[i] = true;
-        findPerm(pick.concat(nums[i]), picked + 1);
+        findPerm(pickedNums.concat(nums[i]), pickedSize + 1);
         visited[i] = false;
       }
     }

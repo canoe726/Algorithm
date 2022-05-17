@@ -44,11 +44,9 @@ function isValid (str) {
                 break;
             }
             top = stack.pop();
-            if ((top == '(' && ch == ')') ||
-                (top == '[' && ch == ']') ||
-                (top == '{' && ch == '}')) {
-                continue;
-            } else {
+            if (!(top == '(' && ch == ')') &&
+                !(top == '[' && ch == ']') &&
+                !(top == '{' && ch == '}')) {
                 valid = false;
                 break;
             }

@@ -26,6 +26,7 @@ def solution(nums):
         middle = heapq.heappop(small)[1]
       result.append(middle)
   
+  print(len(result))
   for i in range(len(result)):
     if (i != 0 and (i + 1) % 10 == 1):
       print()

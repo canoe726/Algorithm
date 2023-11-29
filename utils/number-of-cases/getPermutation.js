@@ -1,7 +1,7 @@
 const nums = [1, 2, 3, 4, 5, 6, 7];
 const pickSize = 3;
 
-function permutation (nums, pickSize) {
+function getPermutation (nums, pickSize) {
   const perm = [];
   const size = nums.length;
   const visited = Array.from({ length: size }, () => false);
@@ -23,6 +23,6 @@ function permutation (nums, pickSize) {
   return perm;
 }
 
-const perm = permutation(nums, pickSize);
+const perm = getPermutation(nums, pickSize);
 console.log(perm);
 console.log(perm.length);

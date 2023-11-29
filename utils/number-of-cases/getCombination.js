@@ -1,7 +1,7 @@
 const nums = [1, 2, 3, 4, 5, 6, 7, 8];
 const pickSize = 3;
 
-function combination (nums, pickSize) {
+function getCombination (nums, pickSize) {
   const comb = [];
   const visited = Array.from({ length: pickSize }, () => false);
 
@@ -22,7 +22,7 @@ function combination (nums, pickSize) {
   return comb;
 }
 
-const comb = combination(nums, pickSize);
+const comb = getCombination(nums, pickSize);
 console.log(comb);
 console.log(comb.length);
 

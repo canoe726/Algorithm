@@ -15,7 +15,7 @@ const graph = [
 const visited = Array.from({ length: size }, () => false);
 const dist = Array.from({ length: size }, () => 0);
 
-function getMinIndex () {
+function getMinIndex() {
   let min = INF;
   let index = 0;
   for (let i = 0; i < size; i++) {
@@ -27,7 +27,7 @@ function getMinIndex () {
   return index;
 }
 
-function dijkstra (node) {
+function dijkstra(node) {
   for (let i = 0; i < size; i++) {
     dist[i] = graph[node][i];
   }

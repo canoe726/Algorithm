@@ -1,8 +1,6 @@
 // 하나의 정점에서 다른 모든 정점으로 가는 최단 경로
 // 최단 거리는 여러 개의 최단 거리로 이루어짐
-const MinHeap = require('../data-structure/min_heap');
-
-const pq = new MinHeap();
+const MinHeap = require('../../heap/minHeap');
 
 const size = 6;
 const INF = 100000000;
@@ -47,7 +45,7 @@ const dist = Array.from({ length: size + 1 }, () => INF);
 
 function dijkstra(node) {
   dist[node] = 0;
-  const pq = new MinHeap();
+  const pq = MinHeap();
   pq.push([node, 0]);
 
   while (!pq.empty()) {

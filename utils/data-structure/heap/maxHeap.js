@@ -1,56 +1,73 @@
-class MaxHeap {
-  constructor () {
-    this.heap = [-1];
+function MaxHeap() {
+  let heap = [-1];
+
+  function size() {
+    return heap.length - 1;
   }
 
-  empty () {
-    return this.heap.length == 1;
+  function top() {
+    return heap[1];
   }
 
-  size () {
-    return this.heap.length - 1;
+  function empty() {
+    return heap.length == 1;
   }
 
-  push (elem) {
-    this.heap.push(elem);
-    let child = this.size();
-    let parent = Math.floor(child / 2);
-    while (parent > 0) {
-      if (this.heap[child] > this.heap[parent]) {
-        [this.heap[child], this.heap[parent]] = [this.heap[parent], this.heap[child]];
-        child = parent;
-        parent = Math.floor(child / 2);
+  function push(elem) {
+    heap.push(elem);
+
+    let childIndex = size();
+    let parentIndex = Math.floor(childIndex / 2);
+
+    while (parentIndex > 0) {
+      if (heap[childIndex] > heap[parentIndex]) {
+        let temp = heap[parentIndex];
+        heap[parentIndex] = heap[childIndex];
+        heap[childIndex] = temp;
+
+        childIndex = parentIndex;
+        parentIndex = Math.floor(childIndex / 2);
       } else {
         break;
       }
     }
   }
 
-  pop () {
-    const maxValue = this.heap[1];
-    let temp = this.heap[1];
-    this.heap[1] = this.heap[this.size()];
-    this.heap[this.size()] = temp;
-    this.heap.splice(this.size(), 1);
+  function pop() {
+    if (empty()) {
+      return null;
+    }
+    const topIndex = 1;
+    const heapSize = size();
+    const maxValue = top();
 
-    let parent = 1;
+    let temp = heap[topIndex];
+    heap[topIndex] = heap[heapSize];
+    heap[heapSize] = temp;
+    heap.splice(heapSize, 1);
+
+    let root = 1;
     while (true) {
-      let leftChild = parent * 2;
-      let rightChild = (parent * 2) + 1;
-      let child = -1;
-      if (leftChild <= this.size() && rightChild <= this.size()) {
-        child = this.heap[leftChild] < this.heap[rightChild] ? rightChild : leftChild;
-      } else if (leftChild <= this.size()) {
-        child = leftChild
-      } else if (rightChild <= this.size()) {
-        child = rightChild;
+      let left = root * 2;
+      let right = root * 2 + 1;
+      let child;
+
+      if (left <= heapSize && right <= heapSize) {
+        child = heap[left] < heap[right] ? right : left;
+      } else if (left <= heapSize) {
+        child = left;
+      } else if (right <= heapSize) {
+        child = right;
       } else {
         break;
       }
 
-      if (this.heap[parent] < this.heap[child]) {
-        [this.heap[parent], this.heap[child]] = [this.heap[child], this.heap[parent]];
-        parent = child;
+      if (heap[root] < heap[child]) {
+        temp = heap[root];
+        heap[root] = heap[child];
+        heap[child] = temp;
+
+        root = child;
       } else {
         break;
       }
@@ -58,16 +75,24 @@ class MaxHeap {
     return maxValue;
   }
 
-  print () {
-    const printHeap = this.heap.slice();
-    printHeap.splice(0, 1);
-    console.log(printHeap);
+  function print() {
+    let printStr = '[';
+    for (let i = 1; i <= size(); i++) {
+      if (i == size()) {
+        printStr += `${heap[i]}]`;
+      } else {
+        printStr += `${heap[i]}, `;
+      }
+    }
+    console.log(printStr);
   }
+
+  return { size, top, empty, push, pop, print };
 }
 
 module.exports = MaxHeap;
 
-// const data = [6, 3, 10, 5, 11, 2, 3, 9, 1, 4, 7, 2, 8]
+// const data = [6, 3, 10, 5, 11, 2, 3, 9, 1, 4, 7, 2, 8];
 // const maxHeap = new MaxHeap();
 // for (let i = 0; i < data.length; i++) {
 //   maxHeap.push(data[i]);

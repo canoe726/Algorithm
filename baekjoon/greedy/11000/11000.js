@@ -1,3 +1,9 @@
+const [n, ...arr] = require('fs')
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input')
+  .toString()
+  .trim()
+  .split('\n');
+
 function MinHeap() {
   let heap = [-1];
 
@@ -50,24 +56,24 @@ function MinHeap() {
     while (true) {
       let left = root * 2;
       let right = root * 2 + 1;
-      let child;
+      let nextChild;
 
       if (left <= heapSize && right > heapSize) {
-        child = left;
+        nextChild = left;
       } else if (left > heapSize && right <= heapSize) {
-        child = right;
+        nextChild = right;
       } else if (left <= heapSize && right <= heapSize) {
-        child = heap[left] > heap[right] ? right : left;
+        nextChild = heap[left] > heap[right] ? right : left;
       } else {
         break;
       }
 
-      if (heap[child] < heap[root]) {
+      if (heap[nextChild] < heap[root]) {
         temp = heap[root];
-        heap[root] = heap[child];
-        heap[child] = temp;
+        heap[root] = heap[nextChild];
+        heap[nextChild] = temp;
 
-        root = child;
+        root = nextChild;
       } else {
         break;
       }
@@ -90,18 +96,32 @@ function MinHeap() {
   return { size, top, empty, push, pop, print };
 }
 
-// const minHeap = MinHeap();
-// minHeap.push(7);
-// minHeap.push(3);
-// minHeap.push(5);
-// minHeap.push(1);
-// minHeap.push(2);
-// minHeap.print();
-// console.log(minHeap.pop());
-// console.log(minHeap.pop());
-// console.log(minHeap.pop());
-// console.log(minHeap.pop());
-// console.log(minHeap.pop());
-// console.log(minHeap.pop());
+function main(n, arr) {
+  arr = arr.sort((a, b) => {
+    if (a[0] === b[0]) {
+      return a[1] - b[1];
+    }
+    return a[0] - b[0];
+  });
 
-module.exports = MinHeap;
+  const minHeap = MinHeap();
+  minHeap.push(arr[0][1]);
+
+  for (let i = 1; i < n; i++) {
+    const lastEnd = minHeap.top();
+
+    const [start, end] = arr[i];
+    if (lastEnd <= start) {
+      minHeap.pop();
+    }
+    minHeap.push(end);
+  }
+
+  return minHeap.size();
+}
+
+const response = main(
+  n,
+  arr.map((a) => a.split(' ').map((a) => Number(a))),
+);
+console.log(response);

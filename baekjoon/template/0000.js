@@ -1,5 +1,8 @@
-const [n, ...arr] = require('fs')
-  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : 'input')
+const fs = require('fs');
+const path = require('path');
+
+const [n, ...arr] = fs
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : path.resolve(__dirname, 'input'))
   .toString()
   .trim()
   .split('\n');

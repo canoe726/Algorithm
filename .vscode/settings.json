@@ -4,5 +4,8 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

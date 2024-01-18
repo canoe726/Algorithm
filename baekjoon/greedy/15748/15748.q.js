@@ -12,34 +12,24 @@ const [L, N, Rf, Rb] = n.split(' ');
 function main(L, N, Rf, Rb, arr) {
   arr.sort((a, b) => {
     if (a[1] === b[1]) {
-      return b[0] - a[0];
+      return a[0] - b[0];
     }
     return b[1] - a[1];
   });
 
-  const trails = [[0, 0], ...arr, [L, 0]];
+  let answer = BigInt(0);
+  let prevXi = BigInt(0);
 
-  let answer = 0;
-  let farmerSec = 0;
-  let bessieSec = 0;
-  let curMeter = 0;
+  for (let i = 0; i < N; i++) {
+    let [Xi, Ci] = arr[i];
 
-  for (let i = 1; i < N + 2; i++) {
-    const [Xi, Ci] = [trails[i][0] - curMeter, trails[i][1]];
-
-    if (Xi <= 0 && curMeter >= trails[i][0]) {
+    if (Xi < prevXi) {
       continue;
     }
-    curMeter = trails[i][0];
 
-    farmerSec += Xi * Rf;
-    bessieSec += Xi * Rb;
-
-    const gap = farmerSec - bessieSec;
-    if (gap > 0) {
-      answer += gap * Ci;
-      bessieSec += gap;
-    }
+    const gap = (BigInt(Xi) - BigInt(prevXi)) * (BigInt(Rf) - BigInt(Rb));
+    answer += BigInt(gap) * BigInt(Ci);
+    prevXi = BigInt(Xi);
   }
 
   return answer;

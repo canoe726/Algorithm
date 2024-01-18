@@ -23,17 +23,14 @@ function main(L, N, Rf, Rb, arr) {
   let farmerSec = 0;
   let bessieSec = 0;
   let curMeter = 0;
-  console.log(trails);
 
   for (let i = 1; i < N + 2; i++) {
     const [Xi, Ci] = [trails[i][0] - curMeter, trails[i][1]];
-    console.log(trails[i][0]);
 
     if (Xi <= 0 && curMeter >= trails[i][0]) {
       continue;
     }
     curMeter = trails[i][0];
-    console.log(curMeter, Ci);
 
     farmerSec += Xi * Rf;
     bessieSec += Xi * Rb;
@@ -43,10 +40,6 @@ function main(L, N, Rf, Rb, arr) {
       answer += gap * Ci;
       bessieSec += gap;
     }
-
-    console.log(Xi, gap, Ci);
-    console.log(farmerSec, bessieSec);
-    console.log(answer);
   }
 
   return answer;

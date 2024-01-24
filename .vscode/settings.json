@@ -5,7 +5,18 @@
     "source.organizeImports": "explicit"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit"
+    },
+    "editor.detectIndentation": false,
   },
   "C_Cpp.clang_format_style": "{ IndentWidth: 2, ColumnLimit: 80 }",
   "C_Cpp.clang_format_fallbackStyle": "Google",

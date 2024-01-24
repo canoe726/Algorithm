@@ -13,11 +13,17 @@ file = open(filePath + "/" + "input", "r")
 
 N, K = map(int, file.readline().split())
 
-while N > 1:
-    if N % K == 0:
-        N //= K
-    else:
-        N -= 1
+while True:
+    minus = (N // K) * K
+    N -= minus
+    answer += minus
+
+    if N < K:
+        break
+
+    N //= K
     answer += 1
+
+answer += N - 1
 
 print(answer)

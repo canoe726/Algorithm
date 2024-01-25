@@ -1,16 +1,18 @@
 import sys
-from functools import cmp_to_key
 
-path = sys.argv[0].split("/")
-path.pop()
-filePath = "/".join(path)
 
-input = sys.stdin.readline
+def getFile(fileName):
+    path = sys.argv[0].split("/")
+    path.pop()
+    filePath = "/".join(path)
+    file = open(filePath + "/" + fileName, "r")
+    return file
 
-file = open(filePath + "/" + "input", "r")
 
-N, M, K = map(int, file.readline().split())
-nums = list(map(int, file.readline().split()))
+file = getFile("input")
+
+N, M, K = map(int, file.readline().rstrip().split())
+nums = list(map(int, file.readline().rstrip().split()))
 nums.sort(reverse=True)
 
 largest = nums[0]

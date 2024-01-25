@@ -17,6 +17,7 @@
       "    path.pop()",
       "    filePath = \"/\".join(path)",
       "    file = open(filePath + \"/\" + fileName, \"r\")",
+      "    return file",
       "",
       "",
       "file = getFile(\"input\")",

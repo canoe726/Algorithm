@@ -1,8 +1,16 @@
 from collections import deque
 import sys
 
-file = open("input", "r")
 
+def getFile(fileName):
+    path = sys.argv[0].split("/")
+    path.pop()
+    filePath = "/".join(path)
+    file = open(filePath + "/" + fileName, "r")
+    return file
+
+
+file = getFile("input")
 answer = 0
 
 N, M = map(int, file.readline().rstrip().split())

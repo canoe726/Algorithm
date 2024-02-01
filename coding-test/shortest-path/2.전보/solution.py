@@ -23,8 +23,6 @@ for i in range(M):
     X, Y, Z = list(map(int, file.readline().rstrip().split()))
     graph[X].append((Y, Z))
 
-print(graph)
-
 
 def dijkstra(node):
     heap = []
@@ -46,7 +44,6 @@ def dijkstra(node):
 
 
 dijkstra(C)
-print(distance)
 
 cities = 0
 sendTime = 0

@@ -9,10 +9,10 @@ def getFile(fileName):
     return file
 
 
-def find_parent(parent, vertex):
-    if parent[vertex] != vertex:
-        parent[vertex] = find_parent(parent, parent[vertex])
-    return parent[vertex]
+def find_parent(parent, n):
+    if parent[n] != n:
+        parent[n] = find_parent(parent, parent[n])
+    return parent[n]
 
 
 def union_parent(parent, a, b):
@@ -30,12 +30,24 @@ file = getFile("input")
 V, E = map(int, file.readline().rstrip().split())
 parent = [0] * (V + 1)
 
-for i in range(1, V + 1):
-    parent[i] = i
+for v in range(1, V + 1):
+    parent[v] = v
 
-for i in range(E):
+cycle = False
+
+for _ in range(E):
     a, b = list(map(int, file.readline().rstrip().split()))
-    union_parent(parent, a, b)
+
+    if find_parent(parent, a) == find_parent(parent, b):
+        cycle = True
+        break
+    else:
+        union_parent(parent, a, b)
+
+if cycle:
+    print("사이클이 발생했습니다.")
+else:
+    print("사이클이 발생하지 않았습니다.")
 
 print("원소가 속한 집합: ", end="")
 for i in range(1, V + 1):

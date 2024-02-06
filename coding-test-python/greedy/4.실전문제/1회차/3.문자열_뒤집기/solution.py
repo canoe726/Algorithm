@@ -1,5 +1,4 @@
 import sys
-from functools import cmp_to_key
 
 path = sys.argv[0].split("/")
 path.pop()
@@ -7,17 +6,31 @@ filePath = "/".join(path)
 
 input = sys.stdin.readline
 
-answer = 0
+answer = [0, 0]
 
 file = open(filePath + "/" + "input", "r")
 
 input = list(map(str, file.readline().split()))[0]
 nums = list(map(int, input))
 
-for num in nums:
-    if num <= 1:
-        answer += num
-    else:
-        answer *= num
+INF = int(1e9)
 
-print(answer)
+
+for base in range(2):
+    prevIndex = INF
+    count = 0
+
+    for i in range(len(nums)):
+        if nums[i] != base and prevIndex == INF:
+            prevIndex = i
+
+        if nums[i] == base and prevIndex != INF:
+            count += 1
+            prevIndex = INF
+
+    if prevIndex != INF:
+        count += 1
+
+    answer[base] = count
+
+print(min(answer))

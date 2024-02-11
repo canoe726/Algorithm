@@ -6,7 +6,7 @@ N = list(map(int, stdin.readline().rstrip()))[0]
 nums = list(map(int, stdin.readline().rstrip().split()))
 counts = list(map(int, stdin.readline().rstrip().split()))
 
-INF = 9999999999
+INF = 1e10
 min_answer = INF
 max_answer = -INF
 

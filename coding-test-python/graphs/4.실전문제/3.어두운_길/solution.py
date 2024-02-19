@@ -11,12 +11,16 @@ def getFile(fileName):
 
 file = getFile("input")
 
+answer = 0
+
 N, M = map(int, file.readline().rstrip().split())
+homes = []
 
-parent = [0] * (N + 1)
+for _ in range(M):
+    X, Y, Z = list(map(int, file.readline().rstrip().split()))
+    homes.append((Z, X, Y))
 
-for n in range(1, N + 1):
-    parent[n] = n
+homes.sort()
 
 
 def find_parent(parent, x):
@@ -28,35 +32,29 @@ def find_parent(parent, x):
 def union_parent(parent, a, b):
     a = find_parent(parent, a)
     b = find_parent(parent, b)
-
     if a < b:
         parent[b] = a
     else:
         parent[a] = b
 
 
-maps = []
-for _ in range(N):
-    row = list(map(int, file.readline().rstrip().split()))
-    maps.append(row)
+parent = [0] * (N)
 
-orders = list(map(int, file.readline().rstrip().split()))
-
-for x in range(N):
-    for y in range(N):
-        if maps[x][y] == 1:
-            union_parent(parent, x + 1, y + 1)
-
-answer = "YES"
-
-for o_idx in range(1, len(orders)):
-    prev, cur = orders[o_idx - 1], orders[o_idx]
-
-    if find_parent(parent, prev) != find_parent(parent, cur):
-        answer = "NO"
-        break
+for p in range(N):
+    parent[p] = p
 
 
-print(answer)
+total = sum(list(map(lambda x: x[0], homes)))
+
+
+for home in homes:
+    cost, a, b = home
+
+    if find_parent(parent, a) != find_parent(parent, b):
+        union_parent(parent, a, b)
+        answer += cost
+
+
+print(total - answer)
 
 file.close()

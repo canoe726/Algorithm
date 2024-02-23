@@ -5,13 +5,18 @@ L, C = map(int, stdin.readline().rstrip().split())
 chars = list(map(str, stdin.readline().rstrip().split()))
 chars.sort()
 
+
+vowels = ("a", "e", "i", "o", "u")
 answer = []
 
-for password in combinations(chars, 1):
-    count = 0
+count = 0
+for password in combinations(chars, L):
+    v, c = 0, 0
+    for p in password:
+        if p in vowels:
+            v += 1
+        else:
+            c += 1
 
-    for i in password:
-        if i in ("a", "e", "i", "o", "u"):
-            count += 1
-    if count >= 1 and count <= 1 - 2:
+    if v >= 1 and c >= 2:
         print("".join(password))

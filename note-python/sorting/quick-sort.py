@@ -20,19 +20,18 @@ def quickSort(arr, start, end):
         return
 
     pivot = start
-    left = pivot + 1
+    left = start + 1
     right = end
 
     while left <= right:
-        while left <= end and arr[pivot] > arr[left]:
+        while left <= end and arr[left] <= arr[pivot]:
             left += 1
-        while right > start and arr[pivot] < arr[right]:
+        while right > start and arr[right] >= arr[pivot]:
             right -= 1
-
-        if left <= right:
-            arr[left], arr[right] = arr[right], arr[left]
-        else:
+        if left > right:
             arr[right], arr[pivot] = arr[pivot], arr[right]
+        else:
+            arr[left], arr[right] = arr[right], arr[left]
 
     quickSort(arr, start, right - 1)
     quickSort(arr, right + 1, end)

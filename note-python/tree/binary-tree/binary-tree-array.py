@@ -1,4 +1,3 @@
-# 레벨 순서
 class BinaryTree:
     def __init__(self, tree):
         self.index = 0
@@ -81,6 +80,27 @@ class BinaryTree:
         _pre_order(index)
         return result
 
+    def pre_order_stack(self, index=0):
+        if self.length == 0:
+            return []
+
+        size = self.length
+        result, stack = [], [index]
+
+        while stack:
+            root = stack.pop()
+            left = root * 2 + 1
+            right = left + 1
+
+            result.append(self.tree[root])
+
+            if right < size:
+                stack.append(right)
+            if left < size:
+                stack.append(left)
+
+        return result
+
     def in_order(self, index=0):
         result = []
 
@@ -96,6 +116,27 @@ class BinaryTree:
         _in_order(index)
         return result
 
+    def in_order_stack(self, i=0):
+        if self.length == 0:
+            return []
+
+        index = i
+        size = self.length
+        result, stack = [], []
+
+        while True:
+            if index < size:
+                stack.append(index)
+                index = index * 2 + 1
+            elif stack:
+                index = stack.pop()
+                result.append(self.tree[index])
+                index = index * 2 + 2
+            else:
+                break
+
+        return result
+
     def post_order(self, index=0):
         result = []
 
@@ -109,6 +150,30 @@ class BinaryTree:
                 result.append(self.tree[index])
 
         _post_order(index)
+        return result
+
+    def post_order_stack(self, index=0):
+        if self.length == 0:
+            return []
+
+        size = self.length
+        result, stack, visit = [], [index], []
+
+        while stack:
+            index = stack.pop()
+            visit.append(index)
+
+            left = index * 2 + 1
+            right = left + 1
+
+            if left < size:
+                stack.append(left)
+            if right < size:
+                stack.append(right)
+
+        for _ in range(len(visit)):
+            result.append(self.tree[visit.pop()])
+
         return result
 
 
@@ -133,5 +198,13 @@ for query in find_parent_queries:
 print()
 
 print("pre_order : " + str(binaryTree.pre_order()))
+print("pre_order_stack : " + str(binaryTree.pre_order_stack()))
+print()
+
 print("in_order : " + str(binaryTree.in_order()))
+print("in_order_stack : " + str(binaryTree.in_order_stack()))
+print()
+
 print("post_order : " + str(binaryTree.post_order()))
+print("post_order_stack : " + str(binaryTree.post_order_stack()))
+print()

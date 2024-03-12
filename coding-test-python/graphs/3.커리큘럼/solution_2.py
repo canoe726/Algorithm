@@ -29,7 +29,7 @@ class Queue:
     def enqueue(self, data):
         new_node = Node(data)
 
-        if self.front == None:
+        if self.is_empty():
             self.front = new_node
             self.rear = new_node
             return
@@ -41,13 +41,12 @@ class Queue:
         if self.is_empty():
             return None
 
+        removed = self.front
         if self.front == self.rear:
-            data = self.front.data
             self.front = None
             self.rear = None
-            return data
+            return removed.data
 
-        removed = self.front
         self.front = self.front.next
 
         return removed.data
@@ -58,26 +57,26 @@ INF = int(1e9)
 
 N = list(map(int, file.readline().rstrip().split()))[0]
 
+graphs = [[] for _ in range(N + 1)]
 in_degree = [0 for _ in range(N + 1)]
 times = [0 for _ in range(N + 1)]
-graphs = [[] for _ in range(N + 1)]
 
 for i in range(1, N + 1):
     row = list(map(int, file.readline().rstrip().split()))
-
     times[i] = row[0]
+
     for x in row[1:-1]:
-        in_degree[i] += 1
         graphs[x].append(i)
+        in_degree[i] += 1
 
 
 def topology_sort():
+    queue = Queue()
     result = [0 for _ in range(N + 1)]
     for i in range(N + 1):
         result[i] = times[i]
 
-    queue = Queue()
-    for i in range(1, N + 1):
+    for i in range(N + 1):
         if in_degree[i] == 0:
             queue.enqueue(i)
 
@@ -86,12 +85,12 @@ def topology_sort():
         if node == None:
             break
 
-        for n in graphs[node]:
-            result[n] = max(result[n], result[node] + times[n])
-            in_degree[n] -= 1
+        for next_node in graphs[node]:
+            in_degree[next_node] -= 1
+            result[next_node] = max(result[next_node], result[node] + times[next_node])
 
-            if in_degree[n] == 0:
-                queue.enqueue(n)
+            if in_degree[next_node] == 0:
+                queue.enqueue(next_node)
 
     for i in range(1, N + 1):
         print(result[i])

@@ -1,25 +1,10 @@
-import sys
-
-
-def getFile(fileName):
-    path = sys.argv[0].split("/")
-    path.pop()
-    filePath = "/".join(path)
-    file = open(filePath + "/" + fileName, "r")
-    return file
-
-
-file = getFile("input")
-
-nums = list(map(int, file.readline().rstrip().split()))
-
-
 def heap_push(heap, data):
     heap.append(data)
     current = len(heap) - 1
 
     while current > 0:
         parent = (current - 1) // 2
+
         if heap[parent] > heap[current]:
             heap[parent], heap[current] = heap[current], heap[parent]
             current = parent
@@ -29,7 +14,7 @@ def heap_push(heap, data):
 
 def heap_pop(heap):
     if not heap:
-        return "Empty"
+        return None
     if len(heap) == 1:
         return heap.pop()
 
@@ -51,9 +36,34 @@ def heap_pop(heap):
     return pop_data
 
 
-heap_push(nums, 2)
-print(heap_pop(nums))
-print(heap_pop(nums))
-print(heap_pop(nums))
+def solution(food_times, k):
+    answer = 0
+    heap = []
 
-file.close()
+    for i in range(len(food_times)):
+        heap_push(heap, (food_times[i], i + 1))
+
+    base = 0
+    while heap:
+        size = len(heap)
+        food_time, food_num = heap_pop(heap)
+
+        if k >= (food_time - base) * size:
+            k -= (food_time - base) * size
+            base += food_time - base
+        else:
+            heap_push(heap, ((food_time - base), food_num))
+            break
+
+    result = []
+    while heap:
+        food_time, food_num = heap_pop(heap)
+        result.append((food_num, food_time))
+    result.sort()
+
+    if len(result) > 0:
+        answer = result[k % len(result)][0]
+    else:
+        answer = -1
+
+    return answer

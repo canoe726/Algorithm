@@ -25,7 +25,7 @@ def is_redundant(string):
 # 해시테이블
 # 시간복잡도 : O(N)
 def is_redundant_2(string):
-    check = [False for _ in range(256)]  # ASCII
+    check = [False for _ in range(128)]  # ASCII
 
     for i in range(len(string)):
         if check[ord(string[i])]:

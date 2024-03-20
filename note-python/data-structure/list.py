@@ -105,16 +105,6 @@ class List:
 
         prev.next = node.next
 
-    def prints(self, node):
-        result = "["
-
-        while node.next:
-            result += str(node.data) + ", "
-            node = node.next
-        result += "]"
-
-        print("prints: ", result)
-
     def reverse(self):
         if self.head == None or self.head.next == None:
             return
@@ -131,60 +121,57 @@ class List:
         self.head.next = prev
 
     def _get_mid(self, head):
-        if head == None:
-            return head
-
         slow = head
-        fast = head
-
-        while fast.next and fast.next.next:
+        fast = head.next
+        while fast != None and fast.next != None:
             slow = slow.next
             fast = fast.next.next
         return slow
 
-    def merge(self, left, right):
-        result = None
+    def merge(self, head1, head2):
+        merged = Node(-1)
+        temp = merged
+        left = head1
+        right = head2
 
-        if left == None:
-            return right
-        if right == None:
-            return left
+        while left != None and right != None:
+            if left.data < right.data:
+                temp.next = left
+                left = left.next
+            else:
+                temp.next = right
+                right = right.next
+            temp = temp.next
 
-        if left.data <= right.data:
-            result = left
-            result.next = self.merge(left.next, right)
-        else:
-            result = right
-            result.next = self.merge(left, right.next)
-        return result
+        while left != None:
+            temp.next = left
+            left = left.next
+            temp = temp.next
+
+        while right != None:
+            temp.next = right
+            right = right.next
+            temp = temp.next
+
+        return merged.next
 
     def merge_sort(self, head):
-        if head == None or head.next == None:
+        if head.next == None:
             return head
 
         mid = self._get_mid(head)
-        print("mid: ", mid.data)
-        next_middle = mid.next
+        head2 = mid.next
         mid.next = None
 
-        left = self.merge_sort(head)
-        right = self.merge_sort(next_middle)
+        newHead1 = self.merge_sort(head)
+        newHead2 = self.merge_sort(head2)
+        finalHead = self.merge(newHead1, newHead2)
 
-        sorted_list = self.merge(left, right)
-
-        print("left")
-        self.prints(left)
-        print()
-        print("right")
-        self.prints(right)
-        print()
-        print("sorted_list")
-        self.prints(sorted_list)
-        print()
-        return sorted_list
+        return finalHead
 
     def sort(self):
-        return self.merge_sort(self.head)
+        head = self.merge_sort(self.head)
+        self.head = head
 
 
 my_list = List()
@@ -197,7 +184,7 @@ my_list.insert(100, 5)
 print("pop: ", my_list.pop())
 my_list.remove(6)
 my_list.append(8)
-# my_list.reverse()
+my_list.reverse()
 my_list.sort()
 
 print("my_list : ", my_list)
@@ -211,7 +198,7 @@ a.insert(100, 5)
 a.pop()
 a.remove(6)
 a.append(8)
-# a.reverse()
+a.reverse()
 a.sort()
 print(a)
 print(len(a))

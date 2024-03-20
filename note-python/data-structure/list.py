@@ -120,19 +120,20 @@ class List:
 
         self.head.next = prev
 
-    def _get_mid(self, head):
+    def get_mid(self, head):
+        if head == None:
+            return head
+
         slow = head
-        fast = head.next
-        while fast != None and fast.next != None:
+        fast = head
+        while fast.next and fast.next.next:
             slow = slow.next
             fast = fast.next.next
         return slow
 
-    def merge(self, head1, head2):
+    def merge(self, left, right):
         merged = Node(-1)
         temp = merged
-        left = head1
-        right = head2
 
         while left != None and right != None:
             if left.data < right.data:
@@ -156,22 +157,21 @@ class List:
         return merged.next
 
     def merge_sort(self, head):
-        if head.next == None:
+        if head == None or head.next == None:
             return head
 
-        mid = self._get_mid(head)
+        mid = self.get_mid(head)
         head2 = mid.next
         mid.next = None
 
-        newHead1 = self.merge_sort(head)
-        newHead2 = self.merge_sort(head2)
-        finalHead = self.merge(newHead1, newHead2)
-
-        return finalHead
+        left_sorted = self.merge_sort(head)
+        right_sorted = self.merge_sort(head2)
+        sorted_list = self.merge(left_sorted, right_sorted)
+        return sorted_list
 
     def sort(self):
-        head = self.merge_sort(self.head)
-        self.head = head
+        sorted = self.merge_sort(self.head)
+        self.head = sorted
 
 
 my_list = List()

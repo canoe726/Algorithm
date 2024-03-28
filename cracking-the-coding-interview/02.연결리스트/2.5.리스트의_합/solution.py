@@ -7,6 +7,10 @@ class Node:
 class LinkedList:
     def __init__(self):
         self.head = None
+        self.length = 0
+
+    def __len__(self):
+        return self.length
 
     def __str__(self):
         if self.head == None:
@@ -24,6 +28,7 @@ class LinkedList:
 
     def append(self, data):
         new_node = Node(data)
+        self.length += 1
 
         if self.head == None:
             self.head = new_node
@@ -113,11 +118,85 @@ class LinkedList:
         self.head = sum_list.next
 
 
+def addLists(l1, l2, carry):
+    if not l1 and not l2 and carry == 0:
+        return None
+
+    result = Node(None)
+    value = carry
+    if l1:
+        value += l1.data
+    if l2:
+        value += l2.data
+
+    result.data = value % 10
+
+    if l1 or l2:
+        next_l1 = l1.next if l1 else None
+        next_l2 = l2.next if l2 else None
+        next_carry = 1 if value >= 10 else 0
+
+        more = addLists(next_l1, next_l2, next_carry)
+        result.next = more
+    return result
+
+
+class PartialSum:
+    def __init__(self):
+        self.sum = Node(None)
+        self.carry = 0
+
+
+def insertBefore(list, data):
+    node = Node(data)
+    if list:
+        node.next = list
+    return node
+
+
+def padList(l, padding):
+    head = l
+    for i in range(padding):
+        head = insertBefore(head, 0)
+    return head
+
+
+def addListsHelper(l1, l2):
+    if not l1 and not l2:
+        sum = PartialSum()
+        return sum
+
+    sum = addListsHelper(l1.next, l2.next)
+    val = sum.carry + l1.data + l2.data
+
+    full_result = insertBefore(sum.sum, val % 10)
+    sum.sum = full_result
+    sum.carry = val / 10
+    return sum
+
+
+def addLists2(l1, l2):
+    len1 = len(l1)
+    len2 = len(l2)
+
+    if len1 < len2:
+        l1 = padList(l1, len2 - len1)
+    else:
+        l2 = padList(l2, len1 - len2)
+
+    sum = addListsHelper(l1, l2)
+    if sum.carry == 0:
+        return sum.sum
+    else:
+        result = insertBefore(sum.sum, sum.carry)
+        return result
+
+
 if __name__ == "__main__":
     num1 = LinkedList()
     num2 = LinkedList()
 
-    num1_adds = [7, 1, 6]
+    num1_adds = [7, 1, 6, 2]
     num2_adds = [5, 9, 3]
 
     for add in num1_adds:
@@ -125,18 +204,23 @@ if __name__ == "__main__":
     for add in num2_adds:
         num2.append(add)
 
-    sum_list = LinkedList()
-    sum_list.get_num_2(num1, num2)
-    print(sum_list)
+    sum_list = addLists(num1.head, num2.head, 0)
+    temp = sum_list
+    while temp:
+        print(str(temp.data) + " -> ", end="")
+        temp = temp.next
+    print()
+
+    # sum_list = LinkedList()
+    # sum_list.get_num_2(num1, num2)
+    # print(sum_list)
 
     # total = num1.get_num_1() + num2.get_num_1()
     # sum_adds = []
     # while total:
     #     sum_adds.append(total % 10)
     #     total //= 10
-
     # sum_list = LinkedList()
     # for add in sum_adds:
     #     sum_list.append(add)
-
     # print(sum_list)

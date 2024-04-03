@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Node:
     def __init__(self, data):
         self.data = data
@@ -109,12 +112,53 @@ def isPalindrome1(list):
     return True
 
 
+class Result:
+    def __init__(self, node, result):
+        self.node = node
+        self.result = result
+
+    def setResult(self, result):
+        self.result = result
+
+
+def getListSize(list):
+    size = 0
+
+    node = list.head
+    while node:
+        node = node.next
+        size += 1
+    return size
+
+
+def isPalindromeRecurse(head, size):
+    if head == None or size <= 0:
+        return Result(head, True)
+    elif size == 1:
+        return Result(head.next, True)
+
+    res = isPalindromeRecurse(head.next, size - 2)
+    if not res.result or not res.node:
+        return res
+
+    res.result = head.data == res.node.data
+    res.node = res.node.next
+    return res
+
+
+def isPalindrome2(list):
+    size = getListSize(list)
+    p = isPalindromeRecurse(list.head, size)
+    return p.result
+
+
 if __name__ == "__main__":
     linkedList = LinkedList()
 
-    adds = ["a", "b", "b", "a"]
+    adds = ["a", "b", "c", "e", "a"]
     for add in adds:
         linkedList.append(add)
 
     print("isPalindrome: ", isPalindrome(linkedList))
-    print("isPalindrome: ", isPalindrome1(linkedList))
+    print("isPalindrome1: ", isPalindrome1(linkedList))
+    print("isPalindrome2: ", isPalindrome2(linkedList))

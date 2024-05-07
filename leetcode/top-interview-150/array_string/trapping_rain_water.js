@@ -3,6 +3,7 @@
  * @return {number}
  */
 var trap = function (height) {
+  let result = 0;
   let size = height.length;
   let drops = new Array(size).fill(0);
   let base = height[0];
@@ -24,6 +25,8 @@ var trap = function (height) {
     } else {
       drops[i] = Math.min(drops[i], base - height[i]);
     }
+
+    result += drops[i];
   }
 
   return drops.reduce((acc, cur) => acc + cur, 0);

@@ -1,5 +1,22 @@
-function splitChunk(s, size) {
-  return s.match(new RegExp(`.{1,${size}}`, 'g'));
+function isContain(counts, sentence, wordSize) {
+  let wordCounts = new Map();
+
+  for (let i = 0; i < sentence.length; i += wordSize) {
+    const word = sentence.slice(i, i + wordSize);
+
+    if (wordCounts.has(word)) {
+      wordCounts.set(word, wordCounts.get(word) + 1);
+    } else {
+      wordCounts.set(word, 1);
+    }
+  }
+
+  for (let [key, value] of counts) {
+    if (wordCounts.get(key) !== value) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -10,42 +27,21 @@ function splitChunk(s, size) {
 var findSubstring = function (s, words) {
   const wordSize = words[0].length;
   const concatLen = words.reduce((acc, cur) => acc + cur, '').length;
-  const counts = {};
+  const counts = new Map();
+  let answer = [];
+
   for (let i = 0; i < words.length; i++) {
-    if (!counts[words[i]]) {
-      counts[words[i]] = 1;
+    if (counts.has(words[i])) {
+      counts.set(words[i], counts.get(words[i]) + 1);
     } else {
-      counts[words[i]] += 1;
+      counts.set(words[i], 1);
     }
   }
 
-  let answer = [];
-
   for (let i = 0; i <= s.length - concatLen; i++) {
-    if (i - 1 >= 0 && s[i] === s[i - 1]) {
-      continue;
-    }
-
-    let wordCount = words.length;
-    const tempCounts = JSON.parse(JSON.stringify(counts));
     const sentence = s.slice(i, i + concatLen);
-    const chunk = splitChunk(sentence, wordSize);
-    let exist = true;
 
-    console.log(i, tempCounts, chunk);
-
-    for (let j = 0; j < chunk.length; j++) {
-      if (tempCounts[chunk[j]] > 0) {
-        wordCount -= 1;
-      }
-      tempCounts[chunk[j]] -= 1;
-      if (tempCounts[chunk[j]] < 0) {
-        exist = false;
-        break;
-      }
-    }
-
-    if (exist && wordCount === 0) {
+    if (isContain(counts, sentence, wordSize)) {
       answer.push(i);
     }
   }
@@ -53,12 +49,4 @@ var findSubstring = function (s, words) {
   return answer;
 };
 
-console.log(
-  findSubstring('lingmindraboofooowingdingbarrwingmonkeypoundcake', [
-    'fooo',
-    'barr',
-    'wing',
-    'ding',
-    'wing',
-  ]),
-);
+console.log(findSubstring('barfoothefoobarman', ['foo', 'bar']));
